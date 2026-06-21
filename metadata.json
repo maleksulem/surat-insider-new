@@ -1,0 +1,6 @@
+{
+  "name": "Surat Insider",
+  "description": "Explore Surat and Gujarat's premium travel spots, wedding shopping destinations, food trails, and textile markets with local-expert curation, interactive itineraries, an AI Chatbot guide, and dynamic CMS controls.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

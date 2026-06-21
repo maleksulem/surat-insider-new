@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Store as raw RGB channels so Tailwind opacity modifiers function correctly */
+  --world-primary-rgb: 139, 0, 0;       /* #8B0000 */
+  --world-secondary-rgb: 247, 231, 206; /* #F7E7CE */
+  --world-accent-rgb: 204, 119, 34;     /* #CC7722 */
+  --world-text-rgb: 255, 246, 233;      /* #FFF6E9 */
+}
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Base style resets to match the luxury magazine feel */
+html,
+body {
+  font-family: var(--font-sans);
+  background-color: rgb(var(--world-secondary-rgb));
+  color: rgb(var(--world-text-rgb));
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Fluid global theme-morph canvas transition */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, transform;
+  transition-duration: 700ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hide scrollbar for clean visual carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
