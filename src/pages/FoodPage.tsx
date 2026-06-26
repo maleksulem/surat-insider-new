@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
-import { CustomCursor } from "../components/CustomCursor";
+import { FluidLandingCursor } from "../components/FluidLandingCursor";
 import { 
   Utensils, 
   ArrowLeft, 
@@ -13,27 +14,39 @@ import {
   Coffee
 } from "lucide-react";
 import { Role, Inquiry } from "../types";
+import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
 
 interface FoodPageProps {
-  onMount: () => void;
   currentUserRole: Role | "Guest";
   setCurrentUserRole: (role: Role | "Guest") => void;
-  activeTheme: "normal" | "wedding" | "vacation" | "weekend";
-  setActiveTheme: (theme: "normal" | "wedding" | "vacation" | "weekend") => void;
-  addInquiry: (inq: Omit<Inquiry, "id" | "date" | "status">) => void;
+      addInquiry: (inq: Omit<Inquiry, "id" | "date" | "status">) => void;
 }
 
 export function FoodPage({
-  onMount,
-  currentUserRole,
+    currentUserRole,
   setCurrentUserRole,
-  activeTheme,
-  setActiveTheme,
-  addInquiry,
+      addInquiry,
 }: FoodPageProps) {
-  useEffect(() => {
-    onMount();
-  }, [onMount]);
+  // Call Dynamic SEO and Schema markup hook
+  useDocumentMetadata({
+    title: "Surat Street Food & Fine Dining Culinary Tour Guide",
+    description: "The definitive foodie tour of Surat. Discover the most iconic spots for Surati Locho, butter Khaman, ghari, Undhiyu, and street food feasts.",
+    keywords: "Surati Locho, Surat Food Tour, Surat Street Food, Ghari Sweet, Undhiyu, Dumas Road Food Plaza, Surat Restaurants",
+    ogImage: "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop",
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "TouristAttraction",
+      "name": "Surat Culinary Food Tour",
+      "description": "Premium guided culinary tour exploring the legendary authentic street foods of Surat including Locho, Ghari and Ponk.",
+      "touristType": "Foodies & Culinary Tourists",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Surat",
+        "addressRegion": "Gujarat",
+        "addressCountry": "IN"
+      }
+    }
+  });
 
   const [formSent, setFormSent] = useState(false);
   const [formData, setFormData] = useState({
@@ -93,25 +106,16 @@ export function FoodPage({
   ];
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-amber-800 selection:text-white">
-      <CustomCursor theme={activeTheme} />
+    <div 
+      className="relative min-h-screen bg-[#FFFBF0] text-[#1A1614] flex flex-col font-sans selection:bg-[#B8860B]/30 selection:text-[#1A1614] overflow-x-hidden"
+    >
+      <FluidLandingCursor theme="food" />
 
-      {/* Dynamic Theme Injector */}
-      <style>{`
-        :root {
-          --color-brand-emerald-950: #2e1065 !important;
-          --color-brand-emerald-900: #4c1d95 !important;
-          --color-brand-emerald-800: #6d28d9 !important;
-          --color-brand-emerald-700: #7c3aed !important;
-          --color-brand-sand-50: #faf5ff !important;
-          --color-brand-sand-100: #f3e8ff !important;
-          --color-brand-sand-200: #e9d5ff !important;
-          --color-brand-gold-300: #fb7185 !important;
-          --color-brand-gold-400: #f43f5e !important;
-          --color-brand-gold-500: #f59e0b !important;
-          --color-brand-charcoal: #1e1b4b !important;
-        }
-      `}</style>
+      {/* Warm Ambient Glows simulating candlelight/street lamps */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-[20%] left-[-10%] w-[50%] h-[50%] bg-[#FFD700]/5 blur-[150px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[10%] right-[-10%] w-[50%] h-[50%] bg-[#B8860B]/10 blur-[150px] rounded-full" />
+      </div>
 
       {/* Global Navbar */}
       <Navbar
@@ -119,227 +123,254 @@ export function FoodPage({
         setCurrentTab={() => {}}
         currentUserRole={currentUserRole}
         setCurrentUserRole={setCurrentUserRole}
-        activeTheme={activeTheme}
-        setActiveTheme={setActiveTheme}
       />
 
       {/* Back CTA */}
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 text-left">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 text-left">
         <Link 
           to="/" 
-          className="inline-flex items-center gap-2 text-rose-300 hover:text-amber-300 transition-colors text-xs uppercase tracking-widest font-mono font-bold"
+          className="inline-flex items-center gap-3 text-[#1A1614]/40 hover:text-[#B8860B] transition-all text-[10px] uppercase tracking-[0.4em] font-black group"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          Back to Imperial Portal
+          <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+          The Imperial Portal
         </Link>
       </div>
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+      <main className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-24">
         
-        {/* Editorial Heading Section */}
-        <section className="relative rounded-3xl overflow-hidden border border-amber-500/20 bg-gradient-to-br from-violet-950 via-[#37114c] to-slate-950 p-8 md:p-14 shadow-2xl space-y-6">
-          <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#f59e0b_1px,transparent_1px),linear-gradient(to_bottom,#f59e0b_1px,transparent_1px)] bg-[size:48px_48px] z-0"></div>
+        {/* Editorial Food Hero */}
+        <section className="relative h-[80vh] rounded-[3rem] overflow-hidden group shadow-2xl">
+          <motion.img 
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 2, ease: "easeOut" }}
+            src="https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=2000&auto=format&fit=crop" 
+            alt="Authentic Surti Cuisine"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1A1614] via-[#1A1614]/20 to-transparent" />
           
-          <div className="relative z-10 space-y-4 max-w-4xl text-left">
-            <span className="inline-flex items-center gap-1.5 bg-amber-900/40 border border-amber-400/30 text-amber-300 text-[10px] font-mono uppercase tracking-[0.25em] px-3 py-1 rounded-full">
-              <Utensils className="w-3.5 h-3.5 animate-pulse" />
-              Sovereign Gastronomy • Tactile Street Locho & Ghari
-            </span>
-            <h1 className="font-serif text-4xl md:text-7xl font-black tracking-tight text-white leading-none">
-              A City Styled by <span className="text-amber-400 font-serif font-light italic">Butter and Spice</span>.
-            </h1>
-            <p className="text-purple-100 text-sm md:text-base leading-relaxed max-w-2xl font-light">
-              In Surat, dinner is a luxury feast celebrated directly on the streets. Experience generational sweet ghari and sizzling buttery chickpea locho, crafted with passion.
-            </p>
+          {/* Subtle "Steam" Effect Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-30 mix-blend-overlay animate-pulse" />
+
+          <div className="absolute bottom-0 left-0 right-0 p-10 md:p-20 space-y-8 text-white">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="space-y-6 max-w-3xl"
+            >
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-[10px] font-mono uppercase tracking-[0.4em] text-white/90">
+                <Utensils className="w-3.5 h-3.5 text-[#B8860B]" />
+                The Tasting Table
+              </span>
+              <h1 className="font-serif text-6xl md:text-9xl font-black tracking-tighter leading-[0.8]">
+                Butter <br />
+                <span className="text-[#B8860B] italic font-normal">& Spice.</span>
+              </h1>
+              <p className="text-xl md:text-2xl text-white/70 font-light leading-relaxed max-w-2xl">
+                Experience a city styled by its nocturnal bazaar culture, where life is feasted upon directly from the streets.
+              </p>
+            </motion.div>
           </div>
         </section>
 
         {/* Informative Grid of Taste Specialties */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-12 px-4">
           {localDelicacies.map((hl, i) => (
-            <div 
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
               key={i}
-              className="bg-slate-900/60 border border-amber-500/10 rounded-2xl p-6 md:p-8 space-y-4 hover:border-amber-500/40 transition-colors flex flex-col justify-between"
+              className="group space-y-8"
             >
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-xl bg-purple-950/80 border border-amber-500/20 flex items-center justify-center">
-                  <Flame className="w-5 h-5 text-amber-500" />
+              <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-[#B8860B]/10">
+                <div className="absolute inset-0 bg-[#B8860B]/5 group-hover:bg-transparent transition-colors duration-500" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Flame className="w-12 h-12 text-[#B8860B]/20 group-hover:text-[#B8860B] transition-all duration-500 group-hover:scale-125" />
                 </div>
-                <h3 className="font-serif text-xl font-bold text-[#e9d5ff]">{hl.title}</h3>
-                <p className="text-xs text-brand-sand-200 leading-relaxed font-light">{hl.desc}</p>
               </div>
-              <div className="text-[10px] font-mono text-amber-300 mt-4 flex items-center gap-1 bg-purple-950/40 px-2 py-1 rounded w-fit capitalize font-bold">
-                <MapPin className="w-3.5 h-3.5" />
-                {hl.spots}
+              <div className="space-y-4">
+                <h3 className="font-serif text-3xl font-bold text-[#1A1614] tracking-tight">{hl.title}</h3>
+                <p className="text-base text-[#4A423D] leading-relaxed font-light">{hl.desc}</p>
+                <div className="inline-flex items-center gap-2 text-[10px] font-mono font-bold text-[#B8860B] tracking-widest uppercase bg-[#B8860B]/5 px-3 py-1.5 rounded-full">
+                  <MapPin className="w-3.5 h-3.5" />
+                  {hl.spots}
+                </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </section>
 
         {/* Dual layout with history and tour registration form */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center px-4">
           
           {/* Secrets of Surat Locho */}
-          <div className="lg:col-span-5 text-left space-y-6">
-            <h2 className="font-serif text-2xl font-bold text-white">The Nocturnal Bazaar Culture</h2>
-            <p className="text-xs text-[#e9d5ff]/90 leading-relaxed font-light">
-              Suratis believe that life is meant to be feasted. When the sun dips, families migrate to Dumas Road and Chowk Bazar to consume Butter Locho, sizzling garlic khaman, and giant thalis.
-              <br /><br />
-              <strong>The Secret of Locho:</strong> Locho was born of an accident! A local halwai over-watered a batch of khaman batter. Unwilling to waste it, he spiced and steamed it anyway, serving it hot with oil and nylon sev. Locals fell in love with this crumpled "locho" (accident) and it quickly became the city's signature comfort food.
-            </p>
+          <div className="lg:col-span-5 space-y-12">
+            <div className="space-y-6">
+              <h2 className="font-serif text-5xl font-black text-[#1A1614] leading-[1.1]">The <span className="text-[#B8860B] italic font-normal">Nocturnal</span> <br />Bazaar Culture</h2>
+              <p className="text-lg text-[#4A423D] leading-relaxed font-light">
+                When the sun dips, families migrate to Chowk Bazar to consume Butter Locho, sizzling garlic khaman, and giant thalis under the neon glow.
+              </p>
+            </div>
 
-            <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 space-y-2">
-              <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-amber-400 block">
-                Gastronomy Checklist
-              </span>
-              <ul className="text-xs font-mono text-amber-200/80 space-y-1">
-                <li>✓ Look for bubbling hot steam vents to verify freshness</li>
-                <li>✓ Always enjoy locho immediately — cold locho is forbidden</li>
-                <li>✓ Try authentic spicy garlic mint chutney pairing</li>
-              </ul>
+            <div className="bg-[#1A1614] text-white rounded-[3rem] p-10 space-y-8 shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#B8860B]/10 blur-[80px] rounded-full group-hover:bg-[#B8860B]/20 transition-all duration-700" />
+              <div className="relative z-10 space-y-6">
+                <span className="text-[10px] uppercase font-mono tracking-[0.4em] font-black text-[#B8860B] block">
+                  Gastronomy Checklist
+                </span>
+                <ul className="space-y-6">
+                  {[
+                    "Look for bubbling hot steam vents to verify freshness.",
+                    "Always enjoy locho immediately — cold locho is forbidden.",
+                    "Try the authentic spicy garlic mint chutney pairing."
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex gap-4 items-start text-sm font-light text-white/70">
+                      <CheckCircle className="w-5 h-5 text-[#B8860B] shrink-0 mt-0.5" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
 
           {/* Crawl registration form */}
-          <div className="lg:col-span-7 bg-slate-900/80 border border-amber-500/30 rounded-3xl p-8 md:p-10 shadow-2xl space-y-6">
-            <div className="space-y-1 text-left border-b border-amber-500/10 pb-4">
-              <h3 className="font-serif text-2xl font-bold text-white flex items-center gap-2">
-                <Coffee className="w-5 h-5 text-amber-500 animate-bounce" />
-                Book Midnight Street Food Safari
-              </h3>
-              <p className="text-xs text-[#e9d5ff] font-light">
-                Secure a guided nocturnal food tour with local food historians and tasting permits.
-              </p>
+          <div className="lg:col-span-7 relative">
+            <div className="absolute inset-0 bg-[#B8860B]/10 blur-[120px] rounded-full -z-10" />
+            <div className="bg-white rounded-[3.5rem] p-8 md:p-16 shadow-2xl border border-[#B8860B]/5 space-y-12">
+              <div className="space-y-4 text-center">
+                <div className="w-20 h-20 bg-[#B8860B]/5 border border-[#B8860B]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Coffee className="w-10 h-10 text-[#B8860B]" />
+                </div>
+                <h3 className="font-serif text-4xl font-bold text-[#1A1614]">
+                  Midnight Safari
+                </h3>
+                <p className="text-base text-[#4A423D]/60 font-light italic">
+                  Guided nocturnal food tours with local historians.
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-8 text-sm">
+                {formSent && (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="p-8 bg-[#B8860B]/5 border border-[#B8860B]/20 text-[#1A1614] rounded-[2rem] font-medium text-center"
+                  >
+                    <CheckCircle className="w-8 h-8 text-[#B8860B] mx-auto mb-3" />
+                    <p className="text-lg">Your secret Midnight Food Crawl seats are locked! Watch for coordinates.</p>
+                  </motion.div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40 ml-2">Full Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="Neil Patel"
+                      className="w-full bg-[#FFFBF0] border border-[#B8860B]/10 text-[#1A1614] rounded-2xl p-5 focus:outline-none focus:border-[#B8860B] transition-all"
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40 ml-2">Email</label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="neil@domain.com"
+                      className="w-full bg-[#FFFBF0] border border-[#B8860B]/10 text-[#1A1614] rounded-2xl p-5 focus:outline-none focus:border-[#B8860B] transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40 ml-2">Tour Date</label>
+                    <input
+                      type="date"
+                      required
+                      value={formData.tourDate}
+                      onChange={(e) => setFormData({ ...formData, tourDate: e.target.value })}
+                      className="w-full bg-[#FFFBF0] border border-[#B8860B]/10 text-[#1A1614] rounded-2xl p-5 focus:outline-none focus:border-[#B8860B] transition-all"
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40 ml-2">Party Size</label>
+                    <select
+                      value={formData.spotsCount}
+                      onChange={(e) => setFormData({ ...formData, spotsCount: e.target.value })}
+                      className="w-full bg-[#FFFBF0] border border-[#B8860B]/10 text-[#1A1614] rounded-2xl p-5 focus:outline-none focus:border-[#B8860B] transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="1">Solo Explorer (1)</option>
+                      <option value="2">Couple (2)</option>
+                      <option value="4">Group Suite (4+)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40 ml-2">Diet</label>
+                    <select
+                      value={formData.diet}
+                      onChange={(e) => setFormData({ ...formData, diet: e.target.value })}
+                      className="w-full bg-[#FFFBF0] border border-[#B8860B]/10 text-[#1A1614] rounded-2xl p-5 focus:outline-none focus:border-[#B8860B] transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="Vegetarian">Pure Vegetarian</option>
+                      <option value="Jain Food">Strictly Jain</option>
+                      <option value="Everything">No dietary limits</option>
+                    </select>
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40 ml-2">Spice Level</label>
+                    <select
+                      value={formData.spiceTolerance}
+                      onChange={(e) => setFormData({ ...formData, spiceTolerance: e.target.value })}
+                      className="w-full bg-[#FFFBF0] border border-[#B8860B]/10 text-[#1A1614] rounded-2xl p-5 focus:outline-none focus:border-[#B8860B] transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="Low Heat">Mild</option>
+                      <option value="Medium Surt Heat">Medium (Surt Standard)</option>
+                      <option value="Extreme Surt Locho Spice">Absolute Surt Heat</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40 ml-2">Contact Phone</label>
+                  <input
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="+91 XXXXX XXXXX"
+                    className="w-full bg-[#FFFBF0] border border-[#B8860B]/10 text-[#1A1614] rounded-2xl p-5 focus:outline-none focus:border-[#B8860B] transition-all"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-[#B8860B] hover:bg-[#1A1614] text-white text-[10px] font-black uppercase tracking-[0.5em] py-6 rounded-2xl transition-all duration-700 shadow-xl"
+                >
+                  Register For Midnight Safari
+                </button>
+              </form>
             </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs text-left">
-              {formSent && (
-                <div className="p-4 bg-purple-900/20 border border-amber-500/30 text-[#e9d5ff] rounded-xl font-semibold flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-amber-400" />
-                  Your secret Midnight Food Crawl seats are locked in! Our food guide will send meeting coordinates.
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-[#e9d5ff]">Full Name*</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="e.g. Neil Patel"
-                    className="w-full bg-slate-950 border border-amber-500/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-amber-400"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-[#e9d5ff]">Email Address*</label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="e.g. neil@live.com"
-                    className="w-full bg-slate-950 border border-amber-500/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-amber-400"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-[#e9d5ff]">Crawl Date*</label>
-                  <input
-                    type="date"
-                    required
-                    value={formData.tourDate}
-                    onChange={(e) => setFormData({ ...formData, tourDate: e.target.value })}
-                    className="w-full bg-slate-950 border border-amber-500/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-amber-400"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-[#e9d5ff]">Spots Count*</label>
-                  <select
-                    value={formData.spotsCount}
-                    onChange={(e) => setFormData({ ...formData, spotsCount: e.target.value })}
-                    className="w-full bg-slate-950 border border-amber-500/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-amber-400"
-                  >
-                    <option value="1">1 Person (Solo Explorer)</option>
-                    <option value="2">2 Persons (Couple standard)</option>
-                    <option value="4">4 Persons (Family/group suite)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-[#e9d5ff]">Dietary Requirements*</label>
-                  <select
-                    value={formData.diet}
-                    onChange={(e) => setFormData({ ...formData, diet: e.target.value })}
-                    className="w-full bg-slate-950 border border-amber-500/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-amber-400"
-                  >
-                    <option value="Vegetarian">Pure Vegetarian (Surt Standard)</option>
-                    <option value="Jain Food">Strictly Jain (No root vegetables)</option>
-                    <option value="Everything">No dietary limits</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-[#e9d5ff]">Spice Preference*</label>
-                  <select
-                    value={formData.spiceTolerance}
-                    onChange={(e) => setFormData({ ...formData, spiceTolerance: e.target.value })}
-                    className="w-full bg-slate-950 border border-amber-500/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-amber-400"
-                  >
-                    <option value="Low Heat">Mild (Keep it gentle)</option>
-                    <option value="Medium Surt Heat">Medium (Traditional local kick)</option>
-                    <option value="Extreme Surt Locho Spice">Absolute Surt Heat (Nylon Sev + Chutney flood)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-mono uppercase tracking-wider text-[#e9d5ff]">Allergies or custom food requests</label>
-                <textarea
-                  value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  placeholder="Allergic to nuts, dairy-free coco requests, custom hotel pick up required..."
-                  rows={3}
-                  className="w-full bg-slate-950 border border-amber-500/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-amber-400 resize-none font-sans"
-                />
-              </div>
-
-              <input
-                type="hidden"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              />
-              <div className="flex flex-col text-left gap-1">
-                <label className="text-[10px] font-mono uppercase tracking-wider text-[#e9d5ff]">Enter Contact Phone*</label>
-                <input
-                  type="tel"
-                  required
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+91 XXXXX XXXXX"
-                  className="w-full bg-slate-950 border border-amber-500/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-amber-400 mb-2"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl transition-all"
-              >
-                Register For Midnight Food Crawl
-              </button>
-            </form>
           </div>
 
         </section>
 
       </main>
 
-      <footer className="bg-[#1e1b4b] border-t border-amber-500/10 shrink-0 text-center py-6 text-amber-300/60 text-xs">
-        © {new Date().getFullYear()} Surat Insider • Surati Food Guild Association
+      <footer className="relative z-10 bg-[#1A1614] border-t border-white/5 shrink-0 text-center py-12 text-white/30 text-[10px] font-mono uppercase tracking-[0.5em] mt-auto">
+        © {new Date().getFullYear()} Surat Insider • The Surati Food Guild Association
       </footer>
     </div>
   );

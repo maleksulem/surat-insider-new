@@ -1,0 +1,80 @@
+{
+  "entities": {
+    "CuratedExperience": {
+      "title": "Curated Experience",
+      "description": "Unified schema for places, hotels, restaurants, etc.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "slug": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "shortDescription": { "type": "string" },
+        "fullDescription": { "type": "string" },
+        "location": { "type": "string" },
+        "timings": { "type": "string" },
+        "bestTimeToVisit": { "type": "string" },
+        "estimatedDuration": { "type": "string" },
+        "priceRange": { "type": "string" },
+        "highlights": { "type": "array" },
+        "tips": { "type": "array" },
+        "image": { "type": "string" },
+        "images": { "type": "array" },
+        "gallery": { "type": "array" },
+        "inquiryType": { "type": "string" },
+        "whatsappMessage": { "type": "string" },
+        "rating": { "type": "number" },
+        "status": { "type": "string", "enum": ["Draft", "Published"] }
+      },
+      "required": ["id", "title", "category", "slug"]
+    },
+    "Inquiry": {
+      "title": "Lead Inquiry",
+      "description": "Inquiry submitted by guests for experiences.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "itemId": { "type": "string" },
+        "itemTitle": { "type": "string" },
+        "itemType": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "message": { "type": "string" },
+        "date": { "type": "string" },
+        "status": { "type": "string", "enum": ["New", "Contacted", "Closed"] },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["id", "name", "email", "itemId"]
+    },
+    "AuditLog": {
+      "title": "Audit Log",
+      "description": "System audit logs for administrative actions.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "user": { "type": "string" },
+        "role": { "type": "string" },
+        "action": { "type": "string" },
+        "targetType": { "type": "string" },
+        "targetName": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["id", "user", "action"]
+    }
+  },
+  "firestore": {
+    "/experiences/{experienceId}": {
+      "schema": "CuratedExperience",
+      "description": "All curated places, hotels, tours, and food spots."
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": "Inquiry",
+      "description": "User inquiries and leads."
+    },
+    "/auditLogs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Administrative audit trail."
+    }
+  }
+}

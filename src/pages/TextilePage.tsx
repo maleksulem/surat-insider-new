@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
-import { CustomCursor } from "../components/CustomCursor";
+import { FluidLandingCursor } from "../components/FluidLandingCursor";
 import { 
   Building, 
   ArrowLeft, 
@@ -14,27 +15,37 @@ import {
   Briefcase
 } from "lucide-react";
 import { Role, Inquiry } from "../types";
+import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
 
 interface TextilePageProps {
-  onMount: () => void;
   currentUserRole: Role | "Guest";
   setCurrentUserRole: (role: Role | "Guest") => void;
-  activeTheme: "normal" | "wedding" | "vacation" | "weekend";
-  setActiveTheme: (theme: "normal" | "wedding" | "vacation" | "weekend") => void;
-  addInquiry: (inq: Omit<Inquiry, "id" | "date" | "status">) => void;
+      addInquiry: (inq: Omit<Inquiry, "id" | "date" | "status">) => void;
 }
 
 export function TextilePage({
-  onMount,
-  currentUserRole,
+    currentUserRole,
   setCurrentUserRole,
-  activeTheme,
-  setActiveTheme,
-  addInquiry,
+      addInquiry,
 }: TextilePageProps) {
-  useEffect(() => {
-    onMount();
-  }, [onMount]);
+  // Call Dynamic SEO and Schema markup hook
+  useDocumentMetadata({
+    title: "Surat Textile Sourcing Directory & Bulk Trade Consultation",
+    description: "Connect directly with trusted Surat textile wholesale manufacturers. Pure georgette, silk, digital prints, export consultation, and commission-free procurement.",
+    keywords: "Surat Textile Market, Wholesale Fabric Surat, Ring Road Sourcing, Surat Weavers Directory, Pure Georgette wholesale, Saree Manufacturer Surat, Textile Trade India",
+    ogImage: "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop",
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "BusinessService",
+      "name": "Surat Textile Sourcing Agency",
+      "description": "B2B procurement service assisting national and international buyers in acquiring premium fabrics directly from Surat's weaving mills.",
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": "Surat Insider"
+      },
+      "areaServed": "Worldwide"
+    }
+  });
 
   const [formSent, setFormSent] = useState(false);
   const [formData, setFormData] = useState({
@@ -94,25 +105,14 @@ export function TextilePage({
   ];
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-800 selection:text-white">
-      <CustomCursor theme={activeTheme} />
+    <div 
+      className="relative min-h-screen bg-[#F8F7F2] text-[#1A1614] flex flex-col font-sans selection:bg-[#1A1614] selection:text-white overflow-x-hidden"
+    >
+      <FluidLandingCursor theme="textile" />
 
-      {/* Dynamic Theme Injector */}
-      <style>{`
-        :root {
-          --color-brand-emerald-950: #022c22 !important;
-          --color-brand-emerald-900: #064e3b !important;
-          --color-brand-emerald-800: #047857 !important;
-          --color-brand-emerald-700: #10b981 !important;
-          --color-brand-sand-50: #f0fdf4 !important;
-          --color-brand-sand-100: #dcfce7 !important;
-          --color-brand-sand-200: #bbf7d0 !important;
-          --color-brand-gold-300: #34d399 !important;
-          --color-brand-gold-400: #059669 !important;
-          --color-brand-gold-500: #10b981 !important;
-          --color-brand-charcoal: #022c22 !important;
-        }
-      `}</style>
+      {/* Subtle Woven Pattern Overlay */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
+           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%231A1614' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")` }} />
 
       {/* Global Navbar */}
       <Navbar
@@ -120,224 +120,246 @@ export function TextilePage({
         setCurrentTab={() => {}}
         currentUserRole={currentUserRole}
         setCurrentUserRole={setCurrentUserRole}
-        activeTheme={activeTheme}
-        setActiveTheme={setActiveTheme}
       />
 
       {/* Back CTA */}
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 text-left">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <Link 
           to="/" 
-          className="inline-flex items-center gap-2 text-emerald-300 hover:text-[#bbf7d0] transition-colors text-xs uppercase tracking-widest font-mono font-bold"
+          className="inline-flex items-center gap-3 text-[#1A1614]/40 hover:text-[#1A1614] transition-all text-[10px] uppercase tracking-[0.4em] font-bold group"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          Back to Imperial Portal
+          <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+          The Imperial Portal
         </Link>
       </div>
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+      <main className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-24">
         
-        {/* Editorial Heading Section */}
-        <section className="relative rounded-3xl overflow-hidden border border-emerald-400/20 bg-gradient-to-br from-emerald-950 via-[#012519] to-slate-950 p-8 md:p-14 shadow-2xl space-y-6">
-          <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#10b981_1px,transparent_1px),linear-gradient(to_bottom,#10b981_1px,transparent_1px)] bg-[size:48px_48px] z-0"></div>
-          
-          <div className="relative z-10 space-y-4 max-w-4xl text-left">
-            <span className="inline-flex items-center gap-1.5 bg-emerald-900/40 border border-emerald-400/30 text-emerald-300 text-[10px] font-mono uppercase tracking-[0.25em] px-3 py-1 rounded-full">
-              <Briefcase className="w-3.5 h-3.5" />
-              Sovereign B2B Portal • Global Textile & Gem Exchange
-            </span>
-            <h1 className="font-serif text-4xl md:text-7xl font-black tracking-tight text-white leading-none">
-              High-Security <span className="text-[#bbf7d0] font-serif font-light italic">Bourse Trade</span>.
-            </h1>
-            <p className="text-emerald-100 text-sm md:text-base leading-relaxed max-w-2xl font-light">
-              Weave direct partnerships with global fabric mill clusters, wholesale Georgette dealers, and certified diamond suppliers inside Surat's high-tech business districts.
-            </p>
+        {/* Editorial Narrative Hero */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-8 order-2 lg:order-1">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-6"
+            >
+              <span className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.5em] text-[#B8860B]">
+                <Compass className="w-3 h-3" />
+                The Silk Route
+              </span>
+              <h1 className="font-serif text-6xl md:text-8xl font-black tracking-tighter text-[#1A1614] leading-[0.85]">
+                Precision <br />
+                <span className="italic font-normal">Heritage.</span>
+              </h1>
+              <p className="max-w-md text-lg text-[#4A423D] font-light leading-relaxed">
+                Navigating the sovereign Bourse trade where 40 million meters of precision-woven Georgette and Silk are birthed daily.
+              </p>
+            </motion.div>
           </div>
+
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl order-1 lg:order-2"
+          >
+            <motion.img 
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+              src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop" 
+              alt="Luxury Silk Texture"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-tr from-[#1A1614]/20 to-transparent" />
+          </motion.div>
         </section>
 
-        {/* Informative Grid of Artisan Specialties */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+        {/* Trade Bourse Grid */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {tradeHighlights.map((hl, i) => (
-            <div 
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
               key={i}
-              className="bg-slate-950 border border-emerald-400/15 rounded-2xl p-6 md:p-8 space-y-4 hover:border-emerald-400/40 transition-colors flex flex-col justify-between"
+              className="group space-y-6"
             >
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-xl bg-emerald-950/80 border border-emerald-400/20 flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-emerald-400" />
+              <div className="aspect-square rounded-3xl overflow-hidden bg-white border border-[#1A1614]/5 shadow-inner mb-6 flex items-center justify-center p-12">
+                <TrendingUp className="w-12 h-12 text-[#1A1614]/10 group-hover:text-[#B8860B] transition-colors group-hover:scale-125 duration-500" />
+              </div>
+              <div className="space-y-3 px-2">
+                <h3 className="font-serif text-2xl font-bold text-[#1A1614]">{hl.title}</h3>
+                <p className="text-sm text-[#4A423D] leading-relaxed font-light">{hl.desc}</p>
+                <div className="pt-4 text-[9px] font-mono text-[#B8860B] tracking-[0.3em] uppercase font-black">
+                  {hl.stat}
                 </div>
-                <h3 className="font-serif text-xl font-bold text-white">{hl.title}</h3>
-                <p className="text-xs text-slate-300 leading-relaxed font-light">{hl.desc}</p>
               </div>
-              <div className="text-[10px] font-mono text-emerald-200 mt-4 bg-emerald-950/40 px-3 py-1 rounded border border-emerald-400/10 inline-block w-fit">
-                Stat: {hl.stat}
-              </div>
-            </div>
+            </motion.div>
           ))}
         </section>
 
         {/* Dual layout with guidelines and dynamic inquiry form */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-20 items-start pt-12">
           
           {/* Rules and verification guidelines */}
-          <div className="lg:col-span-5 text-left space-y-6">
-            <h2 className="font-serif text-2xl font-bold text-white">How to trade inside SDB</h2>
-            <p className="text-xs text-emerald-100/80 leading-relaxed font-light">
-              The Surat Diamond Bourse is restricted to certified diamond merchants, buyers with official letters of invitation, and trade clearance agents with pre-authorized access.
-              <br /><br />
-              <strong>Wholesale Clothing Markets:</strong> Ring Road outlets sell only in multi-piece bundles (matching catalogs). To inspect weaves or negotiate, hire an official broker registered under Surat Chamber of Commerce to guarantee absolute safety and avoid inflated prices.
-            </p>
+          <div className="lg:col-span-5 space-y-12">
+            <div className="space-y-6">
+              <h2 className="font-serif text-4xl font-extrabold text-[#1A1614] leading-tight">Trading inside <br />the <span className="italic font-normal">Bourse</span></h2>
+              <p className="text-base text-[#4A423D] leading-relaxed font-light">
+                The Surat Diamond Bourse is restricted to certified diamond merchants, buyers with official letters of invitation, and trade clearance agents with pre-authorized access.
+              </p>
+            </div>
 
-            <div className="bg-emerald-400/5 border border-emerald-400/20 rounded-xl p-5 space-y-2">
-              <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-emerald-300 block">
-                Trade Checklist
-              </span>
-              <ul className="text-xs font-mono text-emerald-200 space-y-1">
-                <li>✓ Inspect wholesale GST registers for legitimate licensing</li>
-                <li>✓ Verify custom patterns directly in loom warehouses</li>
-                <li>✓ Always negotiate prices excluding logistics brokerage</li>
-              </ul>
+            <div className="bg-[#1A1614] text-white rounded-[2rem] p-10 space-y-8 shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rotate-45 translate-x-16 -translate-y-16" />
+              <div className="space-y-4 relative z-10">
+                <span className="text-[10px] uppercase font-mono tracking-[0.3em] font-bold text-white/40 block">
+                  Merchant Protocol
+                </span>
+                <ul className="space-y-6">
+                  {[
+                    "Inspect wholesale GST registers for legitimate licensing.",
+                    "Verify custom patterns directly in loom warehouses.",
+                    "Negotiate prices excluding logistics brokerage for transparency."
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex gap-4 items-start text-sm font-light text-white/80">
+                      <span className="text-[#B8860B] font-mono">0{idx + 1}</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
 
           {/* Catalog request and verification form */}
-          <div className="lg:col-span-7 bg-slate-900/80 border border-emerald-400/30 rounded-3xl p-8 md:p-10 shadow-2xl space-y-6">
-            <div className="space-y-1 text-left border-b border-emerald-400/10 pb-4">
-              <h3 className="font-serif text-2xl font-bold text-white flex items-center gap-2">
-                <FileText className="w-5 h-5 text-emerald-300" />
-                Connect Direct Trade Loom
-              </h3>
-              <p className="text-xs text-emerald-200 font-light">
-                Submit corporate details to requests verified catalog matches and secure customs export clearance notes.
-              </p>
+          <div className="lg:col-span-7">
+            <div className="bg-white rounded-[3rem] p-8 md:p-14 shadow-xl border border-[#1A1614]/5 space-y-10">
+              <div className="space-y-3">
+                <h3 className="font-serif text-3xl font-bold text-[#1A1614]">
+                  Direct Trade Loom
+                </h3>
+                <p className="text-sm text-[#4A423D]/60 font-light">
+                  Submit corporate credentials to access verified mill clusters.
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-8 text-sm">
+                {formSent && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-6 bg-[#B8860B]/5 border border-[#B8860B]/20 text-[#1A1614] rounded-2xl font-medium flex items-center gap-4"
+                  >
+                    <CheckCircle className="w-5 h-5 text-[#B8860B]" />
+                    <span>Your corporate B2B query has been logged. Our trade manager will reach out.</span>
+                  </motion.div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-2 border-b border-[#1A1614]/10 pb-2">
+                    <label className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40">Full Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="Vikram Singhania"
+                      className="w-full bg-transparent text-[#1A1614] placeholder:text-[#1A1614]/20 py-2 focus:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-2 border-b border-[#1A1614]/10 pb-2">
+                    <label className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40">Enterprise</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.company}
+                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                      placeholder="Singhania Global LLC"
+                      className="w-full bg-transparent text-[#1A1614] placeholder:text-[#1A1614]/20 py-2 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-2 border-b border-[#1A1614]/10 pb-2">
+                    <label className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40">Corporate Email</label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="trade@singhania.com"
+                      className="w-full bg-transparent text-[#1A1614] placeholder:text-[#1A1614]/20 py-2 focus:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-2 border-b border-[#1A1614]/10 pb-2">
+                    <label className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40">Phone Number</label>
+                    <input
+                      type="tel"
+                      required
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      placeholder="+91 XXXXX XXXXX"
+                      className="w-full bg-transparent text-[#1A1614] placeholder:text-[#1A1614]/20 py-2 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40 block mb-2">Volume</label>
+                    <select
+                      value={formData.volumeNeeded}
+                      onChange={(e) => setFormData({ ...formData, volumeNeeded: e.target.value })}
+                      className="w-full bg-[#F8F7F2] border border-[#1A1614]/10 rounded-xl p-4 focus:outline-none focus:border-[#1A1614] transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="Wholesale (Bulk Roll)">Bulk Wholesale (100+ Rolls)</option>
+                      <option value="Custom Motif Run">Custom Special Run</option>
+                      <option value="Container Export">Container Load (Export)</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40 block mb-2">Category</label>
+                    <select
+                      value={formData.focusCategory}
+                      onChange={(e) => setFormData({ ...formData, focusCategory: e.target.value })}
+                      className="w-full bg-[#F8F7F2] border border-[#1A1614]/10 rounded-xl p-4 focus:outline-none focus:border-[#1A1614] transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="Pure Fabrics & Georgette">High-grade Georgette</option>
+                      <option value="Brocade & Jacquard Silks">Brocade & Jacquard</option>
+                      <option value="Uncut Diamonds / Spark Gems">Diamonds & Gems</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#1A1614]/40">Specifications</label>
+                  <textarea
+                    value={formData.notes}
+                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                    placeholder="Describe material specs, GSM, width, certifications..."
+                    rows={4}
+                    className="w-full bg-[#F8F7F2] border border-[#1A1614]/10 rounded-[2rem] p-6 focus:outline-none focus:border-[#1A1614] transition-all resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-[#1A1614] hover:bg-[#B8860B] text-white text-[10px] font-bold uppercase tracking-[0.4em] py-6 rounded-2xl transition-all duration-500 shadow-xl"
+                >
+                  Initiate Trade Protocol
+                </button>
+              </form>
             </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs text-left">
-              {formSent && (
-                <div className="p-4 bg-emerald-950 border border-emerald-800/30 text-emerald-250 rounded-xl font-semibold flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-emerald-400" />
-                  Your corporate B2B query has been logged. Our dedicated trade partner manager will sync with you.
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-emerald-200">Contact Person Name*</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="e.g. Vikram Singhania"
-                    className="w-full bg-emerald-950 border border-emerald-400/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-emerald-400"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-emerald-200">Company / Enterprise Name*</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.company}
-                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    placeholder="e.g. Singhania Global Fabric LLC"
-                    className="w-full bg-emerald-950 border border-emerald-400/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-emerald-400"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-emerald-200">Corporate Email*</label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="e.g. import@singhania.com"
-                    className="w-full bg-emerald-950 border border-emerald-400/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-emerald-400"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-emerald-200">Phone Number*</label>
-                  <input
-                    type="tel"
-                    required
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="+91 XXXXX XXXXX"
-                    className="w-full bg-emerald-950 border border-emerald-400/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-emerald-400"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-emerald-200">Target Volume*</label>
-                  <select
-                    value={formData.volumeNeeded}
-                    onChange={(e) => setFormData({ ...formData, volumeNeeded: e.target.value })}
-                    className="w-full bg-emerald-950 border border-emerald-400/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-emerald-400"
-                  >
-                    <option value="Wholesale (Bulk Roll)">Wholesale Packs (100+ Rolls)</option>
-                    <option value="Custom Motif Run">Custom Special Design Wefts (Limited Run)</option>
-                    <option value="Container Export">Full Shipping Container Load (Export)</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-emerald-200">Material Classification*</label>
-                  <select
-                    value={formData.focusCategory}
-                    onChange={(e) => setFormData({ ...formData, focusCategory: e.target.value })}
-                    className="w-full bg-emerald-950 border border-emerald-400/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-emerald-400"
-                  >
-                    <option value="Pure Fabrics & Georgette">High-grade Georgette & Crepe</option>
-                    <option value="Brocade & Jacquard Silks">Brocade, Jacquard, & Satin</option>
-                    <option value="Uncut Diamonds / Spark Gems">Pure Diamonds and Gemstones</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-emerald-200">Export Licensing Support*</label>
-                  <select
-                    value={formData.licensing}
-                    onChange={(e) => setFormData({ ...formData, licensing: e.target.value })}
-                    className="w-full bg-emerald-950 border border-emerald-400/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-emerald-400"
-                  >
-                    <option value="Need export consultation">Need full Export Consulting & Customs clearance pack</option>
-                    <option value="Already certified buyer">Company already has valid Import/Export Certificate (IEC)</option>
-                    <option value="Interstate trade only">Domestic interstate trade only</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-mono uppercase tracking-wider text-emerald-200">Description of requested fabrics or gems spec</label>
-                <textarea
-                  value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  placeholder="Provide details on gms weight, width dimensions, custom dye certifications or direct loom references..."
-                  rows={3}
-                  className="w-full bg-emerald-950 border border-emerald-400/20 rounded-xl px-4 py-2.5 text-white outline-none focus:border-emerald-400 resize-none font-sans"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-emerald-400 hover:bg-emerald-300 text-slate-950 text-xs font-semibold uppercase tracking-wider py-3.5 rounded-xl transition-all"
-              >
-                Connect To Trade Mill Clusters
-              </button>
-            </form>
           </div>
 
         </section>
 
       </main>
 
-      <footer className="bg-[#022c22] border-t border-emerald-400/10 shrink-0 text-center py-6 text-emerald-300/60 text-xs">
-        © {new Date().getFullYear()} Surat Insider • B2B Chamber of Commerce & Fabric Guild
+      <footer className="relative z-10 bg-[#1A1614] border-t border-white/5 shrink-0 text-center py-12 text-white/20 text-[9px] font-mono uppercase tracking-[0.5em] mt-auto">
+        © {new Date().getFullYear()} Surat Insider • The Silk Route Merchant Guild
       </footer>
     </div>
   );

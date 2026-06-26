@@ -2,7 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import { MessageSquare, Send, Sparkles, X, ChevronDown, RefreshCw } from "lucide-react";
 import { ChatMessage } from "../types";
 
-export function GeminiChat() {
+interface GeminiChatProps {
+  chatbotConfig?: {
+    messageLimit: number;
+    customWelcomeMessage: string;
+    defaultPersona: string;
+  };
+}
+
+export function GeminiChat({ chatbotConfig }: GeminiChatProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [persona, setPersona] = useState<"heritage" | "shopping" | "food">("heritage");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -10,27 +18,41 @@ export function GeminiChat() {
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  const userMessages = messages.filter((m) => m.sender === "user");
+  const limit = chatbotConfig?.messageLimit !== undefined ? chatbotConfig.messageLimit : 5;
+  const isLimitReached = userMessages.length >= limit;
+
+  // Dynamically set default persona on initial config load
+  useEffect(() => {
+    if (chatbotConfig?.defaultPersona) {
+      const dp = chatbotConfig.defaultPersona.toLowerCase();
+      if (dp.includes("heritage")) setPersona("heritage");
+      else if (dp.includes("shopping") || dp.includes("fashion") || dp.includes("textile")) setPersona("shopping");
+      else if (dp.includes("food") || dp.includes("culinary") || dp.includes("restaurant")) setPersona("food");
+    }
+  }, [chatbotConfig]);
+
   const personas = {
     heritage: {
       name: "Jayesh",
       role: "Heritage & Culture Guide",
       avatar: "🕌",
       bio: "Local historian specializing in Surat Fort, old European tombs, and Gujarat heritage.",
-      welcome: "Khem Cho! I am Jayesh. Let me tell you about Surat's 500-year history as India's biggest trading port. Ask me anything about ancient monuments, castles, or the Tapi river!",
+      welcome: chatbotConfig?.customWelcomeMessage || "Khem Cho! I am Jayesh. Let me tell you about Surat's 500-year history as India's biggest trading port. Ask me anything about ancient monuments, castles, or the Tapi river!",
     },
     shopping: {
       name: "Radhika",
       role: "Textiles & Wedding Shopping Expert",
       avatar: "💃",
       bio: "Surat's bridal wear savant. Ring Road wholesale maven and jewelry advisor.",
-      welcome: "Namaste! Radhika here. Looking for the perfect Tanchoi silk saree, heavy zardozi lehengas, or wholesale textile deals without getting scammed? Tell me your budget and requirements!",
+      welcome: chatbotConfig?.customWelcomeMessage || "Namaste! Radhika here. Looking for the perfect Tanchoi silk saree, heavy zardozi lehengas, or wholesale textile deals without getting scammed? Tell me your budget and requirements!",
     },
     food: {
       name: "Jignesh",
       role: "Culinary & Street Food Guru",
       avatar: "🍲",
       bio: "Food trail champion. Knows where the warmest Locho and sweetest Ghari reside.",
-      welcome: "Hey there! Jignesh here, and I am starving! From butter locho at Jani's to rich winter undhiyu and pure ghee ghari, I know every secret culinary corner of Surat. Tell me what you're craving!",
+      welcome: chatbotConfig?.customWelcomeMessage || "Hey there! Jignesh here, and I am starving! From butter locho at Jani's to rich winter undhiyu and pure ghee ghari, I know every secret culinary corner of Surat. Tell me what you're craving!",
     }
   };
 
@@ -117,61 +139,123 @@ export function GeminiChat() {
       <button
         id="gemini-chat-fab"
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3.5 rounded-full bg-brand-emerald-950 text-brand-sand-50 hover:bg-brand-emerald-900 transition-all duration-300 shadow-2xl hover:scale-105 border border-brand-gold-500/30 group"
+        className="fixed bottom-24 right-4 lg:bottom-6 lg:right-6 z-50 flex items-center justify-center lg:gap-2 p-2.5 lg:px-4 lg:py-3 rounded-full bg-[#B8860B] text-brand-sand-50 hover:bg-[#B8860B] transition-all duration-300 shadow-2xl hover:scale-105 border border-[#B8860B]/35 group"
       >
-        <span className="relative flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-gold-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-brand-gold-500"></span>
-        </span>
-        <MessageSquare className="w-5 h-5 group-hover:rotate-6 transition-transform" />
-        <span className="font-semibold text-sm tracking-wide">Ask Surat Insider AI</span>
+        {/* Mobile Branded Icon */}
+        <div className="lg:hidden w-7 h-7 flex items-center justify-center">
+          <svg 
+            className="w-6.5 h-6.5 rounded-lg border border-[#B8860B]/25 flex-shrink-0" 
+            viewBox="0 0 100 100"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="100" height="100" rx="22" fill="#0c1717"/>
+            <text 
+              x="50" 
+              y="81" 
+              fontFamily="'Times New Roman', 'Playfair Display', 'Georgia', serif" 
+              fontSize="80" 
+              fill="#fcf9f2" 
+              textAnchor="middle" 
+              fontWeight="300"
+            >
+              I
+            </text>
+            <text 
+              x="50" 
+              y="66" 
+              fontFamily="'Times New Roman', 'Playfair Display', 'Georgia', serif" 
+              fontSize="58" 
+              fill="#dfcba5" 
+              textAnchor="middle" 
+              fontWeight="400"
+            >
+              S
+            </text>
+          </svg>
+        </div>
+        
+        {/* Desktop Branded Layout */}
+        <div className="hidden lg:flex items-center gap-2">
+          <svg 
+            className="w-5.5 h-5.5 rounded-md border border-[#B8860B]/25 flex-shrink-0 transition-transform group-hover:scale-105" 
+            viewBox="0 0 100 100"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="100" height="100" rx="22" fill="#0c1717"/>
+            <text 
+              x="50" 
+              y="81" 
+              fontFamily="'Times New Roman', 'Playfair Display', 'Georgia', serif" 
+              fontSize="80" 
+              fill="#fcf9f2" 
+              textAnchor="middle" 
+              fontWeight="300"
+            >
+              I
+            </text>
+            <text 
+              x="50" 
+              y="66" 
+              fontFamily="'Times New Roman', 'Playfair Display', 'Georgia', serif" 
+              fontSize="58" 
+              fill="#dfcba5" 
+              textAnchor="middle" 
+              fontWeight="400"
+            >
+              S
+            </text>
+          </svg>
+          <span className="font-bold text-[11px] uppercase tracking-wider font-mono">Ask Insider</span>
+        </div>
       </button>
 
-      {/* Floating Chat Drawer */}
+      {/* Full-Screen Chat Modal */}
       {isOpen && (
         <div
-          id="gemini-chat-drawer"
-          className="fixed bottom-24 right-6 z-50 w-full max-w-[420px] bg-brand-sand-50 border border-brand-sand-200 shadow-2xl rounded-2xl flex flex-col overflow-hidden max-h-[580px] animate-fade-in"
+          id="gemini-chat-modal"
+          className="fixed inset-0 z-[1000] bg-[#FFFDF5] flex flex-col h-[100dvh] w-full"
         >
           {/* Header */}
-          <div className="bg-brand-emerald-950 p-4 text-brand-sand-50 flex items-center justify-between border-b border-brand-emerald-900">
+          <div className="bg-[#FFFDF5] p-4 flex items-center justify-between border-b border-[#1A1614]/10 sticky top-0 z-[60]">
             <div className="flex items-center gap-3">
-              <div className="text-2xl bg-brand-sand-50/10 p-1.5 rounded-xl">
+              <div className="text-2xl bg-[#B8860B]/10 p-2 rounded-xl">
                 {personas[persona].avatar}
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <h3 className="font-serif font-bold text-base tracking-wide">
+                  <h3 className="font-serif font-bold text-base tracking-wide text-[#1A1614]">
                     {personas[persona].name}
                   </h3>
-                  <span className="text-[10px] bg-brand-gold-500 text-brand-emerald-950 font-semibold px-1.5 py-0.5 rounded uppercase tracking-wider font-mono">
+                  <span className="text-[10px] bg-[#B8860B]/10 text-[#B8860B] font-semibold px-1.5 py-0.5 rounded uppercase tracking-wider font-mono">
                     AI Guide
                   </span>
                 </div>
-                <p className="text-xs text-brand-sand-100 opacity-80">{personas[persona].role}</p>
+                <p className="text-xs text-[#4A423D]/70">{personas[persona].role}</p>
               </div>
             </div>
             
             <button
               onClick={() => setIsOpen(false)}
-              className="text-brand-sand-100 hover:text-white transition-colors"
+              className="bg-[#1A1614]/5 hover:bg-[#1A1614]/10 text-[#1A1614] rounded-full px-4 py-2.5 flex items-center gap-2 transition-all shadow-sm hover:scale-110 active:scale-95 text-xs font-semibold"
+              aria-label="Back to explore"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
+              Back
             </button>
           </div>
 
           {/* Persona selector bar */}
-          <div className="bg-brand-sand-200/50 px-3 py-2 border-b border-brand-sand-200 flex items-center justify-between text-xs font-medium text-brand-charcoal">
-            <span>Select Local Expert Persona:</span>
+          <div className="bg-white px-4 py-3 border-b border-[#1A1614]/10 flex items-center justify-between text-xs font-medium text-[#1A1614]">
+            <span>Local Expert:</span>
             <div className="flex gap-1.5">
               {(["heritage", "shopping", "food"] as const).map((p) => (
                 <button
                   key={p}
                   onClick={() => setPersona(p)}
-                  className={`px-2.5 py-1 rounded-md transition-all font-semibold ${
+                  className={`px-3 py-1.5 rounded-md transition-all font-semibold ${
                     persona === p
-                      ? "bg-brand-emerald-900 text-brand-sand-50"
-                      : "bg-brand-sand-200 hover:bg-brand-sand-100 text-brand-charcoal-light"
+                      ? "bg-[#B8860B] text-white shadow-sm"
+                      : "bg-[#1A1614]/5 hover:bg-[#1A1614]/10 text-[#1A1614]/70"
                   }`}
                 >
                   {personas[p].name}
@@ -180,16 +264,16 @@ export function GeminiChat() {
             </div>
           </div>
 
-          {/* Persona Bio Description snippet */}
-          <div className="px-4 py-2 bg-brand-gold-500/10 border-b border-brand-gold-500/10 text-[11px] text-brand-charcoal/80 flex items-center gap-1.5">
-            <Sparkles className="w-3 h-3 text-brand-gold-500 shrink-0" />
+          {/* Persona Bio Description */}
+          <div className="px-4 py-3 bg-[#B8860B]/5 border-b border-[#B8860B]/10 text-[11px] text-[#1A1614]/80 flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-brand-gold-600 shrink-0" />
             <p className="italic">{personas[persona].bio}</p>
           </div>
 
           {/* Messages Grid */}
           <div
             ref={scrollRef}
-            className="flex-1 overflow-y-auto p-4 space-y-4 min-h-[250px] bg-brand-sand-50/50"
+            className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#FFFDF5]"
           >
             {messages.map((m) => {
               const isBot = m.sender === "bot";
@@ -198,14 +282,14 @@ export function GeminiChat() {
                   key={m.id}
                   className={`flex ${isBot ? "justify-start" : "justify-end"}`}
                 >
-                  <div className={`max-w-[85%] rounded-2xl p-3.5 space-y-1 block shadow-sm ${
+                  <div className={`max-w-[85%] rounded-2xl p-4 space-y-1 shadow-sm ${
                     isBot 
-                      ? "bg-white text-brand-charcoal border border-brand-sand-200/80 rounded-tl-none" 
-                      : "bg-brand-emerald-900 text-brand-sand-50 rounded-tr-none"
+                      ? "bg-white text-[#1A1614] border border-[#1A1614]/10 rounded-tl-none" 
+                      : "bg-[#B8860B] text-brand-sand-50 rounded-tr-none"
                   }`}>
-                    <p className="text-xs leading-relaxed whitespace-pre-wrap">{m.text}</p>
-                    <span className={`text-[9px] block text-right mt-1 font-mono ${
-                      isBot ? "text-brand-charcoal/40" : "text-brand-sand-200/80"
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{m.text}</p>
+                    <span className={`text-[10px] block text-right mt-2 font-mono ${
+                      isBot ? "text-[#1A1614]/40" : "text-[#4A423D]/80"
                     }`}>
                       {m.timestamp}
                     </span>
@@ -216,13 +300,13 @@ export function GeminiChat() {
 
             {isLoading && (
               <div className="flex justify-start">
-                <div className="max-w-[85%] bg-white border border-brand-sand-100 rounded-2xl p-3 rounded-tl-none flex items-center gap-2">
-                  <div className="flex space-x-1">
-                    <span className="w-2.5 h-2.5 bg-brand-emerald-800 rounded-full animate-bounce"></span>
-                    <span className="w-2.5 h-2.5 bg-brand-emerald-800 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                    <span className="w-2.5 h-2.5 bg-brand-emerald-800 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                <div className="max-w-[85%] bg-white border border-[#1A1614]/10 rounded-2xl p-4 rounded-tl-none flex items-center gap-3">
+                  <div className="flex space-x-1.5">
+                    <span className="w-2 h-2 bg-[#B8860B] rounded-full animate-bounce"></span>
+                    <span className="w-2 h-2 bg-[#B8860B] rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                    <span className="w-2 h-2 bg-[#B8860B] rounded-full animate-bounce [animation-delay:0.4s]"></span>
                   </div>
-                  <span className="text-[11px] font-medium text-brand-charcoal/60">
+                  <span className="text-xs font-medium text-[#1A1614]/60">
                     {personas[persona].name} is searching records...
                   </span>
                 </div>
@@ -230,84 +314,67 @@ export function GeminiChat() {
             )}
           </div>
 
-          {/* Quick query tags */}
-          <div className="px-3.5 py-1.5 bg-brand-sand-200/30 overflow-x-auto no-scrollbar flex gap-2 border-t border-brand-sand-200">
-            {persona === "heritage" && (
-              <>
-                <button
-                  onClick={() => setInputText("What is unique about the 16th-century Surat Castle?")}
-                  className="bg-white hover:bg-brand-sand-100 text-brand-charcoal-light border border-brand-sand-200 rounded-full px-2.5 py-0.5 text-[10px] font-semibold whitespace-nowrap"
-                >
-                  🏰 Surat Castle history
-                </button>
-                <button
-                  onClick={() => setInputText("Tell me about the Dutch tombs and mausoleums.")}
-                  className="bg-white hover:bg-brand-sand-100 text-brand-charcoal-light border border-brand-sand-200 rounded-full px-2.5 py-0.5 text-[10px] font-semibold whitespace-nowrap"
-                >
-                  🪦 Dutch gardens & tombs
-                </button>
-              </>
+          {/* Footer Input */}
+          <div className="p-4 bg-white border-t border-[#1A1614]/10 sticky bottom-0">
+            {/* Quick query tags */}
+            {!isLimitReached && (
+              <div className="mb-4 overflow-x-auto no-scrollbar flex gap-2">
+                {persona === "heritage" && (
+                  <>
+                    <button onClick={() => setInputText("What is unique about the 16th-century Surat Castle?")} className="bg-[#1A1614]/5 hover:bg-[#1A1614]/10 text-[#1A1614]/80 rounded-full px-4 py-2 text-xs font-semibold whitespace-nowrap">🏰 Surat Castle history</button>
+                    <button onClick={() => setInputText("Tell me about the Dutch tombs and mausoleums.")} className="bg-[#1A1614]/5 hover:bg-[#1A1614]/10 text-[#1A1614]/80 rounded-full px-4 py-2 text-xs font-semibold whitespace-nowrap">🪦 Dutch gardens & tombs</button>
+                  </>
+                )}
+                {persona === "shopping" && (
+                  <>
+                    <button onClick={() => setInputText("Where can I find premium Tanchoi and Patola wholesale sarees?")} className="bg-[#1A1614]/5 hover:bg-[#1A1614]/10 text-[#1A1614]/80 rounded-full px-4 py-2 text-xs font-semibold whitespace-nowrap">🧵 Best Tanchoi Silk Saree hubs</button>
+                    <button onClick={() => setInputText("What diamond jewelery shops on Ghod Dod Road are trusted?")} className="bg-[#1A1614]/5 hover:bg-[#1A1614]/10 text-[#1A1614]/80 rounded-full px-4 py-2 text-xs font-semibold whitespace-nowrap">💎 Trusted diamond boutiques</button>
+                  </>
+                )}
+                {persona === "food" && (
+                  <>
+                    <button onClick={() => setInputText("What are the different types of Locho and where to eat it?")} className="bg-[#1A1614]/5 hover:bg-[#1A1614]/10 text-[#1A1614]/80 rounded-full px-4 py-2 text-xs font-semibold whitespace-nowrap">🍲 Best Locho guide</button>
+                    <button onClick={() => setInputText("What is Surati Ghari and who invented it?")} className="bg-[#1A1614]/5 hover:bg-[#1A1614]/10 text-[#1A1614]/80 rounded-full px-4 py-2 text-xs font-semibold whitespace-nowrap">🍬 Famous Ghari sweets</button>
+                  </>
+                )}
+              </div>
             )}
-            {persona === "shopping" && (
-              <>
+
+            {/* Form or Premium CTA */}
+            {isLimitReached ? (
+              <div className="text-center space-y-3">
+                <p className="text-xs text-[#1A1614]/70 leading-relaxed">You have reached your <strong>{limit} message limit</strong>. To get more, connect with our concierge.</p>
                 <button
-                  onClick={() => setInputText("Where can I find premium Tanchoi and Patola wholesale sarees?")}
-                  className="bg-white hover:bg-brand-sand-100 text-brand-charcoal-light border border-brand-sand-200 rounded-full px-2.5 py-0.5 text-[10px] font-semibold whitespace-nowrap"
+                  type="button"
+                  onClick={() => {/* ... */}}
+                  className="w-full bg-[#B8860B] text-brand-sand-50 py-3 rounded-xl text-xs font-bold tracking-wide transition-colors"
                 >
-                  🧵 Best Tanchoi Silk Saree hubs
+                  💬 REQUEST PREMIUM CONCIERGE
                 </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSendMessage} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  placeholder={`Ask ${personas[persona].name}...`}
+                  className="flex-1 bg-[#1A1614]/5 rounded-xl px-4 py-3 text-sm outline-none focus:ring-1 focus:ring-[#B8860B]"
+                />
                 <button
-                  onClick={() => setInputText("What diamond jewelery shops on Ghod Dod Road are trusted?")}
-                  className="bg-white hover:bg-brand-sand-100 text-brand-charcoal-light border border-brand-sand-200 rounded-full px-2.5 py-0.5 text-[10px] font-semibold whitespace-nowrap"
+                  type="submit"
+                  disabled={!inputText.trim() || isLoading}
+                  className={`p-3.5 rounded-xl text-white transition-all ${
+                    inputText.trim() && !isLoading
+                      ? "bg-[#B8860B]"
+                      : "bg-[#1A1614]/20"
+                  }`}
                 >
-                  💎 Trusted diamond boutiques
+                  <Send className="w-5 h-5" />
                 </button>
-              </>
-            )}
-            {persona === "food" && (
-              <>
-                <button
-                  onClick={() => setInputText("What are the different types of Locho and where to eat it?")}
-                  className="bg-white hover:bg-brand-sand-100 text-brand-charcoal-light border border-brand-sand-200 rounded-full px-2.5 py-0.5 text-[10px] font-semibold whitespace-nowrap"
-                >
-                  🍲 Best Locho guide
-                </button>
-                <button
-                  onClick={() => setInputText("What is Surati Ghari and who invented it?")}
-                  className="bg-white hover:bg-brand-sand-100 text-brand-charcoal-light border border-brand-sand-200 rounded-full px-2.5 py-0.5 text-[10px] font-semibold whitespace-nowrap"
-                >
-                  🍬 Famous Ghari sweets
-                </button>
-              </>
+              </form>
             )}
           </div>
-
-          {/* Form */}
-          <form
-            onSubmit={handleSendMessage}
-            className="p-3 bg-brand-sand-100 border-t border-brand-sand-200 flex items-center gap-2"
-          >
-            <input
-              type="text"
-              id="chat-input"
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              placeholder={`Ask ${personas[persona].name}...`}
-              className="flex-1 bg-white border border-brand-sand-200 rounded-xl px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-brand-gold-500 focus:border-brand-gold-500"
-            />
-            <button
-              type="submit"
-              id="send-chat-btn"
-              disabled={!inputText.trim() || isLoading}
-              className={`p-2 rounded-xl text-brand-sand-50 transition-all ${
-                inputText.trim() && !isLoading
-                  ? "bg-brand-emerald-900 hover:bg-brand-emerald-800"
-                  : "bg-brand-charcoal/20 cursor-not-allowed"
-              }`}
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </form>
         </div>
       )}
     </>

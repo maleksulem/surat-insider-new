@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { 
   Calendar, Check, Plus, Trash2, Send, Phone, Clock, ArrowRight, 
-  MapPin, Sparkles, Smile, MessageSquare, ChevronRight, Share2 
+  MapPin, Sparkles, Smile, MessageSquare, ChevronRight, Share2, ChevronDown 
 } from "lucide-react";
-import { Destination, Hotel, FoodSpot, ShoppingGuide, LocalEvent, Tour, Inquiry } from "../types";
+import { Destination, Hotel, FoodSpot, ShoppingGuide, LocalEvent, Tour, Inquiry, CuratedExperience } from "../types";
+import { ExperienceDetailModal } from "./ExperienceDetailModal";
 
 interface PlannerItem {
   id: string;
@@ -28,8 +29,7 @@ interface PlannerSectionProps {
   tours: Tour[];
   events: LocalEvent[];
   addInquiry: (inq: Omit<Inquiry, "id" | "date" | "status">) => void;
-  theme: "normal" | "wedding" | "vacation" | "weekend";
-}
+  }
 
 export function PlannerSection({
   destinations,
@@ -39,8 +39,32 @@ export function PlannerSection({
   tours,
   events,
   addInquiry,
-  theme,
-}: PlannerSectionProps) {
+  }: PlannerSectionProps) {
+  const theme: any = "normal";
+  const [selectedExperience, setSelectedExperience] = useState<CuratedExperience | null>(null);
+
+  const mapTourToCuratedExperience = (tour: Tour): CuratedExperience => {
+    return {
+      id: tour.id,
+      slug: tour.slug || tour.id,
+      title: tour.title,
+      category: "Guided Tour",
+      shortDescription: tour.description,
+      fullDescription: tour.description,
+      location: "Surat, Gujarat",
+      timings: tour.duration,
+      bestTimeToVisit: "Morning / Evening",
+      estimatedDuration: tour.duration,
+      priceRange: `₹${tour.pricing} per head`,
+      highlights: tour.itinerary || [],
+      tips: ["Wear comfortable walking shoes", "Keep a camera ready", "Follow the official tour escort guidelines"],
+      image: tour.image,
+      images: tour.images || (tour.image ? [tour.image] : []),
+      gallery: tour.gallery || [],
+      inquiryType: "Tour",
+      whatsappMessage: `Interested in booking: ${tour.title} (${tour.duration})`
+    };
+  };
   // Calendar dates picker state
   const [selectedMonthIdx, setSelectedMonthIdx] = useState(9); // Default to October (9)
   const [selectedYear, setSelectedYear] = useState(2026);
@@ -105,6 +129,7 @@ export function PlannerSection({
   const [guestEmail, setGuestEmail] = useState("");
   const [guestNotes, setGuestNotes] = useState("");
   const [formSuccess, setFormSuccess] = useState(false);
+  const [dayDropdownOpen, setDayDropdownOpen] = useState(false);
 
   // Initialize day structure whenever days count changes
   const checkAndFillDays = useMemo(() => {
@@ -146,16 +171,20 @@ export function PlannerSection({
   // Available database catalog select source
   const filteredCatalogItems = useMemo(() => {
     let list: any[] = [];
-    if (searchCatalogType === "destination") list = destinations;
-    else if (searchCatalogType === "hotel") list = hotels;
-    else if (searchCatalogType === "shopping") list = shoppingGuides;
-    else if (searchCatalogType === "food") list = foodSpots;
-    else if (searchCatalogType === "tour") list = tours;
+    if (searchCatalogType === "destination") list = destinations || [];
+    else if (searchCatalogType === "hotel") list = hotels || [];
+    else if (searchCatalogType === "shopping") list = shoppingGuides || [];
+    else if (searchCatalogType === "food") list = foodSpots || [];
+    else if (searchCatalogType === "tour") list = tours || [];
 
-    if (!searchCatalogQuery) return list.slice(0, 8);
-    return list.filter(item => 
-      item.title.toLowerCase().includes(searchCatalogQuery.toLowerCase()) || 
-      item.description.toLowerCase().includes(searchCatalogQuery.toLowerCase())
+    const safeList = Array.isArray(list) ? list : [];
+
+    if (!searchCatalogQuery) return safeList.slice(0, 8);
+    return safeList.filter(item => 
+      item && item.title && item.description && (
+        item.title.toLowerCase().includes(searchCatalogQuery.toLowerCase()) || 
+        item.description.toLowerCase().includes(searchCatalogQuery.toLowerCase())
+      )
     ).slice(0, 8);
   }, [searchCatalogType, searchCatalogQuery, destinations, hotels, shoppingGuides, foodSpots, tours]);
 
@@ -278,64 +307,19 @@ export function PlannerSection({
   };
 
   const currentThemeStyles = () => {
-    switch (theme) {
-      case "wedding":
-        return {
-          textColor: "text-slate-900",
-          cardBg: "bg-rose-950 border border-amber-500/30 text-[#fff6e3] shadow-xl",
-          btnColor: "bg-amber-400 hover:bg-amber-300 text-rose-950 font-bold",
-          accentText: "text-amber-600 font-bold",
-          badgeBg: "bg-rose-900 text-amber-300 border border-amber-500/20",
-          titleColor: "text-rose-950 font-serif font-extrabold",
-          divider: "border-white/10",
-          tabActive: "bg-amber-400 text-rose-950 font-bold",
-          inputBg: "bg-rose-900 text-[#fff6e3] border-amber-400/20",
-          inputText: "text-[#fff6e3]",
-          panelBg: "bg-rose-950 border border-amber-500/30 text-[#fff6e3] shadow-xl"
-        };
-      case "vacation":
-        return {
-          textColor: "text-slate-900",
-          cardBg: "bg-[#0b243a] border border-cyan-400/30 text-cyan-50 shadow-xl",
-          btnColor: "bg-cyan-400 hover:bg-cyan-300 text-sky-950 font-bold",
-          accentText: "text-cyan-700 font-bold",
-          badgeBg: "bg-sky-900 text-cyan-200 border border-cyan-400/20",
-          titleColor: "text-sky-950 font-serif font-extrabold",
-          divider: "border-white/10",
-          tabActive: "bg-cyan-400 text-sky-950 font-bold",
-          inputBg: "bg-[#081a2b] text-cyan-50 border-cyan-400/20",
-          inputText: "text-cyan-50",
-          panelBg: "bg-[#0b243a] border border-cyan-400/30 text-cyan-50 shadow-xl"
-        };
-      case "weekend":
-        return {
-          textColor: "text-slate-900",
-          cardBg: "bg-[#27103a] border border-orange-400/30 text-orange-50 shadow-xl",
-          btnColor: "bg-orange-400 hover:bg-orange-300 text-purple-950 font-bold",
-          accentText: "text-orange-600 font-bold",
-          badgeBg: "bg-purple-900 text-orange-200 border border-orange-400/20",
-          titleColor: "text-[#27103a] font-sans font-extrabold",
-          divider: "border-white/10",
-          tabActive: "bg-orange-400 text-purple-950 font-bold",
-          inputBg: "bg-[#1b0a2b] text-orange-50 border-orange-400/20",
-          inputText: "text-orange-50",
-          panelBg: "bg-[#27103a] border border-orange-400/30 text-orange-50 shadow-xl"
-        };
-      default:
-        return {
-          textColor: "text-brand-charcoal",
-          cardBg: "bg-white border border-brand-sand-200 text-brand-charcoal shadow-md",
-          btnColor: "bg-brand-emerald-950 hover:bg-brand-emerald-900 text-brand-sand-50 font-bold",
-          accentText: "text-brand-emerald-800 font-bold",
-          badgeBg: "bg-brand-sand-100 text-brand-emerald-950 border border-brand-sand-200",
-          titleColor: "text-brand-emerald-950 font-serif font-extrabold",
-          divider: "border-brand-sand-200",
-          tabActive: "bg-brand-emerald-950 text-white font-bold",
-          inputBg: "bg-brand-sand-50 text-brand-charcoal border-brand-sand-200",
-          inputText: "text-brand-charcoal",
-          panelBg: "bg-brand-sand-50/50 border border-[#dfcba5]"
-        };
-    }
+    return {
+      textColor: "text-[#1A1614]",
+      cardBg: "bg-white border border-[#1A1614]/10 text-[#1A1614] shadow-sm",
+      btnColor: "bg-[#B8860B] hover:bg-[#a3760a] text-white font-bold",
+      accentText: "text-[#B8860B] font-bold",
+      badgeBg: "bg-[#FFFDF5] text-[#1A1614] border border-[#1A1614]/10",
+      titleColor: "text-[#1A1614] font-serif font-extrabold",
+      divider: "border-[#1A1614]/10",
+      tabActive: "bg-[#B8860B] text-white font-bold",
+      inputBg: "bg-white border border-[#1A1614]/20 text-[#1A1614]",
+      inputText: "text-[#1A1614] placeholder:text-[#1A1614]/40",
+      panelBg: "bg-white border border-[#1A1614]/10 text-[#1A1614] shadow-sm"
+    };
   };
 
   const style = currentThemeStyles();
@@ -440,28 +424,182 @@ export function PlannerSection({
       <div className="flex flex-col md:flex-row md:items-center justify-between border-b gap-4 pb-6" style={{ borderColor: style.divider }}>
         <div className="space-y-2">
           <span className={`text-xs uppercase font-mono tracking-widest ${style.accentText} font-bold flex items-center gap-1.5`}>
-            <Calendar className="w-4 h-4 animate-bounce" /> Plan Your Surat Holiday
+            <Calendar className="w-4 h-4 animate-bounce" /> Your Itinerary
           </span>
           <h2 className={`text-3xl md:text-4xl font-extrabold ${style.titleColor}`}>
-            The Dynamic Vacation Planner
+            The Planner
           </h2>
-          <p className="text-sm text-brand-charcoal opacity-85 max-w-2xl leading-relaxed font-medium">
-            Construct a bespoke calendar timeline by mapping curated shopping mills, stay locations, and historic fort tours day-by-day. Instantly share complete schedule with guides via WhatsApp.
+          <p className="text-sm  max-w-2xl leading-relaxed font-medium">
+            Architect your journey. Map curated landmarks, boutiques, and experiences into a seamless timeline.
           </p>
         </div>
 
         {/* Quick Indicators badge */}
         <div className={`p-4 rounded-2xl flex items-center gap-3 ${style.cardBg}`}>
           <div className="text-center px-2">
-            <span className="text-[10px] uppercase font-mono block opacity-60">Selected days</span>
+            <span className="text-[10px] uppercase font-mono block text-[#4A423D]">Selected days</span>
             <span className={`text-3xl font-black font-mono ${style.accentText}`}>{daysCount}</span>
           </div>
           <div className="w-px h-10 border-l animate-pulse" style={{ borderColor: style.divider }}></div>
           <div className="text-[10px] font-mono leading-tight space-y-1">
             <p>🏁 Start: {startDate ? `${monthNames[selectedMonthIdx].substring(0, 3)} ${startDate}` : "?"}, {selectedYear}</p>
             <p>🏳️ End: {endDate ? `${monthNames[selectedMonthIdx].substring(0, 3)} ${endDate}` : "?"}, {selectedYear}</p>
-            <p className="opacity-60">Status: Standalone synced</p>
+            <p className="text-[#4A423D]">Status: Standalone synced</p>
           </div>
+        </div>
+      </div>
+
+      {/* Sovereign Curated City Packages Section (Read-Only, CMS-integrated) */}
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b gap-4 pb-4.5" style={{ borderColor: style.divider }}>
+          <div className="space-y-1.5 animate-fade-in">
+            <span className={`text-[11px] uppercase font-mono tracking-widest ${style.accentText} font-extrabold flex items-center gap-1.5`}>
+              <Sparkles className="w-4 h-4 text-brand-gold-500 animate-pulse" /> Live Curated Travel Passports
+            </span>
+            <h3 className={`text-2xl font-black tracking-tight ${style.titleColor}`}>
+              The Collections
+            </h3>
+            <p className="text-xs  max-w-xl font-medium leading-relaxed">
+              Bypass the manual preparation. Discover handpicked trails that define the Surat experience.
+              <strong className={`font-bold ml-1 ${theme === "normal" ? "text-[#1A1614]" : "text-[#1A1614]"}`}>Managed live via the super admin CMS dashboard.</strong>
+            </p>
+          </div>
+          
+          <div className={`text-xs font-mono px-3.5 py-2 rounded-xl border flex items-center gap-2 select-none shrink-0 ${style.badgeBg}`}>
+            <span className="w-2 h-2 rounded-full bg-[#B8860B] animate-pulse" />
+            <span className="font-bold">Official Tour Escorts Included</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {tours.map((tour) => (
+            <motion.div
+              key={tour.id}
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className={`rounded-3xl overflow-hidden shadow-xl flex flex-col justify-between ${style.cardBg}`}
+              style={{ contentVisibility: "auto" }}
+            >
+              <div>
+                {/* Header Cover Image */}
+                <div 
+                  onClick={() => setSelectedExperience(mapTourToCuratedExperience(tour))}
+                  className="relative h-44 w-full overflow-hidden cursor-pointer hover:opacity-95 transition-opacity"
+                >
+                  <img
+                    src={tour.image}
+                    alt={tour.title}
+                    className="w-full h-full object-cover select-none transition-transform duration-500 hover:scale-105"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute top-3 left-3 bg-[#B8860B]/95 text-brand-sand-50 text-[9px] font-mono font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-[#B8860B]/35 shadow-md">
+                    ⏱️ {tour.duration}
+                  </div>
+                  <div className="absolute top-3 right-3 bg-[#B8860B] text-[#1A1614] text-[10px] font-mono font-black border border-white px-2.5 py-1 rounded-lg flex items-center gap-1 shadow">
+                    ★ {tour.rating ? tour.rating.toFixed(1) : "5.0"}
+                  </div>
+                </div>
+
+                {/* Content Details */}
+                <div className="p-5 space-y-4">
+                  <div className="space-y-1">
+                    <h4 className={`font-serif font-black text-base leading-snug tracking-tight ${theme === "normal" ? "text-[#1A1614]" : "text-[#1A1614]"}`}>
+                      {tour.title}
+                    </h4>
+                    <div className="flex items-center gap-2 text-xs font-mono text-brand-gold-600 font-bold">
+                      <span>🎟️ Value Fee:</span>
+                      <span className={`text-sm font-black ${theme === "normal" ? "text-[#1A1614]" : "text-[#1A1614]"}`}>₹{tour.pricing}</span>
+                      <span className={`text-[10px] font-normal ${theme === "normal" ? "text-[#1A1614]/50" : "text-[#1A1614]/40"}`}>per visitor guest</span>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-[#4A423D] leading-relaxed font-sans font-medium">
+                    {tour.description}
+                  </p>
+
+                  {/* Step by Step Timeline sequence tree road map */}
+                  <div className={`p-4 rounded-2xl border space-y-2.5 select-none ${style.panelBg ? style.panelBg : 'bg-[#FFFDF5]0/50'}`}>
+                    <div className="flex items-center justify-between border-b pb-1.5 mb-1" style={{ borderColor: style.divider }}>
+                      <span className={`text-[9px] uppercase tracking-widest font-mono font-black flex items-center gap-1 ${style.accentText}`}>
+                        📍 Route Roadmap Stops
+                      </span>
+                      <span className={`text-[9px] font-mono font-bold ${theme === "normal" ? "text-[#1A1614]/50" : "text-[#1A1614]/40"}`}>
+                        {tour.itinerary?.length || 0} stages tour
+                      </span>
+                    </div>
+
+                    <div className="space-y-4 relative pl-3.5 border-l border-[#B8860B]/20 select-none">
+                      {tour.itinerary?.map((stepStr, sIdx) => {
+                        const match = stepStr.match(/^(\d{2}:\d{2}\s+(?:AM|PM))\s*-\s*(.+)$/i);
+                        const time = match ? match[1] : null;
+                        const text = match ? match[2] : stepStr;
+
+                        return (
+                          <div key={sIdx} className="relative group">
+                            {/* timeline node bullet */}
+                            <div className="absolute -left-[20px] top-1 w-2 h-2 rounded-full bg-[#c5a059] border border-white group-hover:scale-125 transition-transform duration-200 ring-2 ring-brand-sand-100" />
+                            
+                            <div className="text-[11px] leading-relaxed">
+                              {time && (
+                                <span className={`font-mono text-[9px] font-black uppercase bg-[#B8860B]/15 px-1.5 py-0.5 rounded border border-[#B8860B]/20 mr-1.5 ${style.accentText}`}>
+                                  {time}
+                                </span>
+                              )}
+                              <span className={`font-semibold tracking-wide font-sans text-xs hover:text-brand-gold-500 transition-colors ${theme === "normal" ? "text-[#1A2E22]" : "text-[#1A1614]"}`}>
+                                {text}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action layout footer */}
+              <div className="p-5 pt-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const inquiryText = `🌟 *NEW PRIVATE CURATED PACKAGE RESERVATION* 🌟\n\n` +
+                      `👑 *Package Requested:* ${tour.title}\n` +
+                      `⏱️ *Trip Limit:* ${tour.duration}\n` +
+                      `💰 *Tier Tariff:* ₹${tour.pricing} per head\n\n` +
+                      `📋 *Full Schedule Sequence:* \n` +
+                      `${tour.itinerary.map((item, index) => `📍 [Step ${index+1}] ${item}`).join('\n')}\n\n` +
+                      `Please reach back to confirm guide availabilities and group dispatch booking slot!`;
+
+                    addInquiry({
+                      itemId: tour.id,
+                      itemTitle: tour.title,
+                      itemType: "tour",
+                      name: "Interested Guest Traveler",
+                      email: "guest@suratinsider.com",
+                      phone: "WhatsApp Chat request",
+                      message: inquiryText
+                    });
+                    
+                    // Redirect directly to whatsapp using predefined text
+                    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(inquiryText)}`, "_blank");
+                  }}
+                  className={`w-full py-3 rounded-2xl text-[11px] font-bold font-mono tracking-widest uppercase transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] active:scale-95 text-center ${style.btnColor}`}
+                >
+                  <span>📲 BOOK NOW via WHATSAPP</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        
+        {/* Divider and custom schedule teaser indicator */}
+        <div className="flex items-center gap-4 py-8 select-none" style={{ borderColor: style.divider }}>
+          <div className="flex-1 h-px border-t" style={{ borderColor: style.divider }} />
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#c5a059] font-black whitespace-nowrap px-4">
+            ✦ Or customize dynamic calendar below ✦
+          </span>
+          <div className="flex-1 h-px border-t" style={{ borderColor: style.divider }} />
         </div>
       </div>
 
@@ -479,23 +617,23 @@ export function PlannerSection({
               <div className="flex items-center gap-1.5">
                 <button 
                   onClick={handlePrevMonth}
-                  className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/10 hover:bg-black/20 text-[#dfcba5] hover:text-white transition-all font-bold text-sm"
+                  className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/10 hover:bg-black/20 text-[#B8860B] hover:text-[#1A1614] transition-all font-bold text-sm"
                   title="Previous Month"
                 >
                   ‹
                 </button>
-                <span className={`font-serif text-xs sm:text-sm font-bold uppercase tracking-wider ${style.textColor === "text-brand-charcoal" ? "text-brand-emerald-950" : "text-amber-50"}`}>
+                <span className={`font-serif text-xs sm:text-sm font-bold uppercase tracking-wider ${style.textColor === "text-[#1A1614]" ? "text-[#1A1614]" : "text-amber-50"}`}>
                   🗓️ {selectedMonth}
                 </span>
                 <button 
                   onClick={handleNextMonth}
-                  className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/10 hover:bg-black/20 text-[#dfcba5] hover:text-white transition-all font-bold text-sm"
+                  className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/10 hover:bg-black/20 text-[#B8860B] hover:text-[#1A1614] transition-all font-bold text-sm"
                   title="Next Month"
                 >
                   ›
                 </button>
               </div>
-              <span className="text-[9px] sm:text-[10px] font-mono bg-amber-400/20 text-[#dfcba5] px-2 py-0.5 rounded uppercase text-right font-semibold">
+              <span className="text-[9px] sm:text-[10px] font-mono bg-[#B8860B]/20 text-[#B8860B] px-2 py-0.5 rounded uppercase text-right font-semibold">
                 {getSeasonVibe()}
               </span>
             </div>
@@ -504,12 +642,12 @@ export function PlannerSection({
             <div className="grid grid-cols-7 gap-1.5 text-center text-xs font-mono mb-4">
               {/* Day names */}
               {["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].map(d => (
-                <div key={d} className="text-[10px] font-black uppercase opacity-45 py-1">{d}</div>
+                <div key={d} className="text-[10px] font-black uppercase  py-1">{d}</div>
               ))}
               
               {/* Offset grid for first day of month */}
               {Array.from({ length: firstDayIndex }).map((_, i) => (
-                <div key={`empty-${i}`} className="py-2 opacity-10 font-light">-</div>
+                <div key={`empty-${i}`} className="py-2 opacity-10 font-normal">-</div>
               ))}
 
               {/* Monthly numbers */}
@@ -522,30 +660,30 @@ export function PlannerSection({
                 const holidayLabel = getHolidayLabel(d);
                 const isSunday = new Date(selectedYear, selectedMonthIdx, d).getDay() === 0;
 
-                let cellClass = "hover:bg-white/10 text-white/90 rounded-lg";
+                let cellClass = "hover:bg-white/10 text-[#1A1614]/90 rounded-lg";
                 if (theme === "normal") {
-                  cellClass = "hover:bg-brand-emerald-950/10 text-brand-charcoal rounded-lg";
+                  cellClass = "hover:bg-[#B8860B]/10 text-[#1A1614] rounded-lg";
                 }
 
                 if (isStart || isEnd) {
-                  cellClass = "bg-[#d946ef] text-white font-extrabold shadow-lg scale-110 rounded-lg";
-                  if (theme === "wedding") cellClass = "bg-amber-400 text-rose-950 font-extrabold shadow-lg scale-110 rounded-lg";
+                  cellClass = "bg-[#d946ef] text-[#1A1614] font-extrabold shadow-lg scale-110 rounded-lg";
+                  if (theme === "wedding") cellClass = "bg-[#B8860B] text-rose-950 font-extrabold shadow-lg scale-110 rounded-lg";
                   if (theme === "vacation") cellClass = "bg-cyan-400 text-sky-950 font-extrabold shadow-lg scale-110 rounded-lg";
-                  if (theme === "normal") cellClass = "bg-brand-emerald-950 text-white font-extrabold shadow-lg scale-110 rounded-lg";
+                  if (theme === "normal") cellClass = "bg-[#B8860B] text-[#1A1614] font-extrabold shadow-lg scale-110 rounded-lg";
                 } else if (isInRange) {
-                  cellClass = "bg-white/20 text-white rounded-md";
-                  if (theme === "normal") cellClass = "bg-brand-sand-200/90 text-brand-emerald-950 font-bold rounded-lg";
+                  cellClass = "bg-white/20 text-[#1A1614] rounded-md";
+                  if (theme === "normal") cellClass = "bg-[#B8860B]/15 text-[#1A1614] font-bold rounded-lg";
                 } else if (isScheduled) {
                   cellClass += " border border-dashed border-purple-400/50 rounded-lg bg-purple-500/10";
                 } else if (holidayLabel) {
                   // Sundays are soft red, other national holidays are warm amber outlines
                   cellClass += isSunday 
                     ? " text-red-400 hover:bg-rose-500/10" 
-                    : " text-amber-300 font-semibold border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/15";
+                    : " text-[#1A1614] font-semibold border border-[#1A1614]/10 bg-white hover:bg-black/5";
                   if (theme === "normal") {
                     cellClass += isSunday 
                       ? " text-red-600 font-bold" 
-                      : " text-brand-gold-600 font-bold bg-brand-sand-100/50";
+                      : " text-[#B8860B] font-bold bg-[#B8860B]/10";
                   }
                 }
 
@@ -558,17 +696,17 @@ export function PlannerSection({
                   >
                     <span>{d}</span>
                     {holidayLabel && !isStart && !isEnd && (
-                      <span className={`w-1 h-1 rounded-full ${isSunday ? "bg-rose-400" : "bg-amber-400"} mt-0.5`}></span>
+                      <span className={`w-1 h-1 rounded-full ${isSunday ? "bg-rose-400" : "bg-[#B8860B]"} mt-0.5`}></span>
                     )}
                     {isScheduled && !isStart && !isEnd && (
-                      <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-brand-gold-500"></span>
+                      <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#B8860B]"></span>
                     )}
                   </button>
                 );
               })}
             </div>
 
-            <div className="text-[10px] leading-relaxed opacity-85 p-3 bg-black/10 rounded-xl border border-white/5 font-mono space-y-1 text-white">
+            <div className="text-[10px] leading-relaxed  p-3 bg-black/10 rounded-xl border border-white/5 font-mono space-y-1 text-[#1A1614]">
               <p>🎯 <strong>Interactive Range:</strong> Click a Start Date, then click an End Date to dynamically span your trip calendar duration instantly.</p>
               <p>📍 Sundays & Indian Calendar Holidays are mapped dynamically with cute point guides.</p>
             </div>
@@ -585,14 +723,14 @@ export function PlannerSection({
             </p>
             <div className="grid grid-cols-2 gap-2 text-center text-[10px] font-mono">
               <div className="bg-white/5 p-2 rounded-lg border border-white/5">
-                <span className="opacity-60 block">ACTIVE SELECTIONS</span>
+                <span className="text-[#4A423D] block">ACTIVE SELECTIONS</span>
                 <strong className={style.accentText}>
                   {scheduledDays.reduce((acc, d) => acc + d.items.length, 0)} Items
                 </strong>
               </div>
               <div className="bg-white/5 p-2 rounded-lg border border-white/5">
-                <span className="opacity-60 block">INTEGRATION STATUS</span>
-                <strong className="text-emerald-500">REAL-TIME WA.ME</strong>
+                <span className="text-[#4A423D] block">INTEGRATION STATUS</span>
+                <strong className="text-[#4A423D]">REAL-TIME WA.ME</strong>
               </div>
             </div>
           </div>
@@ -600,22 +738,130 @@ export function PlannerSection({
 
         {/* RIGHT COLUMN: CORE SCHEDULE DAY BUILDER (7 COLS) */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Day selectors Tabs menu */}
-          <div className="flex gap-2 p-1 overflow-x-auto no-scrollbar bg-white/5 rounded-2xl border border-white/10">
-            {scheduledDays.map((day, idx) => (
+          {/* Day selectors Dropdown menu with dynamic days navigation catalog */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-4 rounded-3xl bg-white/5 border border-white/10 relative z-30">
+            <div className="space-y-0.5">
+              <span className={`text-[10px] uppercase font-mono tracking-widest ${style.accentText} font-black block`}>
+                ✦ Schedule Day stage
+              </span>
+              <p className="text-xs text-[#1A1614]  font-sans font-semibold">Switch scheduled days instantly:</p>
+            </div>
+
+            <div className="flex items-center gap-2 relative">
+              {/* Prev Day trigger navigation button */}
               <button
-                key={`day-tab-${idx}`}
-                onClick={() => setActivePlannerTabDay(idx)}
-                className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold font-mono tracking-tight transition-all uppercase flex flex-col items-center justify-center min-w-[100px] ${
-                  activePlannerTabDay === idx
-                    ? style.tabActive
-                    : "text-white/70 hover:bg-white/10 hover:text-white"
+                type="button"
+                onClick={() => {
+                  if (activePlannerTabDay > 0) {
+                    setActivePlannerTabDay(prev => prev - 1);
+                  }
+                }}
+                disabled={activePlannerTabDay === 0}
+                className={`p-3 rounded-xl border border-white/15 bg-white/5 text-[#fcf9f2] transition-all duration-250 flex items-center justify-center ${
+                  activePlannerTabDay === 0 ? "opacity-35 cursor-not-allowed" : "hover:bg-white/10 active:scale-95"
                 }`}
+                title="Previous Day"
               >
-                <span>Day {day.dayIndex + 1}</span>
-                <span className="text-[9px] font-light mt-0.5 opacity-80">{day.dateStr}</span>
+                ←
               </button>
-            ))}
+
+              {/* Main Premium Dropdown Selection Button */}
+              <div className="relative">
+                <button
+                  type="button"
+                  id="planner-day-dropdown-btn"
+                  onClick={() => setDayDropdownOpen(!dayDropdownOpen)}
+                  className={`flex items-center justify-between gap-4 px-5 py-3 rounded-xl text-xs font-bold font-mono tracking-wide transition-all uppercase min-w-[210px] border border-[#B8860B]/30 shadow-md ${style.tabActive} hover:scale-[1.02] active:scale-[0.98] select-none`}
+                >
+                  <span className="flex items-center gap-1.5">
+                    <span>🗓️ Day {activePlannerTabDay + 1}</span>
+                    <span className="text-[10px] font-normal ">({scheduledDays[activePlannerTabDay]?.dateStr})</span>
+                  </span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${dayDropdownOpen ? "rotate-180" : ""}`} />
+                </button>
+
+                {/* Animated Popover listing all scheduled days */}
+                <AnimatePresence>
+                  {dayDropdownOpen && (
+                    <>
+                      {/* Click-away backdrop dismiss listener */}
+                      <div 
+                        className="fixed inset-0 z-10 cursor-default" 
+                        onClick={() => setDayDropdownOpen(false)} 
+                      />
+                      
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                        className="absolute right-0 mt-2 w-72 rounded-2xl bg-[#0c1717] border border-[#B8860B]/40 p-2.5 z-20 shadow-2xl space-y-1 text-[#1A1614]"
+                      >
+                        <div className="px-3 py-2 border-b border-white/15 mb-1.5 flex items-center justify-between">
+                          <span className="text-[9px] uppercase font-mono tracking-wider text-brand-gold-300 font-extrabold">
+                            Trip Days Catalog
+                          </span>
+                          <span className="text-[8px] font-mono text-[#4A423D]">
+                            {scheduledDays.length} Days Selected
+                          </span>
+                        </div>
+                        
+                        <div className="max-h-64 overflow-y-auto pr-1 space-y-1 no-scrollbar">
+                          {scheduledDays.map((day, idx) => {
+                            const isActive = activePlannerTabDay === idx;
+                            const itemCount = day.items?.length || 0;
+                            return (
+                              <button
+                                key={`dropdown-day-item-${idx}`}
+                                type="button"
+                                onClick={() => {
+                                  setActivePlannerTabDay(idx);
+                                  setDayDropdownOpen(false);
+                                }}
+                                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold font-sans tracking-wide transition-all flex items-center justify-between ${
+                                  isActive
+                                    ? "bg-[#B8860B] text-[#1A1614] font-extrabold shadow-md"
+                                    : "text-brand-sand-50 hover:bg-white/10 hover:text-[#1A1614]"
+                                }`}
+                              >
+                                <div className="flex flex-col text-left">
+                                  <span className="font-mono uppercase font-bold text-[11px] leading-tight flex items-center gap-1">
+                                    Day {day.dayIndex + 1} {isActive && <span className="text-[#1A1614]">✦</span>}
+                                  </span>
+                                  <span className="text-[10px] font-normal text-[#4A423D] mt-0.5">{day.dateStr}</span>
+                                </div>
+                                <span className={`text-[9px] uppercase px-2 py-0.5 rounded-md font-mono font-bold tracking-tight ${
+                                  isActive ? "bg-[#B8860B] text-brand-sand-50" : "bg-white/10 text-brand-gold-300"
+                                }`}>
+                                  {itemCount} {itemCount === 1 ? "item" : "items"}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Next Day trigger navigation button */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (activePlannerTabDay < scheduledDays.length - 1) {
+                    setActivePlannerTabDay(prev => prev + 1);
+                  }
+                }}
+                disabled={activePlannerTabDay === scheduledDays.length - 1}
+                className={`p-3 rounded-xl border border-white/15 bg-white/5 text-[#fcf9f2] transition-all duration-250 flex items-center justify-center ${
+                  activePlannerTabDay === scheduledDays.length - 1 ? "opacity-35 cursor-not-allowed" : "hover:bg-white/10 active:scale-95"
+                }`}
+                title="Next Day"
+              >
+                →
+              </button>
+            </div>
           </div>
 
           {/* Target Day Content Sheet */}
@@ -633,9 +879,9 @@ export function PlannerSection({
                   <h3 className="font-serif font-bold text-sm">
                     Day Schedule Blueprint ({scheduledDays[activePlannerTabDay]?.dateStr || "Planned Day"})
                   </h3>
-                  <p className="text-[10px] opacity-70">Define active items inside morning, afternoon and evening chronological layers.</p>
+                  <p className="text-[10px] text-[#4A423D]">Define active items inside morning, afternoon and evening chronological layers.</p>
                 </div>
-                <span className="text-[10px] font-mono opacity-50">
+                <span className="text-[10px] font-mono text-[#4A423D]">
                   {scheduledDays[activePlannerTabDay]?.items?.length || 0} ITEMS SCHEDULED
                 </span>
               </div>
@@ -644,15 +890,15 @@ export function PlannerSection({
               <div className="space-y-4 relative before:absolute before:left-3 mt-1.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-white/10">
                 {/* MORNING SLOT */}
                 <div className="pl-8 relative space-y-2">
-                  <span className="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-brand-gold-500 border-4 border-rose-950 flex items-center justify-center"></span>
+                  <span className="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-[#B8860B] border-4 border-rose-950 flex items-center justify-center"></span>
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono tracking-wider font-extrabold uppercase opacity-80 text-brand-gold-300">
+                    <span className="text-[11px] font-mono tracking-wider font-extrabold uppercase text-[#4A423D] text-brand-gold-300">
                       🌅 Morning Layer (08:00 AM - 12:00 PM)
                     </span>
                     <button
                       onClick={() => setActiveCreatorSlot("Morning")}
                       className={`px-2 py-0.5 text-[9px] uppercase font-mono rounded font-bold border transition-all ${
-                        activeCreatorSlot === "Morning" ? "bg-white text-emerald-950 border-white" : "border-white/20 text-white/60 hover:bg-white/5"
+                        activeCreatorSlot === "Morning" ? "bg-white text-emerald-950 border-white" : "border-white/20 text-[#1A1614]/60 hover:bg-white/5"
                       }`}
                     >
                       Selected Slot
@@ -666,33 +912,33 @@ export function PlannerSection({
                         <div className="flex items-center gap-2">
                           <span className="text-sm">📍</span>
                           <span className="font-semibold">{item.title}</span>
-                          <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 bg-black/30 rounded opacity-65 text-white">{item.type}</span>
+                          <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 bg-black/30 rounded  text-[#1A1614]">{item.type}</span>
                         </div>
                         <button
                           onClick={() => handleDeleteItemFromSchedule(activePlannerTabDay, item.id, "Morning")}
-                          className="hover:text-red-400 p-1 flex items-center justify-center text-white/50"
+                          className="hover:text-red-400 p-1 flex items-center justify-center text-[#1A1614]/50"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     ))}
                     {scheduledDays[activePlannerTabDay]?.items?.filter(item => item.timeSlot === "Morning").length === 0 && (
-                      <p className="text-[10px] italic opacity-50 pl-3">No morning visits scheduled. Click add below or select slot to attach catalog.</p>
+                      <p className="text-[10px] italic text-[#4A423D] pl-3">No morning visits scheduled. Click add below or select slot to attach catalog.</p>
                     )}
                   </div>
                 </div>
 
                 {/* AFTERNOON SLOT */}
                 <div className="pl-8 relative space-y-2">
-                  <span className="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-brand-gold-500 border-4 border-rose-950 flex items-center justify-center"></span>
+                  <span className="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-[#B8860B] border-4 border-rose-950 flex items-center justify-center"></span>
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono tracking-wider font-extrabold uppercase opacity-80 text-brand-gold-300">
+                    <span className="text-[11px] font-mono tracking-wider font-extrabold uppercase text-[#4A423D] text-brand-gold-300">
                       🌞 Afternoon Layer (12:00 PM - 04:00 PM)
                     </span>
                     <button
                       onClick={() => setActiveCreatorSlot("Afternoon")}
                       className={`px-2 py-0.5 text-[9px] uppercase font-mono rounded font-bold border transition-all ${
-                        activeCreatorSlot === "Afternoon" ? "bg-white text-emerald-950 border-white" : "border-white/20 text-white/60 hover:bg-white/5"
+                        activeCreatorSlot === "Afternoon" ? "bg-white text-emerald-950 border-white" : "border-white/20 text-[#1A1614]/60 hover:bg-white/5"
                       }`}
                     >
                       Selected Slot
@@ -706,33 +952,33 @@ export function PlannerSection({
                         <div className="flex items-center gap-2">
                           <span className="text-sm">🍲</span>
                           <span className="font-semibold">{item.title}</span>
-                          <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 bg-black/30 rounded opacity-65 text-white">{item.type}</span>
+                          <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 bg-black/30 rounded  text-[#1A1614]">{item.type}</span>
                         </div>
                         <button
                           onClick={() => handleDeleteItemFromSchedule(activePlannerTabDay, item.id, "Afternoon")}
-                          className="hover:text-red-400 p-1 flex items-center justify-center text-white/50"
+                          className="hover:text-red-400 p-1 flex items-center justify-center text-[#1A1614]/50"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     ))}
                     {scheduledDays[activePlannerTabDay]?.items?.filter(item => item.timeSlot === "Afternoon").length === 0 && (
-                      <p className="text-[10px] italic opacity-50 pl-3">No afternoon activity added yet.</p>
+                      <p className="text-[10px] italic text-[#4A423D] pl-3">No afternoon activity added yet.</p>
                     )}
                   </div>
                 </div>
 
                 {/* EVENING SLOT */}
                 <div className="pl-8 relative space-y-2">
-                  <span className="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-brand-gold-500 border-4 border-rose-950 flex items-center justify-center"></span>
+                  <span className="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-[#B8860B] border-4 border-rose-950 flex items-center justify-center"></span>
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono tracking-wider font-extrabold uppercase opacity-80 text-brand-gold-300">
+                    <span className="text-[11px] font-mono tracking-wider font-extrabold uppercase text-[#4A423D] text-brand-gold-300">
                       🌇 Evening Layer (04:00 PM - 10:00 PM)
                     </span>
                     <button
                       onClick={() => setActiveCreatorSlot("Evening")}
                       className={`px-2 py-0.5 text-[9px] uppercase font-mono rounded font-bold border transition-all ${
-                        activeCreatorSlot === "Evening" ? "bg-white text-emerald-950 border-white" : "border-white/20 text-white/60 hover:bg-white/5"
+                        activeCreatorSlot === "Evening" ? "bg-white text-emerald-950 border-white" : "border-white/20 text-[#1A1614]/60 hover:bg-white/5"
                       }`}
                     >
                       Selected Slot
@@ -746,18 +992,18 @@ export function PlannerSection({
                         <div className="flex items-center gap-2">
                           <span className="text-sm">🛍️</span>
                           <span className="font-semibold">{item.title}</span>
-                          <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 bg-black/30 rounded opacity-65 text-white">{item.type}</span>
+                          <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 bg-black/30 rounded  text-[#1A1614]">{item.type}</span>
                         </div>
                         <button
                           onClick={() => handleDeleteItemFromSchedule(activePlannerTabDay, item.id, "Evening")}
-                          className="hover:text-red-400 p-1 flex items-center justify-center text-white/50"
+                          className="hover:text-red-400 p-1 flex items-center justify-center text-[#1A1614]/50"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     ))}
                     {scheduledDays[activePlannerTabDay]?.items?.filter(item => item.timeSlot === "Evening").length === 0 && (
-                      <p className="text-[10px] italic opacity-50 pl-3">No evening sights booked inside Day timeline.</p>
+                      <p className="text-[10px] italic text-[#4A423D] pl-3">No evening sights booked inside Day timeline.</p>
                     )}
                   </div>
                 </div>
@@ -767,7 +1013,7 @@ export function PlannerSection({
               <div className="pt-4 border-t space-y-4" style={{ borderColor: style.divider }}>
                 <div className="space-y-1">
                   <h4 className="font-bold text-xs uppercase text-brand-gold-400">Add catalog spot to selected slot ({activeCreatorSlot})</h4>
-                  <p className="text-[10px] opacity-70">Pick dynamic attractions, stays, food spaces or tours below to sync seamlessly.</p>
+                  <p className="text-[10px] text-[#4A423D]">Pick dynamic attractions, stays, food spaces or tours below to sync seamlessly.</p>
                 </div>
 
                 {/* Subcategory selectors */}
@@ -781,7 +1027,7 @@ export function PlannerSection({
                         setSearchCatalogQuery("");
                       }}
                       className={`flex-1 py-1 px-2.5 rounded font-bold ${
-                        searchCatalogType === cat ? "bg-white text-emerald-950" : "text-white/60 hover:text-white"
+                        searchCatalogType === cat ? "bg-white text-emerald-950" : "text-[#1A1614]/60 hover:text-[#1A1614]"
                       }`}
                     >
                       {cat}
@@ -795,7 +1041,7 @@ export function PlannerSection({
                     value={searchCatalogQuery}
                     onChange={(e) => setSearchCatalogQuery(e.target.value)}
                     placeholder={`Search within ${searchCatalogType}s database catalogue...`}
-                    className="flex-1 bg-white/5 border border-white/15 p-2.5 rounded-xl outline-none text-white placeholder-white/30"
+                    className="flex-1 bg-white/5 border border-white/15 p-2.5 rounded-xl outline-none text-[#1A1614] placeholder-white/30"
                   />
                   {searchCatalogQuery && (
                     <button
@@ -812,22 +1058,22 @@ export function PlannerSection({
                   {filteredCatalogItems.map(item => (
                     <div 
                       key={item.id} 
-                      className="p-2.5 bg-black/15 hover:bg-black/30 transition-colors rounded-xl border border-white/5 flex items-center justify-between gap-3 text-[11px]"
+                      className="p-2.5 bg-[#FFFDF5] hover:bg-[#B8860B]/10 transition-colors rounded-xl border border-[#1A1614]/10 flex items-center justify-between gap-3 text-[11px]"
                     >
                       <div className="truncate pr-2">
-                        <p className="font-bold truncate text-white">{item.title}</p>
-                        <p className="text-[9px] opacity-50 truncate">{item.category || searchCatalogType}</p>
+                        <p className="font-bold truncate text-[#1A1614]">{item.title}</p>
+                        <p className="text-[9px] text-[#4A423D] truncate">{item.category || searchCatalogType}</p>
                       </div>
                       <button
                         onClick={() => handleAddItemToSchedule(item.id, item.title, searchCatalogType)}
-                        className={`px-2 py-1 rounded bg-white/10 hover:bg-white/20 transition-all font-bold text-white uppercase text-[8px] tracking-wider shrink-0 font-mono`}
+                        className={`px-2 py-1 rounded bg-[#B8860B]/10 hover:bg-[#B8860B]/20 transition-all font-bold text-[#B8860B] uppercase text-[8px] tracking-wider shrink-0 font-mono`}
                       >
                         + Add To Slot
                       </button>
                     </div>
                   ))}
                   {filteredCatalogItems.length === 0 && (
-                    <p className="col-span-2 text-center text-[10px] italic opacity-50 py-4">No matching catalog spots found.</p>
+                    <p className="col-span-2 text-center text-[10px] italic text-[#4A423D] py-4">No matching catalog spots found.</p>
                   )}
                 </div>
 
@@ -838,11 +1084,11 @@ export function PlannerSection({
                     value={customItemText}
                     onChange={(e) => setCustomItemText(e.target.value)}
                     placeholder="Or type a custom activity... (e.g. Meet family at airport)"
-                    className="flex-1 bg-white/5 border border-white/15 p-2.5 rounded-xl outline-none text-white font-mono"
+                    className="flex-1 bg-white border border-[#1A1614]/10 p-2.5 rounded-xl outline-none text-[#1A1614] placeholder:text-[#1A1614]/40 font-mono focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B]"
                   />
                   <button
                     type="submit"
-                    className="px-4 bg-brand-gold-500 hover:bg-brand-gold-400 text-brand-emerald-950 font-bold tracking-wide text-[10px] uppercase font-mono rounded-xl"
+                    className="px-4 bg-[#B8860B] hover:bg-[#B8860B]/90 text-white font-bold tracking-wide text-[10px] uppercase font-mono rounded-xl shadow-sm"
                   >
                     Quick Add
                   </button>
@@ -856,7 +1102,7 @@ export function PlannerSection({
       {/* WHATSAPP SHARING & BACKEND SUBMISSION SECTION (GLASSMORPHISM MOCKUP) */}
       <div className={`mt-12 rounded-3xl p-6 md:p-10 ${style.panelBg} relative overflow-hidden shadow-2xl`}>
         {/* Background circular highlight */}
-        <div className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-brand-gold-500/10 blur-3xl pointer-events-none"></div>
+        <div className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-[#B8860B]/10 blur-3xl pointer-events-none"></div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
           {/* Left instructions block */}
@@ -867,7 +1113,7 @@ export function PlannerSection({
             <h3 className={`font-serif text-2xl md:text-3xl font-extrabold ${style.titleColor}`}>
               Finalize Custom Plan
             </h3>
-            <p className="opacity-80 leading-relaxed font-sans">
+            <p className="text-[#4A423D] leading-relaxed font-sans">
               Choose to share your complete structured day-by-day vacation itinerary directly to your personal WhatsApp feed (including pre-formatted bullet listings), or direct submit to our local Surat Insider booking concierge team. We will immediately map verified guides and assign comfortable transport options!
             </p>
 
@@ -878,11 +1124,11 @@ export function PlannerSection({
                 target="_blank"
                 rel="noreferrer"
                 id="share-whatsapp-btn"
-                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-5 rounded-2xl flex items-center justify-center gap-2 transition-all border border-emerald-500/30 text-xs shadow-lg"
+                className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-3.5 px-5 rounded-2xl flex items-center justify-center gap-2 transition-all text-xs shadow-lg"
               >
                 <Share2 className="w-4 h-4" /> Share Complete Plan to WhatsApp
               </a>
-              <span className="block text-[9px] text-center opacity-60 font-mono">
+              <span className="block text-[9px] text-center text-[#4A423D] font-mono">
                 Launch pre-formatted text block with emojis on wa.me API!
               </span>
             </div>
@@ -895,15 +1141,15 @@ export function PlannerSection({
             <h4 className="font-serif font-bold text-sm text-brand-gold-400"> Concierge Private Sync</h4>
             
             {formSuccess && (
-              <div className="p-4 bg-emerald-500/10 border border-emerald-400/30 text-emerald-300 font-semibold rounded-xl flex items-center gap-2">
-                <Check className="w-4 h-4 text-emerald-400" />
+              <div className="p-4 bg-[#B8860B]/10 border border-[#B8860B]/20 text-[#1A1614] font-semibold rounded-xl flex items-center gap-2">
+                <Check className="w-4 h-4 text-[#B8860B]" />
                 Schedule saved & sent to platform admin queues successfully!
               </div>
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-[10px] uppercase font-mono tracking-wider opacity-85 block mb-1">Your Full Name*</label>
+                <label className="text-[10px] uppercase font-mono tracking-wider  block mb-1">Your Full Name*</label>
                 <input
                   type="text"
                   required
@@ -914,11 +1160,11 @@ export function PlannerSection({
                 />
               </div>
               <div>
-                <label className="text-[10px] uppercase font-mono tracking-wider opacity-85 block mb-1">WhatsApp Mobile*</label>
+                <label className="text-[10px] uppercase font-mono tracking-wider  block mb-1">WhatsApp Mobile*</label>
                 <input
                   type="text"
                   required
-                  placeholder="+91 98791 98671"
+                  placeholder="+91 99999 99999"
                   value={guestPhone}
                   onChange={(e) => setGuestPhone(e.target.value)}
                   className={`w-full ${style.inputBg} ${style.inputText} p-2.5 rounded-xl outline-none focus:ring-1 focus:ring-amber-400 font-mono`}
@@ -927,7 +1173,7 @@ export function PlannerSection({
             </div>
 
             <div>
-              <label className="text-[10px] uppercase font-mono tracking-wider opacity-85 block mb-1">Email Address*</label>
+              <label className="text-[10px] uppercase font-mono tracking-wider  block mb-1">Email Address*</label>
               <input
                 type="email"
                 required
@@ -939,7 +1185,7 @@ export function PlannerSection({
             </div>
 
             <div>
-              <label className="text-[10px] uppercase font-mono tracking-wider opacity-85 block mb-1">Special travel requests / Accommodation notes</label>
+              <label className="text-[10px] uppercase font-mono tracking-wider  block mb-1">Special travel requests / Accommodation notes</label>
               <textarea
                 placeholder="Include requests like premium guides with Gujarati translation, special dietary needs for locho dishes..."
                 rows={2}
@@ -958,6 +1204,17 @@ export function PlannerSection({
           </form>
         </div>
       </div>
+      
+      {selectedExperience && (
+        <ExperienceDetailModal
+          item={selectedExperience}
+          onClose={() => setSelectedExperience(null)}
+          addInquiry={addInquiry}
+          triggerWhatsAppMessage={(text) => {
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, "_blank");
+          }}
+        />
+      )}
     </div>
   );
 }

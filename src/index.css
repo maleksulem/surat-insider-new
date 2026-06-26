@@ -1,35 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
-:root {
-  /* Store as raw RGB channels so Tailwind opacity modifiers function correctly */
-  --world-primary-rgb: 139, 0, 0;       /* #8B0000 */
-  --world-secondary-rgb: 247, 231, 206; /* #F7E7CE */
-  --world-accent-rgb: 204, 119, 34;     /* #CC7722 */
-  --world-text-rgb: 255, 246, 233;      /* #FFF6E9 */
-}
-
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-theme-base: #FFFDF5;
+  --color-theme-dark: #1A1614;
+  --color-theme-muted: #4A423D;
+  --color-theme-gold: #B8860B;
+
+  /* Aliases to instantly upgrade the entire app to the 10/10 palette */
+  --color-brand-emerald-950: #1A1614;
+  --color-brand-emerald-900: #1A1614;
+  --color-brand-emerald-800: #4A423D;
+  --color-brand-emerald-700: #4A423D;
+  
+  --color-brand-sand-50: #FFFDF5;
+  --color-brand-sand-100: #FFFDF5;
+  --color-brand-sand-200: #e2dfd5; /* Slightly darker for borders */
+  
+  --color-brand-gold-300: #B8860B;
+  --color-brand-gold-400: #B8860B;
+  --color-brand-gold-500: #B8860B;
+  
+  --color-brand-charcoal: #1A1614;
+  --color-brand-charcoal-light: #4A423D;
 }
 
 /* Base style resets to match the luxury magazine feel */
-html,
 body {
   font-family: var(--font-sans);
-  background-color: rgb(var(--world-secondary-rgb));
-  color: rgb(var(--world-text-rgb));
+  background-color: var(--color-theme-base);
+  color: var(--color-theme-dark);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-
-/* Fluid global theme-morph canvas transition */
-* {
-  transition-property: background-color, border-color, color, fill, stroke, transform;
-  transition-duration: 700ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Hide scrollbar for clean visual carousels */
@@ -40,3 +45,20 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* Hero Card Animations */
+.hero-card {
+  will-change: opacity, transform;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.card-active {
+  @apply opacity-100 bg-white/95 border-amber-600/60 shadow-xl z-10;
+  border-width: 1px;
+}
+
+.card-inactive {
+  @apply opacity-50 bg-black/5 border-amber-500/10 z-0;
+  border-width: 1px;
+}
+

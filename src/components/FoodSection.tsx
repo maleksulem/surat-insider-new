@@ -1,19 +1,24 @@
 import React, { useState } from "react";
-import { FoodSpot, Inquiry } from "../types";
+import { FoodSpot, Inquiry, CuratedExperience } from "../types";
 import { Utensils, MapPin, Clock, Search, Star, Heart, Flame, ShieldCheck, Check } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
+import { ExperienceDetailModal } from "./ExperienceDetailModal";
+import { useImageModal } from "../context/ImageModalContext";
 
 interface FoodSectionProps {
   foodSpots: FoodSpot[];
   addInquiry: (inq: Omit<Inquiry, "id" | "date" | "status">) => void;
+  triggerWhatsAppMessage: (text: string) => void;
   searchQuery: string;
 }
 
-export function FoodSection({ foodSpots, addInquiry, searchQuery }: FoodSectionProps) {
+export function FoodSection({ foodSpots, addInquiry, triggerWhatsAppMessage, searchQuery }: FoodSectionProps) {
   const [activeFoodCategory, setActiveFoodCategory] = useState<string>("All");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [selectedPlatter, setSelectedPlatter] = useState<{ id: string; name: string; price: number }[]>([]);
   const [showOrderSent, setShowOrderSent] = useState(false);
+  const [selectedSpot, setSelectedSpot] = useState<CuratedExperience | null>(null);
+  const { openImage } = useImageModal();
 
   // Filter spots
   const categories = ["All", "Street Food", "Local Favorites", "Cafes", "Fine Dining", "Family Restaurants"];
@@ -58,254 +63,185 @@ export function FoodSection({ foodSpots, addInquiry, searchQuery }: FoodSectionP
   ];
 
   return (
-    <div className="space-y-12 animate-fade-in" id="food-trails-tab-view">
-      
-      {/* Editorial Food Intro */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-brand-sand-200">
-        <div className="space-y-2">
-          <span className="text-[11px] font-mono uppercase tracking-[0.25em] text-brand-gold-500 font-bold block">
-            The Culinary Capital of Gujarat
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-32">
+      {/* Culinary Soul Moment */}
+      <section className="space-y-12">
+        <div className="max-w-xl">
+          <span className="text-[11px] font-mono uppercase tracking-[0.35em] text-brand-gold-500 font-bold block mb-4">
+            The Culinary Soul
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-black text-brand-emerald-950 tracking-tight">
-            Surat Food Trails & Locho Hubs
+          <h1 className="font-serif text-4xl md:text-6xl font-black text-[#1A1614] tracking-tight">
+            Taste Surat
           </h1>
-          <p className="text-sm text-brand-charcoal/65 max-w-2xl leading-relaxed">
-            As the saying goes, <em className="text-brand-emerald-900 font-semibold font-serif">"Surat nu Jaman ne Kashi nu Maran"</em> (Eat in Surat, Die in Varanasi) is a testament to the glorious, rich street delicacies. Explore certified iconic spots.
+          <p className="text-base text-[#1A1614]/50 mt-6 leading-relaxed font-light">
+            A legendary culinary heritage where every flavor tells a story of the Silk Road. From roadside lochos to heritage thalis.
           </p>
         </div>
 
-        {/* Category Selector */}
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-2 shrink-0">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveFoodCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-300 ${
-                activeFoodCategory === cat
-                  ? "bg-brand-emerald-900 text-brand-sand-50 shadow-md border-b-2 border-brand-gold-400"
-                  : "bg-brand-sand-200 text-brand-charcoal-light hover:bg-brand-sand-100"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Grid of Food Spots */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <AnimatePresence mode="popLayout">
-          {filteredSpots.map((spot) => (
-            <motion.div
-              layout
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {(filteredSpots || []).slice(0, 6).map((spot, idx) => (
+            <motion.div 
               key={spot.id}
-              initial={{ opacity: 0, y: 25 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-2xl border border-brand-sand-200 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-xl transition-all duration-300 group"
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              onClick={() => setSelectedSpot(spot as any)}
+              className="group cursor-pointer"
             >
-              <div className="relative h-56 bg-brand-sand-100 overflow-hidden">
-                <img
-                  src={spot.image}
-                  alt={spot.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
+              <div className="aspect-[3/4] overflow-hidden rounded-2xl mb-6 shadow-sm group-hover:shadow-xl transition-shadow duration-500 relative bg-brand-sand-100">
+                <img 
+                  src={spot.image} 
+                  alt={spot.title} 
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 cursor-pointer" 
+                  onClick={() => setSelectedSpot(spot as any)}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-60"></div>
-                <div className="absolute top-4 left-4 flex gap-1.5">
-                  <span className="bg-brand-emerald-950 text-brand-sand-50 text-[10px] uppercase font-mono tracking-wider font-bold px-2.5 py-1 rounded shadow-md border border-white/10">
-                    {spot.category}
-                  </span>
-                  <span className="bg-brand-gold-500 text-brand-emerald-950 font-bold font-mono text-[9px] px-2 py-1 rounded shadow uppercase">
-                    {spot.priceLevel} Pricing
-                  </span>
-                </div>
-
-                <button
-                  onClick={() => toggleFavorite(spot.id)}
-                  className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm p-2 rounded-full shadow border border-brand-sand-200 hover:scale-110 active:scale-95 transition-all text-rose-500"
-                >
-                  <Heart className={`w-4 h-4 transition-colors ${favorites.includes(spot.id) ? "fill-rose-500 text-rose-500" : "text-brand-charcoal/50"}`} />
-                </button>
-              </div>
-
-              <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                <div className="space-y-2">
-                  <h3 className="font-serif text-xl font-bold text-brand-emerald-950 group-hover:text-brand-emerald-900 transition-colors">
-                    {spot.title}
-                  </h3>
-                  
-                  <div className="flex items-center gap-4 text-xs font-mono text-brand-charcoal/60">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-brand-gold-500" />
-                      {spot.location}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-brand-gold-500" />
-                      {spot.timings || "09:00 AM - 11:00 PM"}
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-brand-charcoal-light/95 leading-relaxed">
-                    {spot.description}
-                  </p>
-                </div>
-
-                {/* Mustard Colored 'Must Try' Section */}
-                <div className="bg-brand-sand-100 p-4 rounded-xl border border-brand-sand-200 flex items-start gap-2.5">
-                  <Flame className="w-4 h-4 text-orange-600 shrink-0 mt-0.5 animate-bounce" />
-                  <div className="space-y-0.5">
-                    <span className="text-[10px] uppercase font-mono font-bold text-brand-gold-600 block">
-                      Insider Must-Try Recommendation:
-                    </span>
-                    <p className="text-xs font-semibold text-brand-emerald-950">
-                      {spot.mustTry}
-                    </p>
-                  </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+                <div className="absolute bottom-6 left-6 right-6 transform group-hover:-translate-y-2 transition-transform duration-500">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-brand-gold-400 font-bold mb-1 block">{spot.category}</span>
+                  <h3 className="text-white font-serif text-2xl font-bold">{spot.title}</h3>
                 </div>
               </div>
             </motion.div>
           ))}
-        </AnimatePresence>
-
-        {filteredSpots.length === 0 && (
-          <div className="col-span-full py-16 bg-brand-sand-100/50 rounded-2xl border-2 border-dashed border-brand-sand-200 text-center flex flex-col items-center justify-center p-6">
-            <Utensils className="w-12 h-12 text-brand-charcoal/30 mb-3" />
-            <span className="font-serif text-[18px] font-bold text-brand-emerald-950">No Culinary Spots Found</span>
-            <p className="text-xs text-brand-charcoal/60 mt-1 max-w-sm">
-              We couldn't discover any spots matched with your active queries. Clear search or try typing "Locho".
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Surt Feast Platter Interactive Widget */}
-      <div className="bg-brand-emerald-950/95 text-white rounded-3xl p-8 md:p-12 border border-brand-gold-500/20 shadow-2xl relative overflow-hidden">
-        {/* Subtle glowing decorations */}
-        <div className="absolute right-0 top-0 w-80 h-80 rounded-full bg-brand-gold-500/5 blur-3xl pointer-events-none"></div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-          
-          <div className="lg:col-span-6 space-y-4">
-            <span className="bg-brand-gold-400 text-brand-emerald-950 text-[10px] font-mono tracking-widest font-bold uppercase px-3 py-1 rounded-full inline-block">
-              Culinary Interactive Playground
-            </span>
-            <h2 className="font-serif text-3xl font-extrabold text-brand-sand-50 leading-tight">
-              Assemble Your Curated Surt Platter
-            </h2>
-            <p className="text-sm text-brand-sand-200 leading-relaxed max-w-lg font-light">
-              Craft your custom legendary feast by adding Surati elements. Calculate pricing, check historical backgrounds, and book a customized delivery concierge program!
-            </p>
-
-            {/* Grid of options to build a plate */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-4">
-              {localSignatureItems.map((item) => {
-                const isSelected = selectedPlatter.find(p => p.id === item.id);
-                return (
-                  <div
-                    key={item.id}
-                    onClick={() => isSelected ? removeFromPlatter(item.id) : addToPlatter(item)}
-                    className={`p-3.5 rounded-xl border cursor-pointer select-none transition-all flex items-center justify-between ${
-                      isSelected 
-                        ? "bg-brand-gold-400/10 border-brand-gold-400 text-brand-gold-300" 
-                        : "bg-white/5 border-white/10 text-white hover:bg-white/10"
-                    }`}
-                  >
-                    <div className="space-y-0.5">
-                      <h4 className="text-xs font-bold font-sans">{item.name}</h4>
-                      <p className="text-[10px] opacity-70 truncate max-w-[150px] font-normal leading-tight">{item.desc}</p>
-                    </div>
-                    <span className="text-xs font-mono font-bold bg-white/10 px-2 py-0.5 rounded shrink-0">
-                      ₹{item.price}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Platter Billing Review Box */}
-          <div className="lg:col-span-6 bg-white rounded-2xl p-6 md:p-8 text-brand-charcoal shadow-2xl flex flex-col justify-between border border-brand-sand-200 h-full min-h-[350px]">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-brand-sand-200 pb-4">
-                <div className="flex items-center gap-2">
-                  <Utensils className="w-4 h-4 text-brand-gold-500" />
-                  <span className="font-serif font-bold text-brand-emerald-950">Feast Plate Assembly</span>
-                </div>
-                <span className="text-[10px] font-mono bg-brand-emerald-950/10 text-brand-emerald-950 py-0.5 px-2 rounded-full font-bold">
-                  ITEMS: {selectedPlatter.length}
-                </span>
-              </div>
-
-              {selectedPlatter.length === 0 ? (
-                <div className="py-12 text-center text-brand-charcoal/40 flex flex-col items-center justify-center space-y-1.5">
-                  <Flame className="w-8 h-8 text-brand-sand-200 animate-pulse" />
-                  <p className="text-xs font-medium">Add items on the left to start cooking!</p>
-                  <p className="text-[10px] max-w-xs leading-normal">Your virtual digestive journey adjusts rates, ingredients and local history tags.</p>
-                </div>
-              ) : (
-                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
-                  {selectedPlatter.map((p) => (
-                    <div key={p.id} className="flex justify-between items-center text-xs bg-brand-sand-50 p-2.5 rounded border border-brand-sand-200">
-                      <span className="font-semibold text-brand-emerald-950">🥞 {p.name}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-brand-emerald-950">₹{p.price}</span>
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); removeFromPlatter(p.id); }}
-                          className="text-red-500 hover:text-red-700 font-bold px-1.5"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="border-t border-brand-sand-200 pt-5 space-y-4">
-              <div className="flex justify-between items-center text-sm">
-                <span className="font-semibold text-brand-charcoal">Sum Estimated Platter Price:</span>
-                <span className="font-mono text-lg font-black text-brand-emerald-950">
-                  ₹{calculatePlatterTotal()}
-                </span>
-              </div>
-
-              {selectedPlatter.length > 0 && (
-                <>
-                  {showOrderSent ? (
-                    <div className="bg-emerald-900/15 text-emerald-800 p-3 rounded-xl border border-emerald-800/20 flex items-center gap-2 text-xs font-bold justify-center">
-                      <Check className="w-4 h-4 text-emerald-800" />
-                      Gastronomy trail booking saved! Our concierge will email you.
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        setShowOrderSent(true);
-                        setTimeout(() => {
-                          setShowOrderSent(false);
-                          setSelectedPlatter([]);
-                        }, 5000);
-                      }}
-                      className="w-full bg-brand-emerald-950 hover:bg-brand-emerald-900 text-white font-bold py-3 px-4 rounded-xl text-xs tracking-wider transition-all shadow-md flex items-center justify-center gap-2"
-                    >
-                      <ShieldCheck className="w-4 h-4 text-brand-gold-400" />
-                      Reserve Culinary Concierge Trail
-                    </button>
-                  )}
-                  <p className="text-[10px] text-brand-charcoal/50 text-center font-mono leading-normal">
-                    *Tours are fully customized, catering for dietary needs, veganism and gluten-free.
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
-
         </div>
-      </div>
+      </section>
 
+      {/* Interactive Tasting Table Moment */}
+      <motion.section 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        className="relative bg-[#1A1614] rounded-3xl overflow-hidden p-8 md:p-20"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+          <div className="lg:col-span-5 space-y-8 text-brand-sand-50">
+            <div className="space-y-4">
+              <span className="text-brand-gold-500 text-[10px] font-mono tracking-widest font-bold uppercase block">Interactive Experience</span>
+              <h2 className="font-serif text-4xl md:text-5xl font-bold leading-tight">
+                The Tasting Table
+              </h2>
+              <p className="text-base text-brand-sand-50/40 font-light leading-relaxed max-w-sm">
+                Architect your ideal Surati feast. An interactive exploration of regional delicacies and heritage flavors.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {localSignatureItems.map((item) => (
+                    <motion.div 
+                      key={item.id}
+                      onClick={() => addToPlatter(item)}
+                      whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.15)" }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl transition-colors text-left group cursor-pointer"
+                    >
+                  <div className="w-8 h-8 rounded-full bg-brand-gold-500/10 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
+                    🍛
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[10px] font-bold text-brand-sand-50 block truncate">{item.name}</span>
+                    <span className="text-[9px] text-brand-gold-500/50 font-mono">Add Plate</span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <div className="lg:col-span-7 flex justify-center">
+             <div className="relative w-64 h-64 md:w-96 md:h-96 rounded-full border-[1px] border-brand-gold-500/20 flex items-center justify-center p-8 bg-gradient-to-br from-brand-gold-500/5 to-transparent">
+                <div className="absolute inset-8 border border-brand-gold-500/10 rounded-full border-dashed animate-[spin_40s_linear_infinite]" />
+                <AnimatePresence>
+                   {selectedPlatter.length === 0 ? (
+                      <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-center space-y-2"
+                      >
+                         <Utensils className="w-12 h-12 text-brand-gold-500/20 mx-auto" />
+                         <span className="text-[10px] font-mono text-brand-gold-500/30 uppercase tracking-[0.3em]">Awaiting Selection</span>
+                      </motion.div>
+                   ) : (
+                      <div className="relative w-full h-full flex items-center justify-center">
+                         {selectedPlatter.map((item, idx) => {
+                            const angle = (idx / selectedPlatter.length) * Math.PI * 2;
+                            const radius = selectedPlatter.length > 3 ? 100 : 60;
+                            const x = Math.cos(angle) * radius;
+                            const y = Math.sin(angle) * radius;
+                            
+                            return (
+                              <motion.div
+                                key={`${item.id}-${idx}`}
+                                initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
+                                animate={{ scale: 1, opacity: 1, x, y }}
+                                exit={{ scale: 0, opacity: 0 }}
+                                transition={{ 
+                                  type: "spring", 
+                                  stiffness: 120, 
+                                  damping: 12, 
+                                  mass: 0.8 
+                                }}
+                                className="absolute w-14 h-14 md:w-16 md:h-16 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center text-2xl shadow-2xl border border-white/20 group cursor-pointer"
+                                whileHover={{ scale: 1.2, zIndex: 50 }}
+                                onClick={() => removeFromPlatter(item.id)}
+                              >
+                                 <motion.span
+                                   animate={{ rotate: [0, 5, -5, 0] }}
+                                   transition={{ duration: 4, repeat: Infinity }}
+                                 >
+                                   🥘
+                                 </motion.span>
+                              </motion.div>
+                            );
+                         })}
+                         <motion.div 
+                           animate={{ scale: [1, 1.1, 1] }}
+                           transition={{ duration: 4, repeat: Infinity }}
+                           className="w-24 h-24 md:w-32 md:h-32 bg-brand-gold-500/10 rounded-full blur-2xl" 
+                         />
+                      </div>
+                   )}
+                </AnimatePresence>
+             </div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Categorical Experience Moment */}
+      <section className="space-y-12">
+        <div className="text-center max-w-xl mx-auto space-y-4">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-[#1A1614] tracking-tight">The Culinary Edit</h2>
+          <p className="text-base text-[#1A1614]/40 font-light">From heritage traditions to modern interpretations.</p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {["Street Legends", "Traditional Thalis", "Modern Bistros", "Confectionary"].map((cat, idx) => (
+            <motion.div 
+              key={cat}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              className="aspect-square border border-brand-sand-200 rounded-2xl p-8 flex flex-col items-center justify-center text-center group hover:bg-brand-sand-50 transition-all duration-500 cursor-pointer"
+            >
+              <div className="w-14 h-14 bg-brand-gold-500/5 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-gold-500/10 transition-all">
+                <Star className="w-6 h-6 text-brand-gold-500/40 group-hover:text-brand-gold-500 transition-colors" />
+              </div>
+              <h3 className="font-serif text-lg font-bold text-[#1A1614]">{cat}</h3>
+              <span className="text-[10px] font-mono text-brand-gold-500 mt-4 uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity">Explore</span>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Spot Detail Modal */}
+      {selectedSpot && (
+        <ExperienceDetailModal
+          item={selectedSpot}
+          onClose={() => setSelectedSpot(null)}
+          addInquiry={addInquiry}
+          triggerWhatsAppMessage={triggerWhatsAppMessage}
+        />
+      )}
     </div>
   );
 }

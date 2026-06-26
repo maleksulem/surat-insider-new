@@ -1,22 +1,24 @@
 import React, { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Search, Sparkles, Calendar, MapPin, CheckCircle } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { AnimatePresence, motion, useScroll, useTransform, useSpring } from "motion/react";
+import { Search, Sparkles, Calendar, MapPin, CheckCircle, ArrowRight } from "lucide-react";
 import { Navbar } from "../components/Navbar";
 import { CustomCursor } from "../components/CustomCursor";
-import Hero from "../components/Hero";
-import ExhibitionRail from "../components/ExhibitionRail";
-import BentoFeatures from "../components/BentoFeatures";
+import { SuratSOTYHero } from "../components/SuratSOTYHero";
+import { ZariPortals } from "../components/ZariPortals";
 import { ExploreSection } from "../components/ExploreSection";
 import { ShoppingSection } from "../components/ShoppingSection";
 import { HotelSection } from "../components/HotelSection";
 import { FoodSection } from "../components/FoodSection";
-import { PostcardGenerator } from "../components/PostcardGenerator";
 import { PlannerSection } from "../components/PlannerSection";
 import { AdminPanel } from "../components/AdminPanel";
 import { BridalMileSection } from "../components/BridalMileSection";
 import { GeminiChat } from "../components/GeminiChat";
+import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
+import { ExperienceDetailModal } from "../components/ExperienceDetailModal";
 
-import { Role, Destination, ShoppingGuide, Hotel, Tour, FoodSpot, LocalEvent, BlogPost, Inquiry, PartnerRequest, AuditLog, MonetizationSetting } from "../types";
+
+import { Role, Destination, ShoppingGuide, Hotel, Tour, FoodSpot, LocalEvent, BlogPost, Inquiry, PartnerRequest, AuditLog, MonetizationSetting, CuratedExperience } from "../types";
 
 interface HomePageProps {
   currentTab: string;
@@ -25,21 +27,18 @@ interface HomePageProps {
   setCurrentUserRole: (role: Role | "Guest") => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  activeTheme: "normal" | "wedding" | "vacation" | "weekend";
-  setActiveTheme: (theme: "normal" | "wedding" | "vacation" | "weekend") => void;
-  getThemeStyles: () => string;
-  destinations: Destination[];
-  setDestinations: React.Dispatch<React.SetStateAction<Destination[]>>;
-  shoppingGuides: ShoppingGuide[];
-  setShoppingGuides: React.Dispatch<React.SetStateAction<ShoppingGuide[]>>;
-  hotels: Hotel[];
-  setHotels: React.Dispatch<React.SetStateAction<Hotel[]>>;
-  tours: Tour[];
-  setTours: React.Dispatch<React.SetStateAction<Tour[]>>;
-  foodSpots: FoodSpot[];
-  setFoodSpots: React.Dispatch<React.SetStateAction<FoodSpot[]>>;
-  events: LocalEvent[];
-  setEvents: React.Dispatch<React.SetStateAction<LocalEvent[]>>;
+  destinations: CuratedExperience[];
+  setDestinations: React.Dispatch<React.SetStateAction<any[]>>;
+  shoppingGuides: CuratedExperience[];
+  setShoppingGuides: React.Dispatch<React.SetStateAction<any[]>>;
+  hotels: CuratedExperience[];
+  setHotels: React.Dispatch<React.SetStateAction<any[]>>;
+  tours: CuratedExperience[];
+  setTours: React.Dispatch<React.SetStateAction<any[]>>;
+  foodSpots: CuratedExperience[];
+  setFoodSpots: React.Dispatch<React.SetStateAction<any[]>>;
+  events: CuratedExperience[];
+  setEvents: React.Dispatch<React.SetStateAction<any[]>>;
   blogs: BlogPost[];
   setBlogs: React.Dispatch<React.SetStateAction<BlogPost[]>>;
   inquiries: Inquiry[];
@@ -52,6 +51,11 @@ interface HomePageProps {
   setMonetization: (setting: MonetizationSetting) => void;
   addInquiry: (inq: Omit<Inquiry, "id" | "date" | "status">) => void;
   triggerWhatsAppMessage: (text: string) => void;
+  homepageConfig?: any;
+  chatbotConfig?: any;
+  seoConfig?: any;
+  mediaList?: any[];
+  refreshCmsData?: () => void;
 }
 
 export function HomePage({
@@ -61,9 +65,6 @@ export function HomePage({
   setCurrentUserRole,
   searchQuery,
   setSearchQuery,
-  activeTheme,
-  setActiveTheme,
-  getThemeStyles,
   destinations,
   setDestinations,
   shoppingGuides,
@@ -88,57 +89,84 @@ export function HomePage({
   setMonetization,
   addInquiry,
   triggerWhatsAppMessage,
+  homepageConfig,
+  chatbotConfig,
+  seoConfig,
+  mediaList,
+  refreshCmsData,
 }: HomePageProps) {
-  // Partner Form State Localized
-  const [partnerForm, setPartnerForm] = useState({
-    businessName: "",
-    businessType: "shop" as "hotel" | "shop" | "restaurant" | "tour_operator",
-    contactEmail: "",
-    requestedUpdate: "",
+  const navigate = useNavigate();
+  // Call Dynamic SEO and Schema markup hook from the CMS DB
+  const seoTitle = seoConfig?.home?.pageTitle || "Surat Insider • Explore, Shop, Experience";
+  const seoDesc = seoConfig?.home?.metaDescription || "Explore the hidden secrets of Surat. Your curated guide to premium heritage tourism, gourmet food spots, world-class textile hubs, diamond boutiques, and custom weekend itineraries.";
+  const seoKeywords = seoConfig?.home?.keywords || "Surat Tourism, Surat Insider, Surat Saree Shopping, Surat Locho, Surat Diamond, Gujarat Travel, Surat Castle, Ring Road Market Sourcing";
+  const seoOgImage = seoConfig?.home?.openGraphImage || "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop";
+
+  useDocumentMetadata({
+    title: seoTitle,
+    description: seoDesc,
+    keywords: seoKeywords,
+    ogImage: seoOgImage,
+    schema: [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Surat Insider",
+        "description": "Premium experience-discovery and lead-generation platform for Surat. Browse local heritage guides, wholesale textile hubs, diamond boutiques, street food tours, and custom itineraries.",
+        "url": "https://suratinsider.com",
+        "telephone": "+919999999999",
+        "image": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop",
+        "priceRange": "$$",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Surat",
+          "addressRegion": "Gujarat",
+          "addressCountry": "IN"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 21.1702,
+          "longitude": 72.8311
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "TouristAttraction",
+        "name": "Surat Castle",
+        "description": "Historical 16th-century fortress situated on the banks of Tapi river, constructed to repel invasion forces.",
+        "location": {
+          "@type": "Place",
+          "name": "Surat Castle",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Surat",
+            "addressRegion": "Gujarat",
+            "addressCountry": "IN"
+          }
+        }
+      }
+    ]
   });
-  const [partnerFormSuccess, setPartnerFormSuccess] = useState(false);
 
-  const handlePartnerSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!partnerForm.businessName || !partnerForm.contactEmail) return;
+  // Partner Form State Removed - Moved to WorkWithUsPage
+  const [selectedEventItem, setSelectedEventItem] = useState<CuratedExperience | null>(null);
 
-    const newRequest: PartnerRequest = {
-      id: `part-${Date.now()}`,
-      businessName: partnerForm.businessName,
-      businessType: partnerForm.businessType,
-      contactEmail: partnerForm.contactEmail,
-      requestedUpdate: partnerForm.requestedUpdate || `Add listing to platform guide.`,
-      status: "Pending Approval",
-      date: new Date().toISOString().split("T")[0],
-    };
-
-    setPartnerRequests((prev) => [newRequest, ...prev]);
-
-    // Format a gorgeous WhatsApp message for partners
-    const waText = `🤝 *NEW PARTNER APPLICATION ON SURAT INSIDER* 🤝\n\n` +
-      `🏢 *Business Name:* ${partnerForm.businessName}\n` +
-      `🏷️ *Classification:* ${partnerForm.businessType.replace("_", " ").toUpperCase()}\n` +
-      `📧 *Contact Email:* ${partnerForm.contactEmail}\n\n` +
-      `📝 *Requested Listing Details:* \n"${newRequest.requestedUpdate}"\n\n` +
-      `📅 *Date:* ${newRequest.date}\n` +
-      `🔗 SENT VIA PARTNER HUB. TAP TO REPLY!`;
-
-    triggerWhatsAppMessage(waText);
-
-    setPartnerForm({ businessName: "", businessType: "shop", contactEmail: "", requestedUpdate: "" });
-    setPartnerFormSuccess(true);
-    setTimeout(() => setPartnerFormSuccess(false), 5000);
-    addAuditLog("Partner Application Submitted", "Partner Request", newRequest.businessName);
-  };
+  const { scrollY } = useScroll();
+  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
+  const heroScale = useTransform(scrollY, [0, 600], [1, 1.1]);
+  const contentY = useTransform(scrollY, [0, 1000], [0, -100]);
+  
+  const smoothScrollY = useSpring(scrollY, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   return (
-    <div className="min-h-screen bg-brand-sand-50 selection:bg-brand-gold-500/30 text-brand-charcoal flex flex-col font-sans">
+    <div className="min-h-screen bg-brand-sand-50 text-[#1A1614] selection:bg-brand-gold-500 selection:text-[#1A1614] flex flex-col font-sans overflow-x-hidden">
       
-      {/* Dynamic Theme overrides stylesheet */}
-      <style dangerouslySetInnerHTML={{ __html: getThemeStyles() }} />
-
       {/* Lagging Ring Custom Cursor */}
-      <CustomCursor theme={activeTheme} />
+      <CustomCursor />
 
       {/* Top Banner Navigation bar */}
       <Navbar
@@ -146,137 +174,118 @@ export function HomePage({
         setCurrentTab={setCurrentTab}
         currentUserRole={currentUserRole}
         setCurrentUserRole={setCurrentUserRole}
-        activeTheme={activeTheme}
-        setActiveTheme={setActiveTheme}
       />
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentTab}
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -15 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="flex-1 flex flex-col"
+      <main className="flex-1 overflow-y-auto scroll-smooth perspective-1000">
+        {/* Immersive Hero with Living Diamond Navigator */}
+        <motion.section 
+          style={{ opacity: heroOpacity, scale: heroScale }}
+          className="h-screen w-full relative shrink-0"
         >
-          {/* Cinematic National Geographic Style Hero (Exclusively on explore tab) */}
-          {currentTab === "explore" ? (
-            <>
-              <Hero />
-              <ExhibitionRail />
-              <BentoFeatures />
+          <SuratSOTYHero />
+        </motion.section>
 
-              {/* Dynamic Search Bar elevated directly with generous spacing */}
-              <div className="max-w-xl mx-auto pt-16 px-4">
-                <div className="bg-white/95 backdrop-blur rounded-2xl p-2.5 shadow-xl flex items-center gap-3 border border-brand-sand-200">
-                  <div className="flex-1 flex items-center gap-2 px-3 text-brand-charcoal-light">
-                    <Search className="w-5 h-5 text-[#c5a059]" />
-                    <input
-                      type="text"
-                      placeholder="Search Fort, Tanchoi Saree, Diamond stores, Locho..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-transparent border-none outline-none text-sm placeholder:text-brand-charcoal/50 text-brand-emerald-950 font-medium"
-                    />
-                  </div>
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery("")}
-                      className="text-xs text-brand-charcoal/50 hover:text-brand-charcoal font-semibold px-2"
-                    >
-                      Clear
-                    </button>
-                  )}
-                  <button className="bg-brand-emerald-900 hover:bg-brand-emerald-800 text-brand-sand-50 px-5 py-2 rounded-xl text-xs font-semibold tracking-wide transition-colors">
-                    Search
-                  </button>
-                </div>
-              </div>
+        {/* Imperial Portals - Only visible on Explore tab */}
+        {currentTab === "explore" && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <ZariPortals />
+          </motion.div>
+        )}
 
-              {/* Quick Search Filtering Notice */}
-              {searchQuery && (
-                <div className="bg-brand-gold-500/10 p-3 mt-4 text-center text-xs font-medium text-brand-emerald-950 border-b border-brand-gold-500/20">
-                  Showing results matched with "{searchQuery}" across the active dynamic database catalogs.
-                </div>
-              )}
 
-              {/* Core Tabs Content Router Grid */}
-              <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <ExploreSection
-                  destinations={destinations}
-                  tours={tours}
-                  foodSpots={foodSpots}
-                  addInquiry={addInquiry}
-                  searchQuery={searchQuery}
-                />
-              </main>
-              <BridalMileSection />
-            </>
-          ) : (
-            <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
-              {/* Optional Search Filtering Notice when search is filled on inner tabs */}
-              {searchQuery && currentTab !== "postcard" && currentTab !== "admin" && (
-                <div className="bg-brand-gold-500/15 p-4 mb-8 rounded-2xl text-center text-xs font-medium text-brand-emerald-950 border border-brand-gold-500/25 flex items-center justify-center gap-2">
-                  <Sparkles className="w-4 h-4 text-brand-gold-500 animate-pulse" />
-                  Filtering resources by active search key matching: <strong className="text-brand-emerald-900">"{searchQuery}"</strong>
-                </div>
+        {/* Dynamic Experience Portals (Tab Content) */}
+        <motion.div 
+          style={{ y: contentY }}
+          className="min-h-screen relative z-10" 
+          id="tab-content-portal"
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentTab}
+              initial={{ opacity: 0, y: 40, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -40, scale: 0.98 }}
+              transition={{ 
+                duration: 0.9, 
+                ease: [0.16, 1, 0.3, 1],
+                type: "spring",
+                stiffness: 50,
+                damping: 20
+              }}
+            >
+              {currentTab === "explore" && (
+                <>
+                  <ExploreSection
+                    destinations={destinations as any}
+                    tours={tours as any}
+                    foodSpots={foodSpots as any}
+                    addInquiry={addInquiry}
+                    triggerWhatsAppMessage={triggerWhatsAppMessage}
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                  />
+                  <BridalMileSection />
+                </>
               )}
 
               {currentTab === "shopping" && (
                 <ShoppingSection
-                  shoppingGuides={shoppingGuides}
+                  shoppingGuides={shoppingGuides as any}
                   addInquiry={addInquiry}
+                  triggerWhatsAppMessage={triggerWhatsAppMessage}
                   searchQuery={searchQuery}
                 />
               )}
 
               {currentTab === "hotels" && (
                 <HotelSection
-                  hotels={hotels}
+                  hotels={hotels as any}
                   addInquiry={addInquiry}
+                  triggerWhatsAppMessage={triggerWhatsAppMessage}
                   searchQuery={searchQuery}
                 />
               )}
 
               {currentTab === "food" && (
                 <FoodSection
-                  foodSpots={foodSpots}
+                  foodSpots={foodSpots as any}
                   addInquiry={addInquiry}
+                  triggerWhatsAppMessage={triggerWhatsAppMessage}
                   searchQuery={searchQuery}
                 />
               )}
 
-              {currentTab === "postcard" && (
-                <PostcardGenerator />
-              )}
-
               {currentTab === "planner" && (
                 <PlannerSection
-                  destinations={destinations}
-                  hotels={hotels}
-                  foodSpots={foodSpots}
-                  shoppingGuides={shoppingGuides}
-                  tours={tours}
-                  events={events}
+                  destinations={destinations as any}
+                  hotels={hotels as any}
+                  foodSpots={foodSpots as any}
+                  shoppingGuides={shoppingGuides as any}
+                  tours={tours as any}
+                  events={events as any}
                   addInquiry={addInquiry}
-                  theme={activeTheme}
                 />
               )}
 
               {currentTab === "admin" && (
                 <AdminPanel
                   currentUserRole={currentUserRole}
-                  destinations={destinations}
+                  destinations={destinations as any}
                   setDestinations={setDestinations}
-                  shoppingGuides={shoppingGuides}
+                  shoppingGuides={shoppingGuides as any}
                   setShoppingGuides={setShoppingGuides}
-                  hotels={hotels}
+                  hotels={hotels as any}
                   setHotels={setHotels}
-                  tours={tours}
+                  tours={tours as any}
                   setTours={setTours}
-                  foodSpots={foodSpots}
+                  foodSpots={foodSpots as any}
                   setFoodSpots={setFoodSpots}
-                  events={events}
+                  events={events as any}
                   setEvents={setEvents}
                   blogs={blogs}
                   setBlogs={setBlogs}
@@ -288,171 +297,145 @@ export function HomePage({
                   addAuditLog={addAuditLog}
                   monetization={monetization}
                   setMonetization={setMonetization}
+                  homepageConfig={homepageConfig}
+                  chatbotConfig={chatbotConfig}
+                  seoConfig={seoConfig}
+                  mediaList={mediaList}
+                  refreshCmsData={refreshCmsData}
                 />
               )}
 
               {currentTab === "events-blogs" && (
-                <div className="space-y-12">
-                  <div className="border-b border-brand-sand-200 pb-5">
-                    <h2 className="font-serif text-3xl font-extrabold text-brand-emerald-950">Events & National Geographic Stories</h2>
-                    <p className="text-sm text-brand-charcoal/60 mt-1">Festivals, expo markets and local advice column diaries updated by editors daily.</p>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-32">
+                  <div className="max-w-2xl">
+                    <span className="text-[11px] font-mono uppercase tracking-[0.35em] text-brand-gold-500 font-bold block mb-4">Editorial Dispatches</span>
+                    <h2 className="font-serif text-4xl md:text-6xl font-black text-[#1A1614] tracking-tight">The Journal</h2>
+                    <p className="text-base text-[#1A1614]/50 mt-6 leading-relaxed font-light">Curated dispatches from the frontlines of Surati culture, from trade expo calendars to heritage columns.</p>
                   </div>
 
-                  {/* Events lists block */}
-                  <div className="space-y-6">
-                    <h3 className="text-sm uppercase font-mono tracking-wider font-bold text-brand-gold-500">Upcoming Trade Shows & Festivals</h3>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {events.map((evt) => (
-                        <div key={evt.id} className="bg-white rounded-xl overflow-hidden border border-brand-sand-200 flex flex-col sm:flex-row shadow-sm">
-                          <img src={evt.image} className="sm:w-1/3 h-44 object-cover" />
-                          <div className="p-5 sm:w-2/3 flex flex-col justify-between">
-                            <div className="space-y-1.5">
-                              <span className="text-[10px] bg-brand-emerald-950 text-white font-mono px-2 py-0.5 rounded uppercase">
-                                {evt.category}
-                              </span>
-                              <h4 className="font-serif font-bold text-lg text-brand-emerald-950">{evt.title}</h4>
-                              <p className="text-xs text-brand-charcoal-light leading-relaxed">{evt.description}</p>
-                            </div>
-                            <div className="pt-3 text-[11px] font-mono text-brand-charcoal/60 flex justify-between">
-                              <span>📅 {evt.date}</span>
-                              <span>📍 {evt.venue}</span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Blogs lists section */}
-                  <div className="space-y-6 pt-6">
-                    <h3 className="text-sm uppercase font-mono tracking-wider font-bold text-brand-gold-500">Editorial Stories & Columns</h3>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                      {blogs.map((post) => (
-                        <div key={post.id} className="space-y-4">
-                          <div className="aspect-[2/1] bg-brand-sand-100 rounded-xl overflow-hidden">
-                            <img src={post.image} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                  {/* Events Moment */}
+                  <section className="space-y-12">
+                    <h3 className="text-[10px] uppercase font-mono tracking-[0.3em] font-bold text-[#1A1614]/30">Live Calendar</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                      {events.map((evt, idx) => (
+                        <motion.div 
+                          key={evt.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: idx * 0.1 }}
+                          className="flex gap-8 group cursor-pointer"
+                        >
+                          <div className="w-24 h-24 bg-brand-sand-100 rounded-3xl flex flex-col items-center justify-center border border-brand-sand-200 shrink-0 group-hover:bg-[#1A1614] group-hover:text-brand-sand-50 transition-all duration-500 shadow-sm group-hover:shadow-xl group-hover:-translate-y-1">
+                            <span className="text-2xl font-serif font-black">{evt.timings?.split(' ')[0] || "12"}</span>
+                            <span className="text-[10px] font-mono font-bold uppercase tracking-widest opacity-50">{evt.timings?.split(' ')[1] || "OCT"}</span>
                           </div>
                           <div className="space-y-2">
-                            <span className="text-[10px] text-brand-gold-500 font-mono uppercase tracking-wider">{post.category} • {post.publishedAt}</span>
-                            <h4 className="font-serif text-xl font-bold text-brand-emerald-950 leading-tight">{post.title}</h4>
-                            <p className="text-xs text-brand-charcoal/50 font-mono">By {post.author}</p>
-                            <p className="text-xs text-brand-charcoal-light leading-relaxed text-justify">{post.content}</p>
+                            <h4 className="font-serif text-2xl font-bold text-[#1A1614] group-hover:text-brand-gold-600 transition-colors">{evt.title}</h4>
+                            <p className="text-sm text-[#1A1614]/40 font-light line-clamp-2 leading-relaxed">{evt.shortDescription}</p>
                           </div>
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
-                  </div>
+                  </section>
+
+                  {/* Blogs Moment */}
+                  <section className="space-y-12">
+                     <h3 className="text-[10px] uppercase font-mono tracking-[0.3em] font-bold text-[#1A1614]/30">The Vault</h3>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+                       {blogs.map((post, idx) => (
+                         <motion.div 
+                           key={post.id}
+                           initial={{ opacity: 0, y: 20 }}
+                           whileInView={{ opacity: 1, y: 0 }}
+                           viewport={{ once: true }}
+                           transition={{ delay: idx * 0.1 }}
+                           className="space-y-8 group cursor-pointer"
+                         >
+                           <div className="aspect-[16/9] overflow-hidden rounded-3xl bg-brand-sand-100 shadow-sm group-hover:shadow-2xl transition-all duration-700">
+                             <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                           </div>
+                           <div className="space-y-4">
+                             <div className="flex items-center gap-4">
+                               <span className="text-[10px] font-mono font-bold text-brand-gold-500 uppercase tracking-widest">{post.category}</span>
+                               <div className="w-1 h-1 rounded-full bg-brand-sand-300" />
+                               <span className="text-[10px] font-mono font-bold text-brand-sand-400 uppercase tracking-widest">{post.publishedAt}</span>
+                             </div>
+                             <h4 className="font-serif text-3xl font-bold text-[#1A1614] leading-tight group-hover:text-brand-gold-600 transition-colors">{post.title}</h4>
+                             <p className="text-base text-[#1A1614]/40 font-light line-clamp-3 leading-relaxed">{post.content}</p>
+                           </div>
+                         </motion.div>
+                       ))}
+                     </div>
+                  </section>
                 </div>
               )}
-            </main>
-          )}
+            </motion.div>
+          </AnimatePresence>
         </motion.div>
-      </AnimatePresence>
 
-      {/* Dynamic Local Business Partner submission portal */}
-      <section className="bg-brand-sand-100 border-t border-brand-sand-200 py-16 px-4">
-        <div className="max-w-4xl mx-auto bg-white rounded-3xl p-8 md:p-12 border border-brand-sand-200 shadow-xl grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-          <div className="md:col-span-5 space-y-4 text-brand-charcoal">
-            <span className="text-[10px] uppercase font-mono tracking-widest text-brand-gold-500 font-bold block">
-              Direct Partnership Hub
-            </span>
-            <h3 className="font-serif text-2xl md:text-3xl font-extrabold text-brand-emerald-950 leading-tight">
-              Partner with Surat Insider
-            </h3>
-            <p className="text-xs text-brand-charcoal/70 leading-relaxed font-sans font-light">
-              Are you are hotel operator, custom saree loom director, diamond craftsman, or restaurant owner? Submit details here to register your interest. Admins will review, authorize, and sync your details dynamically.
+      </main>
+
+      {/* Footnote and fine-print */}
+      <footer className="bg-[#1A1614] text-brand-sand-50/20 shrink-0 py-24 px-4 sm:px-6 lg:px-8 border-t border-white/5">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-16 md:gap-8">
+          <div className="md:col-span-2 space-y-8">
+            <div className="flex flex-col">
+              <span className="font-serif text-3xl font-bold tracking-tight text-brand-sand-50">
+                SURAT<span className="text-brand-gold-500 font-extrabold">.</span>INSIDER
+              </span>
+              <span className="text-[10px] uppercase font-mono tracking-[0.4em] text-brand-gold-500/90 mt-1 font-bold">
+                The Imperial Edit
+              </span>
+            </div>
+            <p className="text-sm font-light text-brand-sand-50/40 max-w-sm leading-relaxed">
+              Step into South Gujarat's premier portal for luxury textile curation, heritage explorations, and culinary marvels.
             </p>
           </div>
 
-          <form onSubmit={handlePartnerSubmit} className="md:col-span-7 space-y-4 text-xs">
-            {partnerFormSuccess && (
-              <div className="p-4 bg-emerald-900/15 border border-emerald-800/30 text-emerald-950 rounded-xl font-semibold flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-800" />
-                Submitted successfully! Pending Admin verification in CMS.
-              </div>
-            )}
+          <div className="space-y-6">
+            <h4 className="text-[11px] font-mono uppercase tracking-[0.4em] text-brand-gold-500 font-bold">Directory</h4>
+            <ul className="space-y-4 text-xs font-medium uppercase tracking-widest text-brand-sand-50/60">
+              <li><button onClick={() => setCurrentTab("explore")} className="hover:text-brand-gold-500 transition-colors">Explore</button></li>
+              <li><Link to="/textile" className="hover:text-brand-gold-500 transition-colors">Shop</Link></li>
+              <li><Link to="/plan" className="hover:text-brand-gold-500 transition-colors">Plan</Link></li>
+              <li><Link to="/hotels" className="hover:text-brand-gold-500 transition-colors">Hotels</Link></li>
+              <li><Link to="/food" className="hover:text-brand-gold-500 transition-colors">Food</Link></li>
+              <li><Link to="/weekend" className="hover:text-brand-gold-500 transition-colors">Events</Link></li>
+            </ul>
+          </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-[10px] uppercase font-mono tracking-wider text-brand-charcoal opacity-75">Business Name*</label>
-                <input
-                  type="text"
-                  required
-                  value={partnerForm.businessName}
-                  onChange={(e) => setPartnerForm({ ...partnerForm, businessName: e.target.value })}
-                  placeholder="e.g. Radhe Silk Mills"
-                  className="w-full bg-brand-sand-50/50 px-3.5 py-2.5 border border-brand-sand-200 rounded-xl outline-none focus:ring-1 focus:ring-brand-emerald-800"
-                />
-              </div>
-
-              <div>
-                <label className="text-[10px] uppercase font-mono tracking-wider text-brand-charcoal opacity-75">Business Classification*</label>
-                <select
-                  value={partnerForm.businessType}
-                  onChange={(e) => setPartnerForm({ ...partnerForm, businessType: e.target.value as any })}
-                  className="w-full bg-brand-sand-50/50 px-3.5 py-2.5 border border-brand-sand-200 rounded-xl outline-none focus:ring-1 focus:ring-brand-emerald-800"
-                >
-                  <option value="shop">Silk & Saree Shop</option>
-                  <option value="hotel">Hotel Suite / Stay</option>
-                  <option value="restaurant">Traditional Thali Hook / Cafe</option>
-                  <option value="tour_operator">Local Tour Guide unit</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label className="text-[10px] uppercase font-mono tracking-wider text-brand-charcoal opacity-75">Contact Address Email*</label>
-              <input
-                type="email"
-                required
-                value={partnerForm.contactEmail}
-                onChange={(e) => setPartnerForm({ ...partnerForm, contactEmail: e.target.value })}
-                placeholder="owner@radhesilk.com"
-                className="w-full bg-brand-sand-50/50 px-3.5 py-2.5 border border-brand-sand-200 rounded-xl outline-none focus:ring-1 focus:ring-brand-emerald-800"
-              />
-            </div>
-
-            <div>
-              <label className="text-[10px] uppercase font-mono tracking-wider text-brand-charcoal opacity-75">Description of requested changes / list details</label>
-              <textarea
-                value={partnerForm.requestedUpdate}
-                onChange={(e) => setPartnerForm({ ...partnerForm, requestedUpdate: e.target.value })}
-                placeholder="Provide address, pricing brackets, specific weaves or hotel room counts to verify..."
-                rows={3}
-                className="w-full bg-brand-sand-50/50 px-3.5 py-2.5 border border-brand-sand-200 rounded-xl outline-none focus:ring-1 focus:ring-brand-emerald-800 resize-none"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-brand-emerald-950 text-white font-semibold py-3 rounded-xl hover:bg-brand-emerald-900 transition-colors uppercase tracking-wider"
-            >
-              Submit Partner Request
-            </button>
-          </form>
+          <div className="space-y-6">
+            <h4 className="text-[11px] font-mono uppercase tracking-[0.4em] text-brand-gold-500 font-bold">Partnerships</h4>
+            <ul className="space-y-4 text-xs font-medium uppercase tracking-widest text-brand-sand-50/60">
+              <li><Link to="/work-with-us" className="hover:text-brand-gold-500 transition-colors">Work With Us</Link></li>
+              <li><Link to="/insiderbyharundaryaee5313" className="hover:text-brand-gold-500 transition-colors">Staff Access</Link></li>
+            </ul>
+          </div>
         </div>
-      </section>
 
-      {/* Footnote and fine-print */}
-      <footer className="bg-brand-emerald-950 text-brand-sand-200 border-t border-brand-emerald-900 shrink-0 text-center py-8">
-        <p className="text-xs font-mono opacity-60">
-          © {new Date().getFullYear()} Surat Insider Global Platform • Crafted with Google AI Studio Integration
-        </p>
-        <div className="mt-3">
-          <button
-            onClick={() => window.dispatchEvent(new Event("open-staff-auth"))}
-            className="text-[10px] uppercase tracking-widest font-mono font-bold text-brand-gold-500/40 hover:text-brand-gold-500 hover:underline transition-all cursor-pointer"
-            title="Authorized Staff Portal (Secure 2-Step Verification Gate)"
-          >
-            🔒 Staff Portal
-          </button>
+        <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-[10px] font-mono uppercase tracking-[0.5em] font-bold">
+            Surat Insider Collective • {new Date().getFullYear()}
+          </p>
+          <div className="flex gap-8 text-[10px] font-mono uppercase tracking-[0.3em]">
+            <span className="text-brand-sand-50/20">Privacy Protocol</span>
+            <span className="text-brand-sand-50/20">Visitor Terms</span>
+          </div>
         </div>
       </footer>
 
       {/* Chatbot module */}
-      <GeminiChat />
+      <GeminiChat chatbotConfig={chatbotConfig} />
+
+      {selectedEventItem && (
+        <ExperienceDetailModal
+          item={selectedEventItem}
+          onClose={() => setSelectedEventItem(null)}
+          addInquiry={addInquiry}
+          triggerWhatsAppMessage={triggerWhatsAppMessage}
+        />
+      )}
 
     </div>
   );

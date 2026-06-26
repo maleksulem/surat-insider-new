@@ -19,10 +19,34 @@ export interface BaseItem {
   title: string;
   description: string;
   image: string;
+  images?: string[];
   gallery?: string[];
   rating: number;
   status: "Draft" | "Published";
   slug: string;
+}
+
+export interface CuratedExperience {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  shortDescription: string;
+  fullDescription: string;
+  location: string;
+  timings: string;
+  bestTimeToVisit: string;
+  estimatedDuration: string;
+  priceRange: string;
+  highlights: string[];
+  tips: string[];
+  image: string;
+  images?: string[];
+  gallery: string[];
+  inquiryType: string;
+  whatsappMessage: string;
+  rating?: number;
+  status?: "Draft" | "Published";
 }
 
 export interface Destination extends BaseItem {
@@ -91,6 +115,10 @@ export interface Inquiry {
   message: string;
   date: string;
   status: "New" | "Contacted" | "Closed";
+  sourcePage?: string;
+  category?: string;
+  inquiryType?: string;
+  timestamp?: string;
 }
 
 export interface PartnerRequest {

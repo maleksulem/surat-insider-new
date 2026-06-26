@@ -1,42 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "motion/react";
 
 import { WeddingPage } from "./pages/WeddingPage";
 import { WeekendPage } from "./pages/WeekendPage";
 import { TextilePage } from "./pages/TextilePage";
 import { FoodPage } from "./pages/FoodPage";
 import { InsiderPage } from "./pages/InsiderPage";
+import { PlanPage } from "./pages/PlanPage";
+import { WorkWithUsPage } from "./pages/WorkWithUsPage";
+import { DiscoveryPage } from "./pages/DiscoveryPage";
+import { HotelsPage } from "./pages/HotelsPage";
 import { HomePage } from "./pages/HomePage";
+import { AdminLoginPage } from "./pages/AdminLoginPage";
+import { trackPageVisit, trackInquirySubmitted, trackWhatsAppClick } from "./lib/analytics";
+import { ScrollToTop } from "./components/ScrollToTop";
 
 import {
-  INITIAL_DESTINATIONS,
-  INITIAL_SHOPPING,
-  INITIAL_HOTELS,
-  INITIAL_TOURS,
-  INITIAL_FOOD,
-  INITIAL_EVENTS,
-  INITIAL_BLOGS,
   INITIAL_INQUIRIES,
   INITIAL_PARTNERS,
   INITIAL_AUDIT,
   INITIAL_MONETIZATION,
 } from "./data";
 
+import { DESTINATIONS_DATA } from "./data/destinations";
+import { FOOD_DATA } from "./data/food";
+import { SHOPPING_DATA } from "./data/shopping";
+import { HOTELS_DATA } from "./data/hotels";
+import { STORIES_DATA } from "./data/stories";
+import { TOURS_DATA, EVENTS_DATA } from "./data/weekend";
+
 import { Role, Destination, ShoppingGuide, Hotel, Tour, FoodSpot, LocalEvent, BlogPost, Inquiry, PartnerRequest, AuditLog, MonetizationSetting } from "./types";
 
-// =========================================================================
-// 👉 CENTRAL WHATSAPP GATEWAY CONFIGURATION 👈
-// Change this value to your exact WhatsApp phone number (with country code, 
-// no spaces, no plus signs, e.g. "919099123456" for India).
-// =========================================================================
-export const WHATSAPP_CONTACT_NUMBER = "919879198671"; 
+export const WHATSAPP_CONTACT_NUMBER = (import.meta as any).env.VITE_WHATSAPP_CONTACT_NUMBER || "919999999999"; 
 
 export function triggerWhatsAppMessage(text: string) {
   const encodedText = encodeURIComponent(text);
   const whatsappUrl = `https://wa.me/${WHATSAPP_CONTACT_NUMBER}?text=${encodedText}`;
   
-  // Safe, cross-platform anchor click simulation to break out of iframe limits securely
   const link = document.createElement("a");
   link.href = whatsappUrl;
   link.target = "_blank";
@@ -46,7 +47,6 @@ export function triggerWhatsAppMessage(text: string) {
   document.body.removeChild(link);
 }
 
-// Elegant, magazine-style page transition wrapper with a smooth slide-and-fade response
 interface PageTransitionProps {
   children: React.ReactNode;
   key?: any;
@@ -58,8 +58,8 @@ function PageTransition({ children }: PageTransitionProps) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
-      transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }} // Polished custom ease-out cubic bezier curve
-      className="min-h-screen flex flex-col justify-between"
+      transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+      className="min-h-screen bg-[#FFFDF5] text-[#1A1614] selection:bg-[#B8860B] selection:text-[#1A1614] flex flex-col justify-between"
     >
       {children}
     </motion.div>
@@ -68,141 +68,294 @@ function PageTransition({ children }: PageTransitionProps) {
 
 export default function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState<string>("explore");
-  const [currentUserRole, setCurrentUserRole] = useState<Role | "Guest">("Super Admin");
+  const [currentUserRole, setCurrentUserRole] = useState<Role | "Guest">("Guest");
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTheme, setActiveTheme] = useState<"normal" | "wedding" | "vacation" | "weekend">("normal");
+  
 
+  // Dynamic CMS database states (Initialized with pre-compiled defaults)
+  const [destinations, setDestinations] = useState<Destination[]>(DESTINATIONS_DATA);
+  const [shoppingGuides, setShoppingGuides] = useState<any[]>(SHOPPING_DATA);
+  const [hotels, setHotels] = useState<Hotel[]>(HOTELS_DATA);
+  const [tours, setTours] = useState<Tour[]>(TOURS_DATA);
+  const [foodSpots, setFoodSpots] = useState<FoodSpot[]>(FOOD_DATA);
+  const [events, setEvents] = useState<LocalEvent[]>(EVENTS_DATA);
+  const [blogs, setBlogs] = useState<BlogPost[]>(STORIES_DATA);
+  
+  const [homepageConfig, setHomepageConfig] = useState<any>(null);
+  const [chatbotConfig, setChatbotConfig] = useState<any>(null);
+  const [seoConfig, setSeoConfig] = useState<any>(null);
+  const [mediaList, setMediaList] = useState<any[]>([]);
+
+  const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES);
+  const [partnerRequests, setPartnerRequests] = useState<PartnerRequest[]>(INITIAL_PARTNERS);
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(INITIAL_AUDIT);
+  const [monetization, setRawMonetization] = useState<MonetizationSetting>(INITIAL_MONETIZATION);
+
+  // Load and apply tab states
   useEffect(() => {
     if (location.state && (location.state as any).activeTab) {
       setCurrentTab((location.state as any).activeTab);
-      // Clean state after using it to prevent infinite loop or re-triggering upon reload
       const stateCopy = { ...location.state as any };
       delete stateCopy.activeTab;
       window.history.replaceState(stateCopy, "");
     }
   }, [location.state]);
 
-  const getThemeStyles = () => {
-    switch (activeTheme) {
-      case "wedding":
-        return `
-          :root {
-            --color-brand-emerald-950: #4a0404 !important; /* Deep Royal Red */
-            --color-brand-emerald-900: #7a0c1a !important; /* Crimson Red */
-            --color-brand-emerald-800: #961124 !important; /* Rich Scarlet */
-            --color-brand-emerald-700: #b91c1c !important; /* Shiny Red */
-            
-            --color-brand-sand-50: #fffdf5 !important; /* Soft Ivory Cream */
-            --color-brand-sand-100: #fbf5e6 !important; /* Warm Champagne */
-            --color-brand-sand-200: #ebdcb9 !important; /* Gold sand */
-            
-            --color-brand-gold-300: #ffd700 !important; /* Pure Gold */
-            --color-brand-gold-400: #d4af37 !important; /* Metallic Gold */
-            --color-brand-gold-500: #c5a059 !important; /* Ochre Royal Gold */
-            
-            --color-brand-charcoal: #200d07 !important; /* Deep Mahogany */
+  // Dynamic Page SEO Metadata & Visitor Tracking
+  useEffect(() => {
+    let pageTitle = "Surat Insider • Explore, Shop, Experience";
+    let metaDescription = "Step into South Gujarat's premier portal for luxury textile curation, heritage explorations, diamonds, and culinary marvels.";
+    let keywords = "surat, travel, gujarat, tourism, textile, diamonds, locho, history, silk, castle";
+
+    // Grab SEO settings from CMS dynamically if loaded
+    const pKey = location.pathname === "/" ? "home" : location.pathname.substring(1);
+    if (seoConfig && seoConfig[pKey]) {
+      pageTitle = seoConfig[pKey].pageTitle;
+      metaDescription = seoConfig[pKey].metaDescription;
+      keywords = seoConfig[pKey].keywords;
+    }
+
+    document.title = pageTitle;
+    
+    // Dynamically inject meta tags
+    const setMeta = (name: string, content: string) => {
+      let el = document.querySelector(`meta[name="${name}"]`);
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute("name", name);
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", content);
+    };
+    setMeta("description", metaDescription);
+    setMeta("keywords", keywords);
+
+    trackPageVisit(location.pathname, pageTitle);
+  }, [location.pathname, seoConfig]);
+
+  // Sync core CMS database and session states
+  const refreshCmsData = () => {
+    fetch("/api/cms/content")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.destinations) setDestinations(data.destinations);
+        if (data.shoppingGuides) setShoppingGuides(data.shoppingGuides);
+        if (data.hotels) setHotels(data.hotels);
+        if (data.tours) setTours(data.tours);
+        if (data.foodSpots) setFoodSpots(data.foodSpots);
+        if (data.events) setEvents(data.events);
+        if (data.blogs) setBlogs(data.blogs);
+        if (data.homepage) setHomepageConfig(data.homepage);
+        if (data.aiChatbot) setChatbotConfig(data.aiChatbot);
+        if (data.seo) setSeoConfig(data.seo);
+        if (data.media) setMediaList(data.media);
+      })
+      .catch((err) => console.error("Error fetching dynamic CMS content:", err));
+  };
+
+  useEffect(() => {
+    // 1. Fetch dynamic CMS values on load
+    refreshCmsData();
+
+    // 2. Fetch session status
+    fetch("/api/auth/status")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.loggedIn && data.role === "Super Admin") {
+          setCurrentUserRole("Super Admin");
+        } else {
+          setCurrentUserRole("Guest");
+        }
+      })
+      .catch((err) => console.error("Session check error:", err));
+
+    // 3. Fetch monetization settings
+    fetch("/api/monetization")
+      .then((res) => res.json())
+      .then((data) => setRawMonetization(data))
+      .catch((err) => console.error("Error fetching monetization:", err));
+  }, []);
+
+  // Fetch administrator states if validated
+  useEffect(() => {
+    if (currentUserRole === "Super Admin") {
+      fetch("/api/admin/inquiries")
+        .then((res) => res.json())
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setInquiries(data);
+          } else {
+            console.warn("Inquiries response is not an array:", data);
+            setInquiries(INITIAL_INQUIRIES);
           }
-        `;
-      case "vacation":
-        return `
-          :root {
-            --color-brand-emerald-950: #082f49 !important; /* Deep Oceanic Sky */
-            --color-brand-emerald-900: #0369a1 !important; /* Wave Teal/Blue */
-            --color-brand-emerald-800: #0284c7 !important; /* Sea Coral Sky */
-            --color-brand-emerald-700: #0ea5e9 !important; /* Sky Blue */
-            
-            --color-brand-sand-50: #f0f9ff !important; /* Breezy White Lagoon */
-            --color-brand-sand-100: #e0f2fe !important; /* Light Wave Lagoon */
-            --color-brand-sand-200: #bae6fd !important; /* Light Azure */
-            
-            --color-brand-gold-300: #38bdf8 !important; /* Bright Sky Spark */
-            --color-brand-gold-400: #0284c7 !important; /* Warm Aqua Blue */
-            --color-brand-gold-500: #0ea5e9 !important; /* Sky Accent */
-            
-            --color-brand-charcoal: #0f172a !important; /* Slate Dark */
+        })
+        .catch((err) => {
+          console.error("Error fetching inquiries:", err);
+          setInquiries(INITIAL_INQUIRIES);
+        });
+
+      fetch("/api/admin/partner-requests")
+        .then((res) => res.json())
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setPartnerRequests(data);
+          } else {
+            console.warn("Partner requests response is not an array:", data);
+            setPartnerRequests(INITIAL_PARTNERS);
           }
-        `;
-      case "weekend":
-        return `
-          :root {
-            --color-brand-emerald-950: #2e1065 !important; /* Velvet Purple */
-            --color-brand-emerald-900: #4c1d95 !important; /* Grape Indigo */
-            --color-brand-emerald-800: #6d28d9 !important; /* Royal Violet */
-            --color-brand-emerald-700: #7c3aed !important; /* Deep Orchid */
-            
-            --color-brand-sand-50: #faf5ff !important; /* Soft Lavender Creame */
-            --color-brand-sand-100: #f3e8ff !important; /* Light Purple Mist */
-            --color-brand-sand-200: #e9d5ff !important; /* Pale Amethyst */
-            
-            --color-brand-gold-300: #fb7185 !important; /* Sunset Rose Pink */
-            --color-brand-gold-400: #f43f5e !important; /* Sizzling Strawberry */
-            --color-brand-gold-500: #e11d48 !important; /* Vivid Coral */
-            
-            --color-brand-charcoal: #1e1b4b !important; /* Deep Indigo Midnight */
+        })
+        .catch((err) => {
+          console.error("Error fetching partner requests:", err);
+          setPartnerRequests(INITIAL_PARTNERS);
+        });
+
+      fetch("/api/admin/audit-logs")
+        .then((res) => res.json())
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setAuditLogs(data);
+          } else {
+            console.warn("Audit logs response is not an array:", data);
+            setAuditLogs(INITIAL_AUDIT);
           }
-        `;
-      case "normal":
-      default:
-        return ``;
+        })
+        .catch((err) => {
+          console.error("Error fetching audit logs:", err);
+          setAuditLogs(INITIAL_AUDIT);
+        });
+    } else {
+      setInquiries(INITIAL_INQUIRIES);
+      setPartnerRequests(INITIAL_PARTNERS);
+      setAuditLogs(INITIAL_AUDIT);
+    }
+  }, [currentUserRole]);
+
+  // Handle Dynamic CMS Updates
+  const setMonetization = (newSetting: MonetizationSetting | ((prev: MonetizationSetting) => MonetizationSetting)) => {
+    setRawMonetization((prev) => {
+      const next = typeof newSetting === "function" ? newSetting(prev) : newSetting;
+      if (currentUserRole === "Super Admin") {
+        fetch("/api/admin/monetization", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(next)
+        }).catch((e) => console.error("Failed to sync monetization settings: ", e));
+      }
+      return next;
+    });
+  };
+
+  
+
+  const addAuditLog = (action: string, targetType: string, targetName: string) => {
+    if (currentUserRole === "Super Admin") {
+      fetch("/api/admin/audit-logs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, targetType, targetName })
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setAuditLogs(data);
+        } else {
+          console.warn("Audit logs response from log action is not an array:", data);
+        }
+      })
+      .catch((err) => console.error("Error logging audit:", err));
+    } else {
+      const timestamp = new Date().toISOString();
+      const newLog: AuditLog = {
+        id: `log-${Date.now()}`,
+        user: "Anonymous Client",
+        role: "Editor",
+        action,
+        targetType,
+        targetName,
+        timestamp,
+      };
+      setAuditLogs((prev) => [newLog, ...prev]);
     }
   };
 
-  // Live State Database (allows client-side adding, editing and deleting from CMS UI)
-  const [destinations, setDestinations] = useState<Destination[]>(INITIAL_DESTINATIONS);
-  const [shoppingGuides, setShoppingGuides] = useState<ShoppingGuide[]>(INITIAL_SHOPPING);
-  const [hotels, setHotels] = useState<Hotel[]>(INITIAL_HOTELS);
-  const [tours, setTours] = useState<Tour[]>(INITIAL_TOURS);
-  const [foodSpots, setFoodSpots] = useState<FoodSpot[]>(INITIAL_FOOD);
-  const [events, setEvents] = useState<LocalEvent[]>(INITIAL_EVENTS);
-  const [blogs, setBlogs] = useState<BlogPost[]>(INITIAL_BLOGS);
-  
-  const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES);
-  const [partnerRequests, setPartnerRequests] = useState<PartnerRequest[]>(INITIAL_PARTNERS);
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(INITIAL_AUDIT);
-  const [monetization, setMonetization] = useState<MonetizationSetting>(INITIAL_MONETIZATION);
+  const addInquiry = (inq: Omit<Inquiry, "id" | "date" | "status"> & { sourcePage?: string; category?: string; inquiryType?: string }) => {
+    const timestamp = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+    const sourcePage = inq.sourcePage || window.location.pathname;
+    const category = inq.category || "General Experiences";
+    const inquiryType = inq.inquiryType || (inq.itemType === "shopping" ? "Custom Shopping Tour Sourcing" : inq.itemType === "tour" ? "Curated Itinerary Booking" : inq.itemType === "hotel" ? "Luxury Stay Coordination" : "General Travel Consultation");
 
-  // Global Helpers
-  const addAuditLog = (action: string, targetType: string, targetName: string) => {
-    const timestamp = new Date().toISOString();
-    const newLog: AuditLog = {
-      id: `log-${Date.now()}`,
-      user: currentUserRole === "Guest" ? "Anonymous Client" : "itxghost111@gmail.com",
-      role: currentUserRole === "Guest" ? "Editor" : (currentUserRole as Role),
-      action,
-      targetType,
-      targetName,
-      timestamp,
-    };
-    setAuditLogs((prev) => [newLog, ...prev]);
-  };
-
-  const addInquiry = (inq: Omit<Inquiry, "id" | "date" | "status">) => {
     const newInquire: Inquiry = {
       ...inq,
       id: `inq-${Date.now()}`,
       date: new Date().toISOString().split("T")[0],
       status: "New",
+      sourcePage,
+      category,
+      inquiryType,
+      timestamp,
     };
-    setInquiries((prev) => [newInquire, ...prev]);
-    addAuditLog(`Created Tour/Hotel/Shopping Lead`, "Lead Inquiry", inq.itemTitle);
 
-    // Formulate a beautiful WhatsApp summary message automatically
-    const waText = `✨ *NEW INQUIRY FROM SURAT INSIDER* ✨\n\n` +
-      `👤 *Name:* ${inq.name}\n` +
-      `📧 *Email:* ${inq.email}\n` +
-      `📞 *Phone:* ${inq.phone || "Not specified"}\n\n` +
-      `🏷️ *Product/Experience:* ${inq.itemTitle} (${inq.itemType.toUpperCase()})\n` +
-      `💬 *Requirements/Message:* \n"${inq.message}"\n\n` +
-      `📅 *Date:* ${newInquire.date}\n` +
-      `🔗 _Sent via Surat Insider Experience Map. Tap to reply directly!_`;
+    fetch("/api/inquiries", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newInquire)
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success && data.inquiry) {
+        setInquiries((prev) => [data.inquiry, ...prev]);
+      }
+    })
+    .catch((err) => {
+      console.error("Error creating inquiry on server:", err);
+      setInquiries((prev) => [newInquire, ...prev]);
+    });
+
+    addAuditLog(`Created Lead Inquiry`, "Lead Inquiry", inq.itemTitle);
+
+    trackInquirySubmitted(inq.itemTitle, inq.itemType, { name: inq.name });
+    trackWhatsAppClick(inq.itemTitle, category, { item_type: inq.itemType });
+
+    const waText = 
+      `✨ *OFFICIAL INQUIRY • SURAT INSIDER* ✨\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+      `👤 *USER PROFILE*\n` +
+      `  • *Name:* ${inq.name}\n` +
+      `  • *Phone:* ${inq.phone || "Not specified"}\n` +
+      `  • *Email:* ${inq.email}\n\n` +
+      `🏷️ *INQUIRY DETAILS*\n` +
+      `  • *Item/Product:* ${inq.itemTitle}\n` +
+      `  • *Category:* ${category}\n` +
+      `  • *Inquiry Type:* ${inquiryType}\n` +
+      `  • *Source Page:* ${sourcePage}\n\n` +
+      `💬 *USER MESSAGE*\n` +
+      `"${inq.message}"\n\n` +
+      `⏰ *TIMESTAMP*\n` +
+      `  • ${timestamp} (IST)\n\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `🔗 _Sent via Surat Insider Gateway. Tap to reply directly to ${inq.name}!_`;
 
     triggerWhatsAppMessage(waText);
   };
 
+  const handleAdminLoginSuccess = (role: string) => {
+    setCurrentUserRole("Super Admin");
+    setCurrentTab("admin");
+    navigate("/");
+  };
+
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location}>
+    <>
+      <ScrollToTop currentTab={currentTab} />
+      <AnimatePresence mode="wait">
+        <Routes location={location}>
+        {/* Standalone Administrative Login Gateway (Hidden) */}
+        <Route path="/insiderbyharundaryaee5313" element={
+          <AdminLoginPage onLoginSuccess={handleAdminLoginSuccess} />
+        } />
+
         <Route path="/" element={
           <PageTransition key={location.pathname}>
             <HomePage
@@ -212,9 +365,6 @@ export default function App() {
               setCurrentUserRole={setCurrentUserRole}
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
-              activeTheme={activeTheme}
-              setActiveTheme={setActiveTheme}
-              getThemeStyles={getThemeStyles}
               destinations={destinations}
               setDestinations={setDestinations}
               shoppingGuides={shoppingGuides}
@@ -239,6 +389,11 @@ export default function App() {
               monetization={monetization}
               setMonetization={setMonetization}
               addInquiry={addInquiry}
+              homepageConfig={homepageConfig}
+              chatbotConfig={chatbotConfig}
+              seoConfig={seoConfig}
+              mediaList={mediaList}
+              refreshCmsData={refreshCmsData}
             />
           </PageTransition>
         } />
@@ -246,11 +401,8 @@ export default function App() {
         <Route path="/wedding" element={
           <PageTransition key={location.pathname}>
             <WeddingPage 
-              onMount={() => setActiveTheme("wedding")} 
               currentUserRole={currentUserRole} 
               setCurrentUserRole={setCurrentUserRole} 
-              activeTheme={activeTheme} 
-              setActiveTheme={setActiveTheme} 
               addInquiry={addInquiry} 
             />
           </PageTransition>
@@ -258,11 +410,8 @@ export default function App() {
         <Route path="/weekend" element={
           <PageTransition key={location.pathname}>
             <WeekendPage 
-              onMount={() => setActiveTheme("vacation")} 
               currentUserRole={currentUserRole} 
               setCurrentUserRole={setCurrentUserRole} 
-              activeTheme={activeTheme} 
-              setActiveTheme={setActiveTheme} 
               addInquiry={addInquiry} 
             />
           </PageTransition>
@@ -270,11 +419,8 @@ export default function App() {
         <Route path="/textile" element={
           <PageTransition key={location.pathname}>
             <TextilePage 
-              onMount={() => setActiveTheme("normal")} 
               currentUserRole={currentUserRole} 
               setCurrentUserRole={setCurrentUserRole} 
-              activeTheme={activeTheme} 
-              setActiveTheme={setActiveTheme} 
               addInquiry={addInquiry} 
             />
           </PageTransition>
@@ -282,28 +428,64 @@ export default function App() {
         <Route path="/food" element={
           <PageTransition key={location.pathname}>
             <FoodPage 
-              onMount={() => setActiveTheme("weekend")} 
               currentUserRole={currentUserRole} 
               setCurrentUserRole={setCurrentUserRole} 
-              activeTheme={activeTheme} 
-              setActiveTheme={setActiveTheme} 
               addInquiry={addInquiry} 
             />
           </PageTransition>
         } />
-        <Route path="/insider" element={
+        <Route path="/hotels" element={
           <PageTransition key={location.pathname}>
-            <InsiderPage 
-              onMount={() => setActiveTheme("normal")} 
+            <HotelsPage 
+              hotels={hotels}
               currentUserRole={currentUserRole} 
               setCurrentUserRole={setCurrentUserRole} 
-              activeTheme={activeTheme} 
-              setActiveTheme={setActiveTheme} 
+              addInquiry={addInquiry} 
+              triggerWhatsAppMessage={(txt) => window.open(`https://wa.me/91XXXXXXXXXX?text=${encodeURIComponent(txt)}`)}
+            />
+          </PageTransition>
+        } />
+        <Route path="/insider-vault" element={
+          <PageTransition key={location.pathname}>
+            <InsiderPage 
+              currentUserRole={currentUserRole} 
+              setCurrentUserRole={setCurrentUserRole} 
               addInquiry={addInquiry} 
             />
+          </PageTransition>
+        } />
+        <Route path="/plan" element={
+          <PageTransition key={location.pathname}>
+            <PlanPage 
+              destinations={destinations}
+              hotels={hotels}
+              foodSpots={foodSpots}
+              shoppingGuides={shoppingGuides}
+              tours={tours}
+              events={events}
+              addInquiry={addInquiry}
+              currentUserRole={currentUserRole}
+              setCurrentUserRole={setCurrentUserRole}
+            />
+          </PageTransition>
+        } />
+        <Route path="/work-with-us" element={
+          <PageTransition key={location.pathname}>
+            <WorkWithUsPage 
+              currentUserRole={currentUserRole}
+              setCurrentUserRole={setCurrentUserRole}
+              setPartnerRequests={setPartnerRequests}
+              addAuditLog={addAuditLog}
+            />
+          </PageTransition>
+        } />
+        <Route path="/discover" element={
+          <PageTransition key={location.pathname}>
+            <DiscoveryPage />
           </PageTransition>
         } />
       </Routes>
     </AnimatePresence>
+    </>
   );
 }

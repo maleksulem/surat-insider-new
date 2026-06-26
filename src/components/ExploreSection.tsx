@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { Destination, Tour, FoodSpot, Inquiry } from "../types";
-import { MapPin, Clock, Compass, HelpCircle, Utensils, Star, Info, MessageSquare, ChevronRight, Check } from "lucide-react";
-import { motion } from "motion/react";
+import { Destination, Tour, FoodSpot, Inquiry, CuratedExperience } from "../types";
+import { MapPin, Clock, Compass, HelpCircle, Utensils, Star, Info, MessageSquare, ChevronRight, Check, Search, X, ArrowUpRight } from "lucide-react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { ExperienceDetailModal } from "./ExperienceDetailModal";
 
 interface ExploreSectionProps {
-  destinations: Destination[];
-  tours: Tour[];
+  destinations: CuratedExperience[];
+  tours: CuratedExperience[];
   foodSpots: FoodSpot[];
   addInquiry: (inq: Omit<Inquiry, "id" | "date" | "status">) => void;
+  triggerWhatsAppMessage: (text: string) => void;
   searchQuery: string;
+  setSearchQuery: (q: string) => void;
 }
 
 export function ExploreSection({
@@ -16,10 +19,13 @@ export function ExploreSection({
   tours,
   foodSpots,
   addInquiry,
+  triggerWhatsAppMessage,
   searchQuery,
+  setSearchQuery,
 }: ExploreSectionProps) {
-  const [selectedDest, setSelectedDest] = useState<Destination | null>(null);
-  const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
+  const [selectedDest, setSelectedDest] = useState<CuratedExperience | null>(null);
+  const [selectedTour, setSelectedTour] = useState<CuratedExperience | null>(null);
+  const [selectedFoodSpot, setSelectedFoodSpot] = useState<CuratedExperience | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("All");
 
   // Destination category filter
@@ -29,7 +35,7 @@ export function ExploreSection({
   const filteredDestinations = destinations.filter((dest) => {
     const matchesSearch =
       dest.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      dest.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (dest.shortDescription || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       dest.category.toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesCategory = activeCategory === "All" || dest.category === activeCategory;
@@ -64,471 +70,200 @@ export function ExploreSection({
     setTimeout(() => setInquirySent(null), 4000);
   };
 
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 2000], [0, -100]);
+  const y2 = useTransform(scrollY, [0, 2000], [0, 100]);
+
   return (
-    <div className="space-y-12" id="world-discovery-system-header">
-      {/* Category Navigation */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-brand-sand-200 pb-5">
-        <div>
-          <h2 className="font-serif text-3xl font-bold text-brand-emerald-950">
-            Heritage, Nature & Sights
-          </h2>
-          <p className="text-sm text-brand-charcoal/60 mt-1">
-            Carefully curated local master-trail detailing iconic sights of historic Surat.
-          </p>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-32">
+      {/* Heritage & Landmarks Moment */}
+      <section className="space-y-12">
+        <div className="max-w-xl">
+          <motion.h2 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
+            className="font-serif text-4xl md:text-5xl font-bold text-[#1A1614] tracking-tight"
+          >
+            Heritage & Landmarks
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 100, damping: 20 }}
+            className="text-base text-[#1A1614]/50 mt-4 leading-relaxed font-light"
+          >
+            Traces of the Dutch, Portuguese, and British legacies woven into the modern fabric of the city.
+          </motion.p>
         </div>
-        
-        {/* Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
-                activeCategory === cat
-                  ? "bg-brand-emerald-900 text-brand-sand-50 shadow-md"
-                  : "bg-brand-sand-200 text-brand-charcoal-light hover:bg-brand-sand-100"
-              }`}
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          {(destinations || []).filter(d => d.category === "Heritage").slice(0, 3).map((site, idx) => (
+            <motion.div 
+              key={site.id}
+              initial={{ opacity: 0, scale: 0.95, y: 40 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ 
+                delay: idx * 0.15, 
+                type: "spring", 
+                stiffness: 50, 
+                damping: 15,
+                mass: 1.2
+              }}
+              onClick={() => setSelectedDest(site)}
+              className={`${idx === 0 ? 'md:col-span-7' : idx === 1 ? 'md:col-span-5' : 'md:col-span-12'} group relative aspect-[16/10] overflow-hidden rounded-2xl bg-brand-sand-100 cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-700`}
             >
-              {cat}
-            </button>
+              <motion.img 
+                src={site.image} 
+                alt={site.title} 
+                style={{ y: idx % 2 === 0 ? y1 : y2 }}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 cursor-pointer" 
+                onClick={() => setSelectedDest(site)}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-40 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="absolute bottom-0 left-0 p-8 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 ease-out">
+                <span className="text-[10px] uppercase font-mono tracking-[0.3em] text-brand-gold-400 font-bold mb-3 block">Discovery • {site.location}</span>
+                <h3 className="text-brand-sand-50 font-serif text-3xl font-bold flex items-center gap-4">
+                  {site.title}
+                  <ArrowUpRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0" />
+                </h3>
+                <p className="text-brand-sand-50/60 text-sm mt-3 max-w-sm font-light leading-relaxed">{site.shortDescription}</p>
+              </div>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </section>
 
-      {/* Destinations Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="destinations-grid">
-        {filteredDestinations.map((dest) => (
-          <motion.div
-            key={dest.id}
-            id={`dest-card-${dest.id}`}
-            onClick={() => setSelectedDest(dest)}
-            className="group cursor-pointer bg-white rounded-2xl border border-brand-sand-200 shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col"
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            whileHover={{ y: -6, scale: 1.015 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="relative h-64 overflow-hidden bg-brand-sand-100">
-              <img
-                src={dest.image}
-                alt={dest.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
-              <div className="absolute top-4 left-4">
-                <span className="bg-brand-emerald-950/90 text-brand-sand-50 text-[10px] uppercase font-mono tracking-wider font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm">
-                  {dest.category}
-                </span>
-              </div>
-              <div className="absolute top-4 right-4 bg-brand-sand-50/95 backdrop-blur-sm px-2 py-0.5 rounded-lg flex items-center gap-1 border border-brand-sand-200">
-                <Star className="w-3.5 h-3.5 fill-brand-gold-500 text-brand-gold-500" />
-                <span className="text-xs font-bold text-brand-emerald-950 font-mono">{dest.rating}</span>
-              </div>
+      {/* The Expert Edit - Full Bleed Moment */}
+      <motion.section 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        className="relative h-[60vh] md:h-[80vh] -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden rounded-3xl"
+      >
+        <img 
+          src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=2000&q=80" 
+          className="absolute inset-0 w-full h-full object-cover"
+          alt="Expert Edit"
+        />
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-[1px]" />
+        <div className="absolute inset-0 flex items-center justify-center text-center p-6">
+          <div className="max-w-2xl space-y-8">
+            <div className="space-y-4">
+              <span className="text-xs uppercase font-mono tracking-[0.4em] text-brand-gold-400 font-bold">
+                Private Expeditions
+              </span>
+              <h2 className="font-serif text-5xl md:text-7xl font-bold text-brand-sand-50 leading-tight">
+                The Expert Edit
+              </h2>
+              <p className="text-lg text-brand-sand-50/80 font-light max-w-lg mx-auto leading-relaxed">
+                Immersive journeys led by master chroniclers and textile experts. Beyond the reachable.
+              </p>
             </div>
+            <button className="px-12 py-4 bg-brand-gold-500 text-[#1A1614] rounded-full text-xs font-bold tracking-widest uppercase hover:bg-brand-gold-400 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-2xl">
+              Request Access
+            </button>
+          </div>
+        </div>
+      </motion.section>
 
-            <div className="p-6 flex-1 flex flex-col justify-between">
-              <div>
-                <h3 className="font-serif text-xl font-bold text-brand-emerald-950 group-hover:text-brand-emerald-800 transition-colors">
-                  {dest.title}
-                </h3>
-                <p className="text-xs text-brand-charcoal/50 mt-1 flex items-center gap-1 font-mono">
-                  <MapPin className="w-3 h-3 text-brand-gold-500 text-brand-gold-400 shrink-0" />
-                  {dest.location}
-                </p>
-                <p className="text-sm text-brand-charcoal-light/90 mt-3 line-clamp-3 leading-relaxed">
-                  {dest.description}
-                </p>
-              </div>
-
-              <div className="pt-5 mt-5 border-t border-brand-sand-100 flex items-center justify-between">
-                <span className="text-xs font-mono text-brand-gold-500 font-semibold group-hover:underline">
-                  View Curated Itinerary
-                </span>
-                <ChevronRight className="w-4 h-4 text-brand-gold-500 transform group-hover:translate-x-1 transition-transform" />
-              </div>
-            </div>
-          </motion.div>
-        ))}
-
-        {filteredDestinations.length === 0 && (
-          <div className="col-span-full py-16 bg-brand-sand-100/50 rounded-2xl border-2 border-dashed border-brand-sand-200 flex flex-col items-center justify-center p-6 text-center">
-            <Compass className="w-12 h-12 text-brand-emerald-900/35 mb-3" />
-            <span className="font-serif text-lg font-bold text-brand-emerald-950">No Spots Discovered</span>
-            <p className="text-xs text-brand-charcoal/60 mt-1 max-w-sm">
-              We couldn't find items matches "{searchQuery}". Search for landmarks, street dishes or wedding stores.
+      {/* The Coastline Moment */}
+      <section className="space-y-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="max-w-xl">
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#1A1614] tracking-tight">
+              The Coastline
+            </h2>
+            <p className="text-base text-[#1A1614]/50 mt-4 leading-relaxed font-light">
+              Where the Tapi meets the Arabian Sea. Quiet horizons and black sands.
             </p>
           </div>
-        )}
-      </div>
+        </div>
 
-      {/* Destination Detailed Itinerary Modal */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {(destinations || []).filter(d => d.category === "Nature").slice(0, 3).map((site, idx) => (
+            <motion.div 
+              key={site.id}
+              initial={{ opacity: 0, scale: 0.98 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              onClick={() => setSelectedDest(site)}
+              className="group cursor-pointer"
+            >
+              <div className="aspect-[4/5] overflow-hidden rounded-2xl mb-6 shadow-sm group-hover:shadow-xl transition-shadow duration-500">
+                <img 
+                  src={site.image} 
+                  alt={site.title} 
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 cursor-pointer"
+                  onClick={() => setSelectedDest(site)}
+                />
+              </div>
+              <h3 className="font-serif text-xl font-bold text-[#1A1614] group-hover:text-brand-gold-600 transition-colors">{site.title}</h3>
+              <p className="text-sm text-[#1A1614]/40 mt-1 font-mono tracking-wider uppercase text-[10px]">{site.location}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Modals */}
       {selectedDest && (
-        <div className="fixed inset-0 z-50 bg-brand-emerald-950/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-brand-sand-50 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col animate-scale-up border border-brand-sand-200">
-            {/* Header */}
-            <div className="relative h-64 md:h-80 shrink-0 bg-brand-sand-200">
-              <img
-                src={selectedDest.image}
-                alt={selectedDest.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-              
-              <button
-                onClick={() => setSelectedDest(null)}
-                className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-2.5 transition-all shadow-md z-10"
-              >
-                ✕
-              </button>
-
-              <div className="absolute bottom-6 left-6 right-6 text-white space-y-2">
-                <span className="bg-brand-gold-500 text-brand-emerald-950 text-[10px] font-mono tracking-widest font-bold uppercase px-3 py-1 rounded inline-block">
-                  {selectedDest.category}
-                </span>
-                <h3 className="font-serif text-2xl md:text-4xl font-extrabold tracking-tight">
-                  {selectedDest.title}
-                </h3>
-                <p className="text-sm opacity-90 flex items-center gap-1.5 font-sans font-medium">
-                  <MapPin className="w-4 h-4 text-brand-gold-300" />
-                  {selectedDest.location}
-                </p>
-              </div>
-            </div>
-
-            {/* Modal Scroll Content */}
-            <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
-              {/* Story */}
-              <div className="space-y-3">
-                <span className="text-xs text-brand-gold-500 font-mono uppercase tracking-[0.2em] font-semibold block">
-                  The Curated Story
-                </span>
-                <p className="font-sans text-sm md:text-base leading-relaxed text-brand-charcoal-light font-normal text-justify">
-                  {selectedDest.story || selectedDest.description}
-                </p>
-              </div>
-
-              {/* Specifications Block - Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-5 rounded-xl border border-brand-sand-200">
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <Clock className="w-5 h-5 text-brand-emerald-800 shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-xs text-brand-charcoal/60 uppercase font-mono font-semibold tracking-wider">
-                        Visiting Hours & Admission
-                      </h4>
-                      <p className="text-sm font-semibold text-brand-emerald-950 mt-0.5">
-                        {selectedDest.visitingHours || "08:00 AM - 06:00 PM"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <Compass className="w-5 h-5 text-brand-emerald-800 shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-xs text-brand-charcoal/60 uppercase font-mono font-semibold tracking-wider">
-                        Best Time to Visit
-                      </h4>
-                      <p className="text-sm font-semibold text-brand-emerald-950 mt-0.5">
-                        {selectedDest.bestTimeToVisit || "October to March (Winds)"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <h4 className="text-xs text-brand-charcoal/60 uppercase font-mono font-semibold tracking-wider">
-                    Nearby Sights & Treasures
-                  </h4>
-                  <div className="flex flex-wrap gap-1.5">
-                    {selectedDest.nearbyAttractions?.map((attr) => (
-                      <span
-                        key={attr}
-                        className="bg-brand-sand-100 text-brand-emerald-950 text-xs font-medium px-2.5 py-1 rounded"
-                      >
-                        📍 {attr}
-                      </span>
-                    )) || <span className="text-xs text-brand-charcoal/50">Dutch Gardens, Chauta Bazar</span>}
-                  </div>
-                </div>
-              </div>
-
-              {/* Hourly Itinerary */}
-              <div className="bg-brand-emerald-950 text-brand-sand-50 p-6 rounded-xl space-y-4">
-                <div className="flex items-center gap-2">
-                  <Compass className="w-5 h-5 text-brand-gold-400" />
-                  <h4 className="font-serif text-lg font-bold tracking-wide">
-                    Suggested Hour-by-Hour Trail
-                  </h4>
-                </div>
-                <p className="text-xs opacity-80 leading-relaxed font-sans font-light">
-                  {selectedDest.suggestedItinerary || "We recommend starting in the early hours around 8 AM. Grab delicious Surati Locho at Jani's, and then stroll into the historic core of Surat Castle by 10 AM. Carry a high resolution camera."}
-                </p>
-              </div>
-            </div>
-
-            {/* Footer buttons */}
-            <div className="p-4 bg-brand-sand-100 border-t border-brand-sand-200 flex justify-end">
-              <button
-                onClick={() => setSelectedDest(null)}
-                className="px-6 py-2.5 bg-brand-emerald-950 text-brand-sand-50 hover:bg-brand-emerald-900 rounded-xl text-xs font-semibold tracking-wider transition-colors"
-              >
-                Close Trail
-              </button>
-            </div>
-          </div>
-        </div>
+        <ExperienceDetailModal
+          item={selectedDest}
+          onClose={() => setSelectedDest(null)}
+          addInquiry={addInquiry}
+          triggerWhatsAppMessage={triggerWhatsAppMessage}
+        />
       )}
-
-      {/* Featured Tours Packages */}
-      <div className="bg-brand-sand-100/60 rounded-3xl p-8 md:p-12 border border-brand-sand-200 mt-16 space-y-8">
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs uppercase font-mono tracking-[0.25em] text-brand-gold-500 font-bold block">
-            Custom Curator Programs
-          </span>
-          <h2 className="font-serif text-3xl font-extrabold text-brand-emerald-950">
-            Private Curated Expeditions
-          </h2>
-          <p className="text-sm text-brand-charcoal/60 leading-relaxed">
-            Direct specialized tours guided by master textile operators and resident chroniclers.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {tours.map((tour) => (
-            <motion.div
-              key={tour.id}
-              className="bg-white rounded-2xl overflow-hidden border border-brand-sand-200/80 shadow-md flex flex-col md:flex-row hover:shadow-lg transition-all duration-300"
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              whileHover={{ y: -4, scale: 1.012 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="md:w-2/5 relative h-48 md:h-auto bg-brand-sand-100">
-                <img
-                  src={tour.image}
-                  alt={tour.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-3 left-3 bg-brand-gold-500 text-brand-emerald-950 font-mono text-[10px] font-bold px-2 py-0.5 rounded shadow">
-                  ★ Popular Tour
-                </div>
-              </div>
-
-              <div className="p-6 md:w-3/5 flex flex-col justify-between space-y-4">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-brand-gold-500 uppercase font-mono font-bold">
-                      ⏱️ {tour.duration}
-                    </span>
-                    <span className="text-sm font-bold text-brand-emerald-950 font-mono">
-                      From ₹{tour.pricing} / head
-                    </span>
-                  </div>
-                  <h3 className="font-serif text-lg font-bold text-brand-emerald-950">
-                    {tour.title}
-                  </h3>
-                  <p className="text-xs text-brand-charcoal-light/90 leading-relaxed">
-                    {tour.description}
-                  </p>
-                </div>
-
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setSelectedTour(tour)}
-                    className="flex-1 bg-brand-sand-100 hover:bg-brand-sand-200 text-brand-emerald-950 font-semibold px-4 py-2 rounded-xl text-xs transition-colors"
-                  >
-                    View Itinerary Map
-                  </button>
-                  <button
-                    onClick={() => setSelectedTour(tour)}
-                    className="flex-1 bg-brand-emerald-900 hover:bg-brand-emerald-800 text-brand-sand-50 font-semibold px-4 py-2 rounded-xl text-xs transition-colors shadow-sm"
-                  >
-                    Inquire Details
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* Tour Detail & Inquiry Modal */}
       {selectedTour && (
-        <div className="fixed inset-0 z-50 bg-brand-emerald-950/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-brand-sand-50 w-full max-w-2xl rounded-2xl shadow-xl overflow-hidden max-h-[90vh] flex flex-col animate-scale-up border border-brand-sand-200">
-            <div className="bg-brand-emerald-950 p-6 text-brand-sand-50 flex items-center justify-between">
-              <div>
-                <span className="text-[10px] uppercase tracking-widest text-brand-gold-400 font-mono">
-                  Curated Tour Itinerary • {selectedTour.duration}
-                </span>
-                <h3 className="font-serif text-xl font-bold">{selectedTour.title}</h3>
-              </div>
-              <button
-                onClick={() => setSelectedTour(null)}
-                className="text-brand-sand-100 hover:text-white font-bold"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
-              <div className="space-y-4">
-                <h4 className="text-xs uppercase tracking-wider font-mono text-brand-gold-500 font-semibold">
-                  Scheduled Program Progression
-                </h4>
-                
-                <div className="space-y-3">
-                  {selectedTour.itinerary?.map((step, idx) => (
-                    <div key={idx} className="flex gap-3 items-start bg-white p-3.5 rounded-lg border border-brand-sand-200">
-                      <span className="bg-brand-gold-500/10 text-brand-emerald-950 text-xs font-bold font-mono h-6 w-6 rounded-full flex items-center justify-center shrink-0 border border-brand-gold-400/20">
-                        {idx + 1}
-                      </span>
-                      <p className="text-xs text-brand-charcoal-light leading-relaxed">{step}</p>
-                    </div>
-                  )) || (
-                    <p className="text-xs text-brand-charcoal/50">Itinerary content being formulated by expert travel managers.</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Inquiry Form */}
-              <div className="bg-brand-sand-100 p-5 rounded-xl border border-brand-sand-200 space-y-3">
-                <h4 className="text-xs uppercase font-semibold text-brand-emerald-950 font-mono tracking-wider">
-                  Make a Custom Guided Inquiry
-                </h4>
-                <p className="text-[11px] text-brand-charcoal/60 leading-normal">
-                  Send details. Our partner tour operators will arrange personalized cars, guides, hotel pick-ups.
-                </p>
-
-                {inquirySent === selectedTour.id ? (
-                  <div className="bg-emerald-900/15 border border-emerald-800/30 p-3.5 rounded-lg flex items-center gap-2 text-emerald-900 text-xs font-semibold">
-                    <Check className="w-4 h-4 shrink-0" />
-                    Inquiry submitted! Admin will contact you via email shortly.
-                  </div>
-                ) : (
-                  <form onSubmit={(e) => handleInquirySubmit(e, { id: selectedTour.id, title: selectedTour.title, type: "tour" })} className="space-y-3">
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="text-[10px] uppercase font-mono tracking-wider text-brand-charcoal opacity-75">Your Name*</label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="w-full bg-white text-xs px-3 py-2 border border-brand-sand-200 rounded-lg outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-[10px] uppercase font-mono tracking-wider text-brand-charcoal opacity-75">Your Email*</label>
-                        <input
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="w-full bg-white text-xs px-3 py-2 border border-brand-sand-200 rounded-lg outline-none"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="text-[10px] uppercase font-mono tracking-wider text-brand-charcoal opacity-75">Contact Phone</label>
-                      <input
-                        type="text"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="+91"
-                        className="w-full bg-white text-xs px-3 py-2 border border-brand-sand-200 rounded-lg outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-[10px] uppercase font-mono tracking-wider text-brand-charcoal opacity-75">Special Request</label>
-                      <textarea
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        placeholder="Dates, headcount and specific language requested..."
-                        rows={2}
-                        className="w-full bg-white text-xs px-3 py-2 border border-brand-sand-200 rounded-lg outline-none resize-none"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full bg-brand-emerald-950 text-brand-sand-50 hover:bg-brand-emerald-900 transition-colors py-2 rounded-xl text-xs font-semibold"
-                    >
-                      Process Tour Inquiry
-                    </button>
-                  </form>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+        <ExperienceDetailModal
+          item={selectedTour}
+          onClose={() => setSelectedTour(null)}
+          addInquiry={addInquiry}
+          triggerWhatsAppMessage={triggerWhatsAppMessage}
+        />
+      )}
+      {selectedFoodSpot && (
+        <ExperienceDetailModal
+          item={selectedFoodSpot}
+          onClose={() => setSelectedFoodSpot(null)}
+          addInquiry={addInquiry}
+          triggerWhatsAppMessage={triggerWhatsAppMessage}
+        />
       )}
 
-      {/* Food Discovery Trails */}
-      <div className="space-y-6 pt-8">
-        <div className="space-y-1">
-          <span className="text-xs uppercase font-mono tracking-[0.2em] text-brand-gold-500 font-bold block">
-            Guaranteed Taste Masterclasses
-          </span>
-          <h2 className="font-serif text-2xl md:text-3xl font-extrabold text-brand-emerald-950">
-            Surati Street Food Trails
-          </h2>
-          <p className="text-xs md:text-sm text-brand-charcoal/60">
-            Why Surat's culinary treasures are celebrated throughout the length of India.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {foodSpots.map((spot) => (
-            <motion.div
-              key={spot.id}
-              className="bg-white rounded-xl border border-brand-sand-200 p-5 space-y-4 shadow-sm hover:shadow-md transition-all duration-300 relative"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              whileHover={{ y: -4, scale: 1.012 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="h-40 bg-brand-sand-100 rounded-lg overflow-hidden relative">
-                <img
-                  src={spot.image}
-                  alt={spot.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-2.5 left-2.5 bg-brand-emerald-950 text-brand-sand-50 text-[9px] uppercase font-mono tracking-wider px-2 py-0.5 rounded">
-                  {spot.category}
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-serif text-lg font-bold text-brand-emerald-950">{spot.title}</h3>
-                  <span className="text-brand-gold-500 font-mono text-xs font-bold">{spot.priceLevel}</span>
-                </div>
-
-                <p className="text-xs text-brand-charcoal/50 flex items-center gap-1 font-mono">
-                  <MapPin className="w-3 h-3 text-brand-gold-500" />
-                  {spot.location}
-                </p>
-
-                <p className="text-xs text-brand-charcoal-light leading-relaxed line-clamp-3">
-                  {spot.description}
-                </p>
-              </div>
-
-              <div className="bg-brand-sand-100 p-3 rounded-lg border border-brand-sand-200">
-                <span className="text-[9px] uppercase font-mono text-brand-gold-500 font-extrabold block">Must Try Pairing:</span>
-                <p className="text-xs font-medium text-brand-emerald-950 mt-0.5">{spot.mustTry}</p>
-              </div>
-
-              <div className="text-[10px] font-mono text-brand-charcoal/50">
-                🕐 Timings: {spot.timings || "07:00 AM - 10:00 PM"}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+      {/* Unified Collaboration Invitation */}
+      <section className="py-32 bg-brand-sand-50">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="bg-white border border-[#1A1614]/5 rounded-[3rem] p-12 md:p-24 shadow-2xl shadow-brand-sand-300/50 flex flex-col items-center text-center space-y-12"
+        >
+          <div className="space-y-6 max-w-2xl">
+            <span className="text-[10px] uppercase font-mono tracking-[0.4em] text-brand-gold-500 font-bold block mb-4">Collaboration</span>
+            <h3 className="font-serif text-4xl md:text-6xl font-black text-[#1A1614] tracking-tight leading-tight">
+              Join the Collective
+            </h3>
+            <p className="text-lg text-[#1A1614]/40 font-light leading-relaxed">
+              A direct channel for hotel operators, master weavers, and culinary directors to join the Surat Insider collective.
+            </p>
+          </div>
+          <motion.button 
+            onClick={() => window.location.href = "/work-with-us"}
+            whileHover={{ scale: 1.05, backgroundColor: "#B8860B" }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            className="px-16 py-6 bg-[#1A1614] text-white rounded-full text-xs font-bold tracking-[0.4em] uppercase transition-colors shadow-2xl flex items-center gap-4 group"
+          >
+            Work With Us
+            <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-2 transition-transform" />
+          </motion.button>
+        </motion.div>
+      </section>
     </div>
   );
 }

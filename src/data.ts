@@ -242,6 +242,26 @@ export const INITIAL_TOURS: Tour[] = [
       "01:15 PM - Traditional designer lunch with industry guides.",
       "02:30 PM - VIP direct-access entry to wholesale textile market showrooms with customized shopping help."
     ]
+  },
+  {
+    id: "tour-3",
+    title: "The Ultimate Surat Insider Day Tour Package",
+    description: "Our signature gold-standard package. We guide you from high-end heritage silk mills, direct to cheap bridal wholesale loom stalls, relax at Dumas black beach, and finish with legendary local food spots.",
+    image: "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop",
+    gallery: ["https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop"],
+    rating: 5.0,
+    status: "Published",
+    slug: "ultimate-surat-insider-tour",
+    pricing: 4500,
+    duration: "Full Day Experience",
+    itinerary: [
+      "09:00 AM - Premium SOTY Silk weaving mill direct walkthrough session - see 24K gold thread embroidery up close.",
+      "11:30 AM - Custom guided pricing & shopping assistance at Ring Road wholesale traditional textile lanes.",
+      "01:30 PM - Authentic, unlimited royal Gujarati Thali lunch with famous butter Ghari at Kansar restaurant.",
+      "04:00 PM - Chilled mocktails, ocean breezes, and dark sand walk at the beautiful atmospheric Dumas Beach.",
+      "06:30 PM - Gastronomy trail sampling Jani's iconic hot cheese locho with fresh mint chutney.",
+      "08:00 PM - Wrap up with musical laser & dancing waters fountain show spectacular at the historic Gopi Talav park."
+    ]
   }
 ];
 
@@ -397,7 +417,7 @@ export const INITIAL_PARTNERS: PartnerRequest[] = [
 export const INITIAL_AUDIT: AuditLog[] = [
   {
     id: "log-1",
-    user: "itxghost111@gmail.com",
+    user: "admin@suratinsider.com",
     role: "Super Admin",
     action: "Platform Initialized",
     targetType: "System Setup",
@@ -406,7 +426,7 @@ export const INITIAL_AUDIT: AuditLog[] = [
   },
   {
     id: "log-2",
-    user: "itxghost111@gmail.com",
+    user: "admin@suratinsider.com",
     role: "Super Admin",
     action: "Approved Partner Listing",
     targetType: "Partner Request",

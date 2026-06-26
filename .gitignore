@@ -1,8 +1,54 @@
+# Dependencies
 node_modules/
-build/
-dist/
+/.pnp
+.pnp.js
+
+# Testing and coverage
 coverage/
-.DS_Store
-*.log
-.env*
+
+# Production build outputs
+dist/
+build/
+
+# Local configuration and environment secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 !.env.example
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor and IDE configurations
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# OS metadata and system files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Caching and compilation metadata
+.eslintcache
+.cache/
+.vite/
+.parcel-cache/
+.next/
+.nuxt/
+tmp/
+temp/
