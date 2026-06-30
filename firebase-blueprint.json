@@ -1,5 +1,28 @@
 {
   "entities": {
+    "AdminUser": {
+      "title": "Admin User",
+      "description": "Authorized administrators.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["SuperAdmin", "Editor"] }
+      },
+      "required": ["id", "email", "role"]
+    },
+    "LoginAttempt": {
+      "title": "Login Attempt",
+      "description": "Tracking login attempts for brute force protection.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "attempts": { "type": "number" },
+        "lastAttemptTimestamp": { "type": "string" },
+        "lockUntilTimestamp": { "type": "string" }
+      },
+      "required": ["email", "attempts"]
+    },
     "CuratedExperience": {
       "title": "Curated Experience",
       "description": "Unified schema for places, hotels, restaurants, etc.",
@@ -75,6 +98,14 @@
     "/auditLogs/{logId}": {
       "schema": "AuditLog",
       "description": "Administrative audit trail."
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminUser",
+      "description": "Authorized administrators."
+    },
+    "/loginAttempts/{email}": {
+      "schema": "LoginAttempt",
+      "description": "Tracking login attempts."
     }
   }
 }

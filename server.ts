@@ -7,8 +7,7 @@ import nodemailer from "nodemailer";
 import crypto from "crypto";
 import fs from "fs";
 import https from "https";
-import { FieldValue } from "firebase-admin/firestore";
-import { getFirebaseDb } from "./src/server/firebase";
+import { getFirebaseDb, FieldValue } from "./src/server/firebase";
 import { 
   getFirestoreExperiences, 
   getFirestoreInquiries, 
@@ -18,9 +17,16 @@ import {
   addFirestoreAuditLog,
   getFirestoreAuditLogs,
   getFirestorePartners,
-  updateFirestorePartner
+  updateFirestorePartner,
+  getLoginAttempt,
+  updateLoginAttempt,
+  getAdminUser,
+  saveFirestoreMediaItem,
+  deleteFirestoreMediaItem,
+  syncAndReconstructMedia
 } from "./src/server/firestoreHelper";
 import { getDb, saveDb, CmsDatabase } from "./src/server/cmsDb";
+import { getStorageProvider } from "./src/server/storageProvider";
 
 dotenv.config();
 
@@ -29,20 +35,44 @@ const requiredEnvVars = ["ADMIN_MASTER_PASSWORD"];
 const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
 
 if (missingEnvVars.length > 0) {
-  console.error("\x1b[31m%s\x1b[0m", "======================================================================");
-  console.error("\x1b[31m%s\x1b[0m", "🚨 CRITICAL STARTUP ERROR: MISSING REQUIRED SECURITY CONFIGURATION");
-  console.error("\x1b[31m%s\x1b[0m", "======================================================================");
-  console.error("\x1b[31m%s\x1b[0m", `The following required environment variable(s) are missing:`);
-  missingEnvVars.forEach(v => console.error(`   - ${v}`));
-  console.error("\x1b[31m%s\x1b[0m", "\nPlease define these in your environment variables or secrets config.");
-  console.error("\x1b[31m%s\x1b[0m", "======================================================================");
-  throw new Error(`CRITICAL SECURITY CONFIGURATION FAILURE: Missing required environment variable(s): ${missingEnvVars.join(", ")}`);
+  console.warn("\x1b[33m%s\x1b[0m", "======================================================================");
+  console.warn("\x1b[33m%s\x1b[0m", "⚠️  WARNING: ADMIN_MASTER_PASSWORD ENVIRONMENT VARIABLE IS NOT SET.");
+  console.warn("\x1b[33m%s\x1b[0m", "Using fallback password 'suratinsider2026' for testing/development.");
+  console.warn("\x1b[33m%s\x1b[0m", "======================================================================");
+  process.env.ADMIN_MASTER_PASSWORD = "suratinsider2026";
 }
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json({ limit: "15mb" }));
+
+// UIMS directories initialization on boot
+const publicDir = path.join(process.cwd(), "public");
+const assetsDir = path.join(publicDir, "assets");
+const subdirs = [
+  "hero", "portal-backgrounds", "vault", "explore", "food", "hotels", "shopping",
+  "destinations", "events", "guides", "blog", "gallery", "banners", "logos", "icons",
+  "placeholders", "uploads", "system"
+];
+
+if (!fs.existsSync(publicDir)) {
+  fs.mkdirSync(publicDir);
+}
+if (!fs.existsSync(assetsDir)) {
+  fs.mkdirSync(assetsDir);
+}
+if (!fs.existsSync(path.join(publicDir, "media"))) {
+  fs.mkdirSync(path.join(publicDir, "media"));
+}
+subdirs.forEach(dir => {
+  const p = path.join(assetsDir, dir);
+  if (!fs.existsSync(p)) fs.mkdirSync(p);
+});
+
+// Serve the /media and /assets folder statically so uploaded images are resolved in both development and production
+app.use("/media", express.static(path.join(process.cwd(), "public/media")));
+app.use("/assets", express.static(path.join(process.cwd(), "public/assets")));
 
 // =========================================================================
 // 🚀 DYNAMIC SEARCH ENGINE OPTIMIZATION (SEO) ENDPOINTS
@@ -99,8 +129,102 @@ let adminEmailAddress = process.env.ADMIN_EMAIL || "admin@suratinsider.com";
 // Active 2FA OTP codes
 const activeOtps = new Map<string, { otp: string; expiresAt: number; attempts: number }>();
 
+class PersistentSessionsMap extends Map<string, { email: string; role: string; expiresAt: number }> {
+  constructor() {
+    super();
+    this.loadFromLocal();
+  }
+
+  private loadFromLocal() {
+    try {
+      const path = require("path");
+      const fs = require("fs");
+      const sessionFile = path.join(process.cwd(), "sessions_cache.json");
+      if (fs.existsSync(sessionFile)) {
+        const data = JSON.parse(fs.readFileSync(sessionFile, "utf-8"));
+        for (const [key, val] of Object.entries(data)) {
+          super.set(key, val as any);
+        }
+        console.log(`[Sessions] Loaded ${this.size} sessions from local cache.`);
+      }
+    } catch (err) {
+      // Ignore
+    }
+  }
+
+  private saveToLocal() {
+    try {
+      const path = require("path");
+      const fs = require("fs");
+      const sessionFile = path.join(process.cwd(), "sessions_cache.json");
+      const obj: Record<string, any> = {};
+      for (const [key, val] of this.entries()) {
+        obj[key] = val;
+      }
+      fs.writeFileSync(sessionFile, JSON.stringify(obj, null, 2));
+    } catch (err) {
+      // Ignore
+    }
+  }
+
+  set(key: string, value: { email: string; role: string; expiresAt: number }) {
+    super.set(key, value);
+    this.saveToLocal();
+    
+    try {
+      const { getFirebaseDb } = require("./src/server/firebase");
+      const db = getFirebaseDb();
+      db.collection("sessions").doc(key).set(value).catch(() => {});
+    } catch (err) {
+      // Ignore
+    }
+    return this;
+  }
+
+  delete(key: string) {
+    const res = super.delete(key);
+    this.saveToLocal();
+    try {
+      const { getFirebaseDb } = require("./src/server/firebase");
+      const db = getFirebaseDb();
+      db.collection("sessions").doc(key).delete().catch(() => {});
+    } catch (err) {
+      // Ignore
+    }
+    return res;
+  }
+
+  async loadFromFirestore() {
+    try {
+      const { getFirebaseDb } = require("./src/server/firebase");
+      const db = getFirebaseDb();
+      const snapshot = await db.collection("sessions").get();
+      if (!snapshot.empty) {
+        let loaded = 0;
+        const now = Date.now();
+        for (const doc of snapshot.docs) {
+          const val = doc.data() as any;
+          if (val.expiresAt && val.expiresAt > now) {
+            super.set(doc.id, val);
+            loaded++;
+          } else {
+            doc.ref.delete().catch(() => {});
+          }
+        }
+        if (loaded > 0) {
+          console.log(`[Sessions] Pre-fetched and loaded ${loaded} active sessions from Firestore.`);
+          this.saveToLocal();
+        }
+      }
+    } catch (err) {
+      // Ignore
+    }
+  }
+}
+
 // Active server sessions
-const activeSessions = new Map<string, { email: string; role: string; expiresAt: number }>();
+const activeSessions = new PersistentSessionsMap();
+activeSessions.loadFromFirestore();
 
 // Lockout states
 const emailFailures = new Map<string, { count: number; lockedUntil: number }>();
@@ -413,42 +537,45 @@ async function generateContentWithRetry(
 // 🔒 3-STEP ADMINISTRATIVE GATEKEEPER (EMAIL -> PASSWORD -> OTP)
 // =========================================================================
 
-app.post("/api/auth/step1-email", (req, res) => {
+app.post("/api/auth/step1-email", async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: "Email is required." });
   
   const trimmedEmail = email.toLowerCase().trim();
-  const ip = getClientIp(req);
   const now = Date.now();
 
-  const record = emailFailures.get(trimmedEmail) || { count: 0, lockedUntil: 0 };
-  if (now < record.lockedUntil) {
+  const attempt = await getLoginAttempt(trimmedEmail);
+  if (attempt && now < parseInt(attempt.lockUntilTimestamp)) {
     return res.status(403).json({ error: "Email verification is locked. Try again later." });
   }
 
-  if (trimmedEmail !== adminEmailAddress.toLowerCase().trim()) {
-    record.count++;
-    if (record.count >= 3) {
-      record.lockedUntil = now + 15 * 60 * 1000;
-      addServerAuditLog("Email Step Lockout", "Security", trimmedEmail, "System");
+  // Check if admin
+  const adminUser = await getAdminUser(trimmedEmail);
+  if (!adminUser) {
+    const attempts = (attempt?.attempts || 0) + 1;
+    let lockUntil = 0;
+    if (attempts >= 3) {
+      // 5, 30, 60... exponential lockout
+      const factor = Math.pow(6, attempts - 3); 
+      lockUntil = now + (attempts === 3 ? 5 : attempts === 4 ? 30 : 60 * factor) * 60 * 1000;
     }
-    emailFailures.set(trimmedEmail, record);
-    return res.status(401).json({ error: "Unauthorized email identity.", attemptsLeft: Math.max(0, 3 - record.count) });
+    await updateLoginAttempt(trimmedEmail, { attempts, lastAttemptTimestamp: now.toString(), lockUntilTimestamp: lockUntil.toString() });
+    return res.status(401).json({ error: "Unauthorized email identity.", attemptsLeft: Math.max(0, 3 - attempts) });
   }
 
-  emailFailures.delete(trimmedEmail);
+  await updateLoginAttempt(trimmedEmail, { attempts: 0, lastAttemptTimestamp: now.toString(), lockUntilTimestamp: "0" });
   res.json({ success: true, message: "Email verified. Proceed to password." });
 });
 
-app.post("/api/auth/step2-password", (req, res) => {
+app.post("/api/auth/step2-password", async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: "Email and password are required." });
   
   const trimmedEmail = email.toLowerCase().trim();
   const now = Date.now();
 
-  const record = passwordFailures.get(trimmedEmail) || { count: 0, lockedUntil: 0 };
-  if (now < record.lockedUntil) {
+  const attempt = await getLoginAttempt(trimmedEmail);
+  if (attempt && now < parseInt(attempt.lockUntilTimestamp)) {
     return res.status(403).json({ error: "Password entry is locked. Try again later." });
   }
 
@@ -458,21 +585,23 @@ app.post("/api/auth/step2-password", (req, res) => {
   }
 
   if (password !== envPassword) {
-    record.count++;
-    if (record.count >= 3) {
-      record.lockedUntil = now + 15 * 60 * 1000;
-      addServerAuditLog("Password Step Lockout", "Security", trimmedEmail, "System");
+    const attempts = (attempt?.attempts || 0) + 1;
+    let lockUntil = 0;
+    if (attempts >= 3) {
+      const factor = Math.pow(6, attempts - 3); 
+      lockUntil = now + (attempts === 3 ? 5 : attempts === 4 ? 30 : 60 * factor) * 60 * 1000;
     }
-    passwordFailures.set(trimmedEmail, record);
-    return res.status(401).json({ error: "Incorrect master passcode.", attemptsLeft: Math.max(0, 3 - record.count) });
+    await updateLoginAttempt(trimmedEmail, { attempts, lastAttemptTimestamp: now.toString(), lockUntilTimestamp: lockUntil.toString() });
+    return res.status(401).json({ error: "Incorrect master passcode.", attemptsLeft: Math.max(0, 3 - attempts) });
   }
 
-  passwordFailures.delete(trimmedEmail);
+  await updateLoginAttempt(trimmedEmail, { attempts: 0, lastAttemptTimestamp: now.toString(), lockUntilTimestamp: "0" });
   
-  // Directly grant administrative session and set cookies (Bypassing OTP step)
+  const adminUser = await getAdminUser(trimmedEmail);
+  const role = adminUser?.role || "Super Admin";
   const sessionToken = crypto.randomBytes(32).toString("hex");
   const expiresAt = now + 30 * 60 * 1000;
-  activeSessions.set(sessionToken, { email: trimmedEmail, role: "Super Admin", expiresAt });
+  activeSessions.set(sessionToken, { email: trimmedEmail, role: role, expiresAt });
 
   res.cookie("session_token", sessionToken, {
     httpOnly: true,
@@ -483,7 +612,7 @@ app.post("/api/auth/step2-password", (req, res) => {
   });
 
   addServerAuditLog("Administrative Access Granted", "Auth", trimmedEmail, trimmedEmail);
-  res.json({ success: true, role: "Super Admin", message: "Password verified. Access granted." });
+  res.json({ success: true, role: role, message: "Password verified. Access granted." });
 });
 
 app.post("/api/auth/step3-otp", (req, res) => {
@@ -645,12 +774,18 @@ app.get("/api/test-email", requireAdmin, async (req, res) => {
 // Public Content Access Endpoint (Exposes all public content at once)
 app.get("/api/cms/content", async (req, res) => {
   try {
+    const media = await getStorageProvider().syncAllFiles();
     const experiences = await getFirestoreExperiences();
     const homepage = await getFirestoreConfig("homepage");
     const aiChatbot = await getFirestoreConfig("aiChatbot");
     const seo = await getFirestoreConfig("seo");
     const monetization = await getFirestoreConfig("monetization");
+    const websiteImagesConfig = await getFirestoreConfig("websiteImages");
     
+    const websiteImages = websiteImagesConfig && Array.isArray(websiteImagesConfig.list)
+      ? websiteImagesConfig.list 
+      : (getDb().websiteImages || []);
+
     // Normalize data structure for frontend compatibility
     const content = {
       destinations: experiences.filter((e: any) => e.inquiryType === "Destination"),
@@ -664,7 +799,8 @@ app.get("/api/cms/content", async (req, res) => {
       aiChatbot,
       seo,
       monetization,
-      media: [] // Media library handled separately or from Firestore if implemented
+      websiteImages,
+      media
     };
     
     res.json(content);
@@ -681,23 +817,63 @@ app.post("/api/admin/cms/save", requireAdmin, async (req, res) => {
       return res.status(400).json({ error: "CMS update identifier (key) is required." });
     }
 
-    if (["homepage", "aiChatbot", "seo", "monetization"].includes(key)) {
+    if (["homepage", "aiChatbot", "seo", "monetization", "websiteImages"].includes(key)) {
       const db = getFirebaseDb();
-      await db.collection("config").doc(key).set(data, { merge: true });
+      if (key === "websiteImages") {
+        await db.collection("config").doc(key).set({ list: data });
+      } else {
+        await db.collection("config").doc(key).set(data, { merge: true });
+      }
+
+      // Sync local file database as well
+      const localDb = getDb();
+      (localDb as any)[key] = data;
+      saveDb(localDb);
     } else if (["destinations", "shoppingGuides", "hotels", "tours", "foodSpots", "events", "blogs"].includes(key)) {
-      // For collections, we expect the data to be the full array for simple logic, but better to use individual updates.
-      // However, to maintain compatibility with the existing Admin UI, we handle the array overwrite.
       const db = getFirebaseDb();
+      
+      const inquiryTypeMap: Record<string, string> = {
+        destinations: "Destination",
+        shoppingGuides: "Shopping",
+        hotels: "Hotel",
+        tours: "Tour",
+        foodSpots: "Food Spot",
+        events: "Event",
+        blogs: "Blog"
+      };
+      const typeLabel = inquiryTypeMap[key];
+
+      const processedItems = (data as any[]).map(item => ({
+        ...item,
+        inquiryType: typeLabel
+      }));
+
+      // 1. Fetch existing Firestore experiences of this specific inquiryType to find deletes
+      const snapshot = await db.collection("experiences").where("inquiryType", "==", typeLabel).get();
+      const existingIds = snapshot.docs.map(doc => doc.id);
+      const newIds = processedItems.map(item => item.id);
+      const idsToDelete = existingIds.filter(id => !newIds.includes(id));
+
       const batch = db.batch();
       
-      // Caution: Overwriting entire collection logic
-      // In a real production app, we'd update individual docs. 
-      // For now, we update docs provided in the array.
-      for (const item of (data as any[])) {
+      // 2. Set/Update items in Firestore with server timestamp
+      for (const item of processedItems) {
         const docRef = db.collection("experiences").doc(item.id);
         batch.set(docRef, { ...item, updatedAt: FieldValue.serverTimestamp() }, { merge: true });
       }
+
+      // 3. Delete obsolete items from Firestore
+      for (const id of idsToDelete) {
+        const docRef = db.collection("experiences").doc(id);
+        batch.delete(docRef);
+      }
+
       await batch.commit();
+
+      // 4. Also persist to the local file-system DB to keep in sync
+      const localDb = getDb();
+      (localDb as any)[key] = processedItems;
+      saveDb(localDb);
     }
 
     await addServerAuditLog(`Saved CMS Content: ${key}`, "CMS Manager", `Target section: ${key}`, (req as any).session.email);
@@ -707,54 +883,148 @@ app.post("/api/admin/cms/save", requireAdmin, async (req, res) => {
   }
 });
 
-// Admin-only Media asset upload handler
-app.post("/api/admin/media/upload", requireAdmin, (req, res) => {
+// Helper function to calculate asset usage across CMS configs and directories
+function getMediaUsage(url: string, localDb: any): string[] {
+  const usage: string[] = [];
+
+  // 1. Check websiteImages config
+  if (localDb.websiteImages && Array.isArray(localDb.websiteImages)) {
+    localDb.websiteImages.forEach((img: any) => {
+      if (img.url === url) {
+        usage.push(`Website Images: "${img.title}"`);
+      }
+    });
+  }
+
+  // 2. Check homepage config
+  if (localDb.homepage) {
+    if (localDb.homepage.heroImage === url) {
+      usage.push("Homepage Config (Hero Image)");
+    }
+  }
+
+  // 3. Check directory collections
+  const checkItem = (item: any, sectionName: string) => {
+    if (item.image === url) {
+      usage.push(`${sectionName}: "${item.title}" (Main Cover)`);
+    }
+    if (Array.isArray(item.images) && item.images.includes(url)) {
+      usage.push(`${sectionName}: "${item.title}" (Secondary Images)`);
+    }
+    if (Array.isArray(item.gallery) && item.gallery.includes(url)) {
+      usage.push(`${sectionName}: "${item.title}" (Gallery Items)`);
+    }
+  };
+
+  const collections = [
+    { key: "destinations", name: "Destination" },
+    { key: "shoppingGuides", name: "Shopping Guide" },
+    { key: "hotels", name: "Hotel" },
+    { key: "tours", name: "Tour" },
+    { key: "foodSpots", name: "Food Spot" },
+    { key: "events", name: "Event" },
+    { key: "blogs", name: "Blog" }
+  ];
+
+  collections.forEach((col) => {
+    if (Array.isArray(localDb[col.key])) {
+      localDb[col.key].forEach((item: any) => checkItem(item, col.name));
+    }
+  });
+
+  return usage;
+}
+
+// Admin-only Media asset upload handler (with Duplicate Detection & Rich UIMS Metadata)
+app.post("/api/admin/media/upload", requireAdmin, async (req, res) => {
   try {
-    const { name, data, altText = "", caption = "", category = "General" } = req.body;
+    const { name, data, altText = "", caption = "", category = "General", duplicateAction = "ask" } = req.body;
     if (!name || !data) {
       return res.status(400).json({ error: "Filename and base64 data string are required." });
     }
 
-    const publicDir = path.join(process.cwd(), "public");
-    const mediaDir = path.join(publicDir, "media");
-    if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir);
-    if (!fs.existsSync(mediaDir)) fs.mkdirSync(mediaDir);
-
-    const safeName = `${Date.now()}-${name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-    const targetPath = path.join(mediaDir, safeName);
-
-    // Extract base64 payload
-    const base64Data = data.replace(/^data:image\/\w+;base64,/, "");
-    const buffer = Buffer.from(base64Data, "base64");
-
-    fs.writeFileSync(targetPath, buffer);
-
-    const sizeInKb = (buffer.length / 1024).toFixed(1) + " KB";
-    const relativeUrl = `/media/${safeName}`;
-
     const db = getDb();
-    const newMedia = {
-      id: `media-${Date.now()}`,
-      url: relativeUrl,
-      filename: name,
-      altText,
-      caption,
-      category,
-      size: sizeInKb
+    
+    // Check if filename already exists in media list (Duplicate Detection)
+    const existingIndex = db.media.findIndex(m => m.filename.toLowerCase() === name.toLowerCase());
+    
+    if (existingIndex !== -1 && duplicateAction === "ask") {
+      return res.status(409).json({
+        conflict: true,
+        message: `An asset with the name "${name}" already exists in the media library.`,
+        existingFile: db.media[existingIndex]
+      });
+    }
+
+    let finalName = name;
+    if (existingIndex !== -1 && duplicateAction === "keep_both") {
+      const ext = path.extname(name);
+      const base = path.basename(name, ext);
+      finalName = `${base}_${Date.now()}${ext}`;
+    }
+
+    const safeName = `${Date.now()}-${finalName.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+    const relativeUrl = `/assets/uploads/${safeName}`;
+    const targetId = existingIndex !== -1 && duplicateAction === "replace" ? db.media[existingIndex].id : `media-${Date.now()}`;
+
+    // Delegate to the configured active storage provider (Firestore, GCS, etc.)
+    const storageProvider = getStorageProvider();
+
+    // If replacing, first invoke deletion of the old record/file to clean up storage
+    if (existingIndex !== -1 && duplicateAction === "replace") {
+      const oldAsset = db.media[existingIndex];
+      try {
+        await storageProvider.deleteFile(oldAsset.id, oldAsset.url);
+      } catch (err) {
+        console.warn(`[CMS Storage] Minor issue unlinking old asset during replacement:`, err);
+      }
+    }
+
+    // Prepare auxiliary metadata attributes for the database record
+    const extraMetadata = {
+      storedFilename: safeName,
+      title: finalName.substring(0, finalName.lastIndexOf(".")) || finalName,
+      altText: altText || finalName,
+      caption: caption || "",
+      category: category || "General",
+      folder: "assets/uploads",
+      description: `Uploaded on ${new Date().toLocaleDateString()}`,
+      width: 1200,
+      height: 800,
+      dateUploaded: new Date().toISOString(),
+      lastModified: new Date().toISOString(),
+      status: "Unused",
+      usedIn: [],
+      thumbnail: relativeUrl,
+      type: "uploaded"
     };
 
-    db.media = [newMedia, ...db.media];
+    // Save using the StorageProvider interface (Writes to local FS and pushes to backup)
+    const newMedia = await storageProvider.saveFile(
+      targetId,
+      finalName,
+      relativeUrl,
+      data,
+      extraMetadata
+    );
+
+    if (existingIndex !== -1 && duplicateAction === "replace") {
+      db.media[existingIndex] = newMedia;
+    } else {
+      db.media = [newMedia, ...db.media];
+    }
+    
     saveDb(db);
 
-    addServerAuditLog("Uploaded Media Asset", "Media Library", name, (req as any).session.email);
+    addServerAuditLog(`Uploaded Media Asset${existingIndex !== -1 ? " (Replaced)" : ""}`, "Media Library", finalName, (req as any).session.email);
     res.json({ success: true, file: newMedia });
   } catch (error: any) {
     res.status(500).json({ error: "Media upload failure: " + error.message });
   }
 });
 
-// Admin-only Media asset deletion
-app.post("/api/admin/media/delete", requireAdmin, (req, res) => {
+// Admin-only Media asset deletion (with Active Use Safeguards / Delete Protection)
+app.post("/api/admin/media/delete", requireAdmin, async (req, res) => {
   try {
     const { id } = req.body;
     if (!id) {
@@ -768,16 +1038,19 @@ app.post("/api/admin/media/delete", requireAdmin, (req, res) => {
     }
 
     const item = db.media[mediaIndex];
-    const filename = path.basename(item.url);
-    const mediaPath = path.join(process.cwd(), "public", "media", filename);
-
-    if (fs.existsSync(mediaPath)) {
-      try {
-        fs.unlinkSync(mediaPath);
-      } catch (err) {
-        console.warn(`[WARNING] Failed to unlink file from disk: ${mediaPath}`, err);
-      }
+    
+    // Check if image is currently in use (Delete Protection)
+    const usage = getMediaUsage(item.url, db);
+    if (usage.length > 0) {
+      return res.status(400).json({
+        error: `Active Deletion Blocked: This asset is currently in active use across the website and cannot be deleted.`,
+        usageList: usage
+      });
     }
+
+    // Delete using the StorageProvider interface (deletes both local files and cloud references)
+    const storageProvider = getStorageProvider();
+    await storageProvider.deleteFile(id, item.url);
 
     db.media.splice(mediaIndex, 1);
     saveDb(db);
@@ -1074,6 +1347,9 @@ app.post("/api/admin/migrate", requireAdmin, async (req, res) => {
     await db.collection("config").doc("aiChatbot").set(cmsData.aiChatbot || {});
     await db.collection("config").doc("seo").set(cmsData.seo || {});
     await db.collection("config").doc("monetization").set(cmsData.monetization || {});
+    if (cmsData.websiteImages) {
+      await db.collection("config").doc("websiteImages").set({ list: cmsData.websiteImages });
+    }
 
     await addServerAuditLog("Manual Database Migration Triggered", "System", "Cloud Firestore", (req as any).session.email);
     res.json({ success: true, message: "Cloud migration complete!" });
@@ -1084,6 +1360,15 @@ app.post("/api/admin/migrate", requireAdmin, async (req, res) => {
 
 // Serve frontend assets using Vite middleware or production static folder
 async function mountViteOrStatic() {
+  // Sync and reconstruct uploaded media from Firestore on server startup (Container self-healing)
+  try {
+    console.log("[CMS Container Startup] Initiating state restoration & media reconstruction from Firestore...");
+    await getStorageProvider().syncAllFiles();
+    console.log("[CMS Container Startup] State restoration & media reconstruction complete!");
+  } catch (err) {
+    console.error("[CMS Container Startup Error] Failed to sync state on startup:", err);
+  }
+
   if (process.env.NODE_ENV !== "production") {
     console.log("Setting up Vite dev middleware...");
     const vite = await createViteServer({

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Hotel, Inquiry, CuratedExperience } from "../types";
 import { Coffee, MapPin, Phone, Star, Tag, Check, ArrowRight, Wifi, ShieldAlert, Sparkles, Bed } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { ExperienceDetailModal } from "./ExperienceDetailModal";
+import { SafeImage } from "./SafeImage";
 
 interface HotelSectionProps {
   hotels: CuratedExperience[];
@@ -17,8 +18,8 @@ export function HotelSection({
   triggerWhatsAppMessage,
   searchQuery,
 }: HotelSectionProps) {
+  const navigate = useNavigate();
   const [selectedFilter, setSelectedFilter] = useState<string>("All");
-  const [selectedHotel, setSelectedHotel] = useState<CuratedExperience | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -83,7 +84,7 @@ export function HotelSection({
               className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                 selectedFilter === f
                   ? "bg-[#B8860B] text-brand-sand-50"
-                  : "bg-[#FFFDF5]00 text-[#1A1614] hover:bg-[#FFFDF5]00"
+                  : "bg-transparent text-[#1A1614] hover:bg-brand-sand-100"
               }`}
             >
               {f}
@@ -106,12 +107,13 @@ export function HotelSection({
             <div>
               {/* Photo */}
               <div 
-                onClick={() => setSelectedHotel(hotel)}
+                onClick={() => navigate(`/hotel/${hotel.id}`)}
                 className="relative h-64 bg-brand-sand-100 cursor-pointer overflow-hidden"
               >
-                <img
+                <SafeImage
                   src={hotel.image}
                   alt={hotel.title}
+                  fallbackType="hotel"
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
                 
@@ -148,7 +150,7 @@ export function HotelSection({
                   {(hotel.highlights || (hotel as any).amenities)?.map((amenity: string, idx: number) => (
                     <span
                       key={idx}
-                      className="bg-[#FFFDF5]00 text-[#1A1614] border border-brand-sand-200 text-[10px] uppercase font-mono px-2 py-0.5 rounded-md"
+                      className="bg-transparent text-[#1A1614] border border-brand-sand-200 text-[10px] uppercase font-mono px-2 py-0.5 rounded-md"
                     >
                       ✓ {amenity}
                     </span>
@@ -158,14 +160,14 @@ export function HotelSection({
             </div>
 
             {/* Inquiry form prompt block */}
-            <div className="p-5 bg-[#FFFDF5]00 border-t border-brand-sand-200 space-y-3">
+            <div className="p-5 bg-transparent border-t border-brand-sand-200 space-y-3">
               {inquirySent === hotel.id ? (
                 <div className="bg-[#FFFDF5] border border-[#B8860B] p-3 rounded-lg text-[#1A1614] text-[11px] font-semibold flex items-center gap-1.5">
                   <Check className="w-3.5 h-3.5" /> Room inquiry dispatched!
                 </div>
               ) : (
                 <button
-                  onClick={() => setSelectedHotel(hotel)}
+                  onClick={() => navigate(`/hotel/${hotel.id}`)}
                   className="w-full flex items-center justify-center gap-1.5 py-2.5 bg-[#B8860B] hover:bg-[#B8860B] text-brand-sand-50 rounded-xl text-xs font-semibold tracking-wide transition-colors"
                 >
                   Inquire
@@ -182,22 +184,12 @@ export function HotelSection({
         ))}
 
         {filteredHotels.length === 0 && (
-          <div className="col-span-full py-16 text-center bg-[#FFFDF5]00/50 rounded-2xl border-2 border-dashed border-brand-sand-200">
+          <div className="col-span-full py-16 text-center bg-[#FFFDF5]/50 rounded-2xl border-2 border-dashed border-brand-sand-200">
             <p className="font-serif text-lg font-bold text-[#1A1614]">No Listings matches filters</p>
             <p className="text-xs text-[#4A423D] mt-1">Try another search terms or select "All".</p>
           </div>
         )}
       </div>
-
-      {/* Hotel Reservation / Inquiry Form Modal */}
-      {selectedHotel && (
-        <ExperienceDetailModal
-          item={selectedHotel}
-          onClose={() => setSelectedHotel(null)}
-          addInquiry={addInquiry}
-          triggerWhatsAppMessage={triggerWhatsAppMessage}
-        />
-      )}
     </div>
   );
 }

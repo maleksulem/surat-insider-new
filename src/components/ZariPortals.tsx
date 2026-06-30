@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { Gem, Clock, Scissors, Utensils, Compass, ArrowUpRight } from "lucide-react";
+import { CuratedExperience, Inquiry } from "../types";
+import { SafeImage } from "./SafeImage";
 
 const portals = [
   { 
@@ -46,8 +48,21 @@ const portals = [
   },
 ];
 
-export function ZariPortals() {
+interface ZariPortalsProps {
+  addInquiry?: (inq: Omit<Inquiry, "id" | "date" | "status">) => void;
+  triggerWhatsAppMessage?: (text: string) => void;
+}
+
+export function ZariPortals({ addInquiry, triggerWhatsAppMessage }: ZariPortalsProps) {
   const navigate = useNavigate();
+  const [clickedId, setClickedId] = useState<number | null>(null);
+
+  const handlePortalClick = (id: number, route: string) => {
+    setClickedId(id);
+    setTimeout(() => {
+      navigate(route);
+    }, 750); // Visual expansion feedback before routing
+  };
 
   return (
     <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -61,37 +76,44 @@ export function ZariPortals() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-          {portals.map((portal, idx) => (
-            <motion.div
-              key={portal.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              onClick={() => navigate(portal.route)}
-              className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-brand-sand-200 cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500"
-            >
-              <img 
-                src={portal.bgImage} 
-                alt={portal.title} 
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1A1614] via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
-              
-              <div className="absolute inset-x-0 bottom-0 p-6 space-y-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-4">
-                  <portal.icon className="w-5 h-5 text-brand-gold-500" />
+          {portals.map((portal) => {
+            const isClicked = clickedId === portal.id;
+            const isAnyClicked = clickedId !== null;
+            return (
+              <motion.button
+                key={portal.id}
+                onClick={() => handlePortalClick(portal.id, portal.route)}
+                animate={{
+                  scale: isClicked ? 1.05 : isAnyClicked ? 0.95 : 1,
+                  opacity: isClicked ? 1 : isAnyClicked ? 0.4 : 1,
+                }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-brand-sand-200 cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500 w-full text-left"
+              >
+                <SafeImage 
+                  imageId={`portal_${portal.id}_bg`}
+                  src={portal.bgImage} 
+                  alt={portal.title} 
+                  fallbackType="generic"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1614] via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+                
+                <div className="absolute inset-x-0 bottom-0 p-6 space-y-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-4">
+                    <portal.icon className="w-5 h-5 text-brand-gold-500" />
+                  </div>
+                  <h3 className="font-serif text-xl font-bold text-white tracking-tight leading-tight flex items-center justify-between">
+                    {portal.title}
+                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </h3>
+                  <p className="text-[10px] text-white/60 font-light leading-relaxed line-clamp-2">
+                    {portal.description}
+                  </p>
                 </div>
-                <h3 className="font-serif text-xl font-bold text-white tracking-tight leading-tight flex items-center justify-between">
-                  {portal.title}
-                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </h3>
-                <p className="text-[10px] text-white/60 font-light leading-relaxed line-clamp-2">
-                  {portal.description}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+              </motion.button>
+            );
+          })}
         </div>
       </div>
     </section>

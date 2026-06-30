@@ -85,6 +85,17 @@ export function Navbar({
   const navigate = useNavigate();
   const location = useLocation();
 
+  const resolvedActiveTab = (() => {
+    if (location.pathname === "/textile") return "shopping";
+    if (location.pathname === "/plan") return "planner";
+    if (location.pathname === "/hotels") return "hotels";
+    if (location.pathname === "/food") return "food";
+    if (location.pathname === "/weekend" || location.pathname === "/events") return "events-blogs";
+    if (location.pathname === "/explore") return "explore";
+    if (location.pathname === "/") return "home";
+    return "";
+  })();
+
   const handleTabAction = (tabId: string) => {
     if (tabId === "admin") {
       navigate("/insiderbyharundaryaee5313");
@@ -95,11 +106,7 @@ export function Navbar({
       return;
     }
     if (tabId === "explore") {
-      if (location.pathname === "/") {
-        setCurrentTab("explore");
-      } else {
-        navigate("/");
-      }
+      navigate("/explore");
       return;
     }
     if (tabId === "shopping") {
@@ -118,12 +125,6 @@ export function Navbar({
       navigate("/weekend");
       return;
     }
-    
-    if (location.pathname !== "/") {
-      navigate("/", { state: { activeTab: tabId } });
-    } else {
-      setCurrentTab(tabId);
-    }
   };
 
   const tabs = [
@@ -133,18 +134,18 @@ export function Navbar({
     { id: "hotels", label: "Hotels", icon: Hotel },
     { id: "food", label: "Food", icon: Utensils },
     { id: "events-blogs", label: "Events", icon: CalendarRange },
-    ...(currentUserRole === "Super Admin" ? [{ id: "admin", label: "CMS", icon: ShieldAlert }] : [])
+    ...(currentUserRole === "Super Admin" || currentUserRole === "Editor" ? [{ id: "admin", label: "CMS", icon: ShieldAlert }] : [])
   ];
 
   return (
     <>
-      <header className="sticky top-0 w-full z-50 bg-[#FFFDF5]/85 backdrop-blur-md border-b border-[#1A1614]/10 transition-all">
+      <header className="sticky top-0 w-full z-50 bg-[#FFFDF5]/40 backdrop-blur-xl backdrop-saturate-150 border-b border-[#1A1614]/5 shadow-[0_8px_32px_0_rgba(26,22,20,0.02)] transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center justify-between h-20">
             
             {/* Logo */}
             <div 
-              onClick={() => handleTabAction("explore")}
+              onClick={() => navigate("/")}
               className="flex items-center gap-3 cursor-pointer group select-none"
               id="nav-logo"
               title="Surat Insider Home"
@@ -223,7 +224,7 @@ export function Navbar({
         >
           {tabs.map((tab) => {
             const Icon = tab.icon;
-            const isActive = currentTab === tab.id;
+            const isActive = resolvedActiveTab === tab.id;
             return (
               <motion.button
                 key={tab.id}
@@ -242,7 +243,7 @@ export function Navbar({
                 {isActive && (
                   <motion.div
                     layoutId="activeTabUnderglowBottom"
-                    className="absolute inset-0 bg-[#FFFDF5]00/50 backdrop-blur-sm rounded-full -z-10"
+                    className="absolute inset-0 bg-[#FFFDF5]/50 backdrop-blur-sm rounded-full -z-10"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ type: "spring", stiffness: 350, damping: 26 }}
@@ -280,7 +281,7 @@ export function Navbar({
         >
           {tabs.map((tab) => {
             const Icon = tab.icon;
-            const isActive = currentTab === tab.id;
+            const isActive = resolvedActiveTab === tab.id;
             return (
               <motion.button
                 key={tab.id}
@@ -289,7 +290,7 @@ export function Navbar({
                 aria-selected={isActive}
                 whileTap={{ scale: 0.92 }}
                 className={`flex flex-col items-center justify-center gap-1 py-1.5 px-0.5 rounded-full text-[9px] font-bold tracking-tight flex-1 min-w-0 font-sans transition-all relative ${
-                  isActive ? "text-[#1A1614] bg-[#FFFDF5]00/70 shadow-sm" : "text-[#1A1614]-light/95 hover:text-[#1A1614]"
+                  isActive ? "text-[#1A1614] bg-[#FFFDF5]/70 shadow-sm" : "text-[#1A1614]-light/95 hover:text-[#1A1614]"
                 }`}
               >
                 <motion.div

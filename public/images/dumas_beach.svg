@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E1916" />
+      <stop offset="100%" stop-color="#0E0C0B" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C5A059" />
+      <stop offset="50%" stop-color="#E5C384" />
+      <stop offset="100%" stop-color="#A37F3C" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)" />
+  <rect x="20" y="20" width="760" height="460" fill="none" stroke="url(#goldGrad)" stroke-width="1" opacity="0.2" />
+  
+  <g transform="translate(400, 210)" stroke="url(#goldGrad)" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Golden Crescent Moon -->
+    <path d="M 120 -60 A 30 30 0 1 0 150 -30 A 25 25 0 1 1 120 -60" fill="url(#goldGrad)" stroke="none" opacity="0.8" />
+    
+    <!-- Pine tree lines -->
+    <path d="M -140 80 L -140 -20 M -140 -20 L -155 0 L -140 -35 L -125 0 Z" stroke-width="2" opacity="0.6" />
+    <path d="M -100 80 L -100 0 M -100 0 L -112 15 L -100 -15 L -88 15 Z" stroke-width="2" opacity="0.8" />
+    <path d="M -165 80 L -165 20 M -165 20 L -175 35 L -165 5 L -155 35 Z" stroke-width="1.5" opacity="0.5" />
+    
+    <!-- Ocean Wave Lines (representing beach tides) -->
+    <path d="M -200 60 C -100 45, -100 75, 0 60 C 100 45, 100 75, 200 60" stroke-width="2.5" opacity="0.8" />
+    <path d="M -200 85 C -100 75, -100 95, 0 85 C 100 75, 100 95, 200 85" stroke-width="1.5" opacity="0.5" />
+    <path d="M -180 105 C -90 100, -90 110, 0 105 C 90 100, 90 110, 180 105" stroke-width="1" opacity="0.3" />
+  </g>
+
+  <text x="400" y="395" fill="#E5C384" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" letter-spacing="6" text-anchor="middle" opacity="0.6">THE CHRONICLES</text>
+  <text x="400" y="430" fill="#F5EFE6" font-family="'Playfair Display', 'Georgia', serif" font-size="28" font-weight="bold" text-anchor="middle" letter-spacing="1">DUMAS BEACH</text>
+</svg>

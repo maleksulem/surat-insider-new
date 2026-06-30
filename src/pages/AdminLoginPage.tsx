@@ -89,7 +89,7 @@ export function AdminLoginPage({ onLoginSuccess }: AdminLoginPageProps) {
       }
 
       setSuccessMessage("Access granted. Redirecting...");
-      setTimeout(() => onLoginSuccess("Super Admin"), 1000);
+      setTimeout(() => onLoginSuccess(data.role), 1000);
     } catch (err: any) {
       setError("Communication failure: " + err.message);
     } finally {
@@ -121,7 +121,7 @@ export function AdminLoginPage({ onLoginSuccess }: AdminLoginPageProps) {
       }
 
       setSuccessMessage("Access granted. Redirecting...");
-      setTimeout(() => onLoginSuccess("Super Admin"), 1000);
+      setTimeout(() => onLoginSuccess(data.role), 1000);
     } catch (err: any) {
       setError("Verification failed: " + err.message);
     } finally {

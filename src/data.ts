@@ -25,9 +25,9 @@ export const INITIAL_DESTINATIONS: Destination[] = [
     id: "dest-2",
     title: "The Dutch & Armenian Cemeteries",
     description: "Serene garden sanctuaries containing massive mausoleums that look like grand architectural monuments from the height of Dutch trade.",
-    image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=1200&auto=format&fit=crop",
+    image: "/media/1782746129812-dutch-garden-surat-india-tourism-history.jpg",
     gallery: [
-      "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=1200&auto=format&fit=crop"
+      "/media/1782746129812-dutch-garden-surat-india-tourism-history.jpg"
     ],
     rating: 4.6,
     status: "Published",

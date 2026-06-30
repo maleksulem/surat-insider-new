@@ -130,14 +130,6 @@ export function WeekendPage({
         </svg>
       </div>
 
-      {/* Global Navbar */}
-      <Navbar
-        currentTab=""
-        setCurrentTab={() => {}}
-        currentUserRole={currentUserRole}
-        setCurrentUserRole={setCurrentUserRole}
-      />
-
       {/* Back CTA */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 text-left">
         <Link 

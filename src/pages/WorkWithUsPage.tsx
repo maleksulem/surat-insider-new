@@ -112,13 +112,6 @@ export function WorkWithUsPage({
 
   return (
     <div className="min-h-screen bg-brand-sand-50 flex flex-col font-sans">
-      <Navbar
-        currentTab=""
-        setCurrentTab={() => {}}
-        currentUserRole={currentUserRole}
-        setCurrentUserRole={setCurrentUserRole}
-      />
-
       <main className="flex-1">
         {/* Editorial Hero */}
         <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">

@@ -1,6 +1,7 @@
 import React from "react";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { useImageModal } from "../context/ImageModalContext";
+import { SafeImage } from "./SafeImage";
 
 interface VaultItem {
   id: string;
@@ -92,9 +93,10 @@ export function BridalMileSection() {
             >
               {item.image && (
                 <>
-                  <img
+                  <SafeImage
                     src={item.image}
                     alt={item.title}
+                    fallbackType="shopping"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-[0.16,1,0.3,1] group-hover:scale-110 cursor-pointer"
                   />
                   <div className="absolute inset-0 bg-black/20 transition-colors duration-500 group-hover:bg-black/0 z-0"></div>

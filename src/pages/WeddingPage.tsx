@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { FluidLandingCursor } from "../components/FluidLandingCursor";
+import { SafeImage } from "../components/SafeImage";
 import { 
   Sparkles, 
   ArrowLeft, 
@@ -120,14 +121,6 @@ export function WeddingPage({
         <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[60%] bg-[#B8860B]/3 blur-[120px] rounded-full" />
       </div>
 
-      {/* Global Navbar */}
-      <Navbar
-        currentTab=""
-        setCurrentTab={() => {}}
-        currentUserRole={currentUserRole}
-        setCurrentUserRole={setCurrentUserRole}
-      />
-
       {/* Back Hero CTA */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <Link 
@@ -143,9 +136,10 @@ export function WeddingPage({
         
         {/* Immersive Atmospheric Hero */}
         <section className="relative h-[70vh] rounded-[2.5rem] overflow-hidden group shadow-2xl border border-[#B8860B]/10">
-          <img 
+          <SafeImage 
             src="https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=2000&auto=format&fit=crop" 
             alt="Surat Royal Bridal"
+            fallbackType="shopping"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#1A1614] via-transparent to-transparent opacity-80" />

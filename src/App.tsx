@@ -12,7 +12,10 @@ import { WorkWithUsPage } from "./pages/WorkWithUsPage";
 import { DiscoveryPage } from "./pages/DiscoveryPage";
 import { HotelsPage } from "./pages/HotelsPage";
 import { HomePage } from "./pages/HomePage";
+import { ExplorePage } from "./pages/ExplorePage";
+import { ExperienceDetailPage } from "./pages/ExperienceDetailPage";
 import { AdminLoginPage } from "./pages/AdminLoginPage";
+import { RootLayout } from "./components/RootLayout";
 import { trackPageVisit, trackInquirySubmitted, trackWhatsAppClick } from "./lib/analytics";
 import { ScrollToTop } from "./components/ScrollToTop";
 
@@ -30,7 +33,8 @@ import { HOTELS_DATA } from "./data/hotels";
 import { STORIES_DATA } from "./data/stories";
 import { TOURS_DATA, EVENTS_DATA } from "./data/weekend";
 
-import { Role, Destination, ShoppingGuide, Hotel, Tour, FoodSpot, LocalEvent, BlogPost, Inquiry, PartnerRequest, AuditLog, MonetizationSetting } from "./types";
+import { Role, Destination, ShoppingGuide, Hotel, Tour, FoodSpot, LocalEvent, BlogPost, Inquiry, PartnerRequest, AuditLog, MonetizationSetting, WebsiteImageConfig } from "./types";
+import { WebsiteImagesProvider } from "./components/SafeImage";
 
 export const WHATSAPP_CONTACT_NUMBER = (import.meta as any).env.VITE_WHATSAPP_CONTACT_NUMBER || "919999999999"; 
 
@@ -87,6 +91,7 @@ export default function App() {
   const [chatbotConfig, setChatbotConfig] = useState<any>(null);
   const [seoConfig, setSeoConfig] = useState<any>(null);
   const [mediaList, setMediaList] = useState<any[]>([]);
+  const [websiteImages, setWebsiteImages] = useState<WebsiteImageConfig[]>([]);
 
   const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES);
   const [partnerRequests, setPartnerRequests] = useState<PartnerRequest[]>(INITIAL_PARTNERS);
@@ -140,7 +145,27 @@ export default function App() {
     fetch("/api/cms/content")
       .then((res) => res.json())
       .then((data) => {
-        if (data.destinations) setDestinations(data.destinations);
+        if (data.destinations) {
+          const sanitized = data.destinations.map((dest: any) => {
+            if (
+              dest.id === "dest-2" ||
+              dest.title?.toLowerCase().includes("cemetery") ||
+              dest.image?.includes("1626082927389-6cd097cdc6ec") ||
+              dest.image?.includes("1572011707963-c60a454bf5fa") ||
+              dest.image?.includes("1505205735326-b37ba429ea13")
+            ) {
+              return {
+                ...dest,
+                image: "/media/1782746129812-dutch-garden-surat-india-tourism-history.jpg",
+                gallery: [
+                  "/media/1782746129812-dutch-garden-surat-india-tourism-history.jpg"
+                ]
+              };
+            }
+            return dest;
+          });
+          setDestinations(sanitized);
+        }
         if (data.shoppingGuides) setShoppingGuides(data.shoppingGuides);
         if (data.hotels) setHotels(data.hotels);
         if (data.tours) setTours(data.tours);
@@ -151,6 +176,7 @@ export default function App() {
         if (data.aiChatbot) setChatbotConfig(data.aiChatbot);
         if (data.seo) setSeoConfig(data.seo);
         if (data.media) setMediaList(data.media);
+        if (data.websiteImages) setWebsiteImages(data.websiteImages);
       })
       .catch((err) => console.error("Error fetching dynamic CMS content:", err));
   };
@@ -340,152 +366,317 @@ export default function App() {
     triggerWhatsAppMessage(waText);
   };
 
-  const handleAdminLoginSuccess = (role: string) => {
-    setCurrentUserRole("Super Admin");
+  const handleAdminLoginSuccess = (role: Role) => {
+    setCurrentUserRole(role);
     setCurrentTab("admin");
     navigate("/");
   };
 
   return (
-    <>
+    <WebsiteImagesProvider websiteImages={websiteImages} refreshImages={refreshCmsData}>
       <ScrollToTop currentTab={currentTab} />
       <AnimatePresence mode="wait">
         <Routes location={location}>
-        {/* Standalone Administrative Login Gateway (Hidden) */}
-        <Route path="/insiderbyharundaryaee5313" element={
-          <AdminLoginPage onLoginSuccess={handleAdminLoginSuccess} />
-        } />
+          {/* Standalone Administrative Login Gateway (Hidden) */}
+          <Route path="/insiderbyharundaryaee5313" element={
+            <AdminLoginPage onLoginSuccess={handleAdminLoginSuccess} />
+          } />
 
-        <Route path="/" element={
-          <PageTransition key={location.pathname}>
-            <HomePage
+          <Route element={
+            <RootLayout
+              currentUserRole={currentUserRole}
+              setCurrentUserRole={setCurrentUserRole}
+              chatbotConfig={chatbotConfig}
               currentTab={currentTab}
               setCurrentTab={setCurrentTab}
-              currentUserRole={currentUserRole}
-              setCurrentUserRole={setCurrentUserRole}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              destinations={destinations}
-              setDestinations={setDestinations}
-              shoppingGuides={shoppingGuides}
-              setShoppingGuides={setShoppingGuides}
-              hotels={hotels}
-              setHotels={setHotels}
-              tours={tours}
-              setTours={setTours}
-              foodSpots={foodSpots}
-              setFoodSpots={setFoodSpots}
-              events={events}
-              setEvents={setEvents}
-              blogs={blogs}
-              setBlogs={setBlogs}
-              inquiries={inquiries}
-              setInquiries={setInquiries}
-              partnerRequests={partnerRequests}
-              setPartnerRequests={setPartnerRequests}
-              triggerWhatsAppMessage={triggerWhatsAppMessage}
-              auditLogs={auditLogs}
-              addAuditLog={addAuditLog}
-              monetization={monetization}
-              setMonetization={setMonetization}
-              addInquiry={addInquiry}
-              homepageConfig={homepageConfig}
-              chatbotConfig={chatbotConfig}
-              seoConfig={seoConfig}
-              mediaList={mediaList}
-              refreshCmsData={refreshCmsData}
             />
-          </PageTransition>
-        } />
+          }>
+            <Route index element={
+              <PageTransition key="home">
+                <HomePage
+                  currentTab={currentTab}
+                  setCurrentTab={setCurrentTab}
+                  currentUserRole={currentUserRole}
+                  setCurrentUserRole={setCurrentUserRole}
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  destinations={destinations}
+                  setDestinations={setDestinations}
+                  shoppingGuides={shoppingGuides}
+                  setShoppingGuides={setShoppingGuides}
+                  hotels={hotels}
+                  setHotels={setHotels}
+                  tours={tours}
+                  setTours={setTours}
+                  foodSpots={foodSpots}
+                  setFoodSpots={setFoodSpots}
+                  events={events}
+                  setEvents={setEvents}
+                  blogs={blogs}
+                  setBlogs={setBlogs}
+                  inquiries={inquiries}
+                  setInquiries={setInquiries}
+                  partnerRequests={partnerRequests}
+                  setPartnerRequests={setPartnerRequests}
+                  triggerWhatsAppMessage={triggerWhatsAppMessage}
+                  auditLogs={auditLogs}
+                  addAuditLog={addAuditLog}
+                  monetization={monetization}
+                  setMonetization={setMonetization}
+                  addInquiry={addInquiry}
+                  homepageConfig={homepageConfig}
+                  chatbotConfig={chatbotConfig}
+                  seoConfig={seoConfig}
+                  mediaList={mediaList}
+                  refreshCmsData={refreshCmsData}
+                />
+              </PageTransition>
+            } />
 
-        <Route path="/wedding" element={
-          <PageTransition key={location.pathname}>
-            <WeddingPage 
-              currentUserRole={currentUserRole} 
-              setCurrentUserRole={setCurrentUserRole} 
-              addInquiry={addInquiry} 
-            />
-          </PageTransition>
-        } />
-        <Route path="/weekend" element={
-          <PageTransition key={location.pathname}>
-            <WeekendPage 
-              currentUserRole={currentUserRole} 
-              setCurrentUserRole={setCurrentUserRole} 
-              addInquiry={addInquiry} 
-            />
-          </PageTransition>
-        } />
-        <Route path="/textile" element={
-          <PageTransition key={location.pathname}>
-            <TextilePage 
-              currentUserRole={currentUserRole} 
-              setCurrentUserRole={setCurrentUserRole} 
-              addInquiry={addInquiry} 
-            />
-          </PageTransition>
-        } />
-        <Route path="/food" element={
-          <PageTransition key={location.pathname}>
-            <FoodPage 
-              currentUserRole={currentUserRole} 
-              setCurrentUserRole={setCurrentUserRole} 
-              addInquiry={addInquiry} 
-            />
-          </PageTransition>
-        } />
-        <Route path="/hotels" element={
-          <PageTransition key={location.pathname}>
-            <HotelsPage 
-              hotels={hotels}
-              currentUserRole={currentUserRole} 
-              setCurrentUserRole={setCurrentUserRole} 
-              addInquiry={addInquiry} 
-              triggerWhatsAppMessage={(txt) => window.open(`https://wa.me/91XXXXXXXXXX?text=${encodeURIComponent(txt)}`)}
-            />
-          </PageTransition>
-        } />
-        <Route path="/insider-vault" element={
-          <PageTransition key={location.pathname}>
-            <InsiderPage 
-              currentUserRole={currentUserRole} 
-              setCurrentUserRole={setCurrentUserRole} 
-              addInquiry={addInquiry} 
-            />
-          </PageTransition>
-        } />
-        <Route path="/plan" element={
-          <PageTransition key={location.pathname}>
-            <PlanPage 
-              destinations={destinations}
-              hotels={hotels}
-              foodSpots={foodSpots}
-              shoppingGuides={shoppingGuides}
-              tours={tours}
-              events={events}
-              addInquiry={addInquiry}
-              currentUserRole={currentUserRole}
-              setCurrentUserRole={setCurrentUserRole}
-            />
-          </PageTransition>
-        } />
-        <Route path="/work-with-us" element={
-          <PageTransition key={location.pathname}>
-            <WorkWithUsPage 
-              currentUserRole={currentUserRole}
-              setCurrentUserRole={setCurrentUserRole}
-              setPartnerRequests={setPartnerRequests}
-              addAuditLog={addAuditLog}
-            />
-          </PageTransition>
-        } />
-        <Route path="/discover" element={
-          <PageTransition key={location.pathname}>
-            <DiscoveryPage />
-          </PageTransition>
-        } />
-      </Routes>
-    </AnimatePresence>
-    </>
+            <Route path="explore" element={
+              <PageTransition key="explore">
+                <ExplorePage
+                  destinations={destinations}
+                  shoppingGuides={shoppingGuides}
+                  tours={tours}
+                  foodSpots={foodSpots}
+                  addInquiry={addInquiry}
+                  triggerWhatsAppMessage={triggerWhatsAppMessage}
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                />
+              </PageTransition>
+            } />
+
+            <Route path="explore/wedding" element={
+              <PageTransition key="wedding">
+                <WeddingPage 
+                  currentUserRole={currentUserRole} 
+                  setCurrentUserRole={setCurrentUserRole} 
+                  addInquiry={addInquiry} 
+                />
+              </PageTransition>
+            } />
+            <Route path="wedding" element={
+              <PageTransition key="wedding">
+                <WeddingPage 
+                  currentUserRole={currentUserRole} 
+                  setCurrentUserRole={setCurrentUserRole} 
+                  addInquiry={addInquiry} 
+                />
+              </PageTransition>
+            } />
+
+            <Route path="explore/events" element={
+              <PageTransition key="weekend">
+                <WeekendPage 
+                  currentUserRole={currentUserRole} 
+                  setCurrentUserRole={setCurrentUserRole} 
+                  addInquiry={addInquiry} 
+                />
+              </PageTransition>
+            } />
+            <Route path="weekend" element={
+              <PageTransition key="weekend">
+                <WeekendPage 
+                  currentUserRole={currentUserRole} 
+                  setCurrentUserRole={setCurrentUserRole} 
+                  addInquiry={addInquiry} 
+                />
+              </PageTransition>
+            } />
+            <Route path="events" element={
+              <PageTransition key="weekend">
+                <WeekendPage 
+                  currentUserRole={currentUserRole} 
+                  setCurrentUserRole={setCurrentUserRole} 
+                  addInquiry={addInquiry} 
+                />
+              </PageTransition>
+            } />
+
+            <Route path="explore/shopping" element={
+              <PageTransition key="textile">
+                <TextilePage 
+                  currentUserRole={currentUserRole} 
+                  setCurrentUserRole={setCurrentUserRole} 
+                  addInquiry={addInquiry} 
+                />
+              </PageTransition>
+            } />
+            <Route path="textile" element={
+              <PageTransition key="textile">
+                <TextilePage 
+                  currentUserRole={currentUserRole} 
+                  setCurrentUserRole={setCurrentUserRole} 
+                  addInquiry={addInquiry} 
+                />
+              </PageTransition>
+            } />
+
+            <Route path="explore/food" element={
+              <PageTransition key="food">
+                <FoodPage 
+                  currentUserRole={currentUserRole} 
+                  setCurrentUserRole={setCurrentUserRole} 
+                  addInquiry={addInquiry} 
+                />
+              </PageTransition>
+            } />
+            <Route path="food" element={
+              <PageTransition key="food">
+                <FoodPage 
+                  currentUserRole={currentUserRole} 
+                  setCurrentUserRole={setCurrentUserRole} 
+                  addInquiry={addInquiry} 
+                />
+              </PageTransition>
+            } />
+
+            <Route path="explore/hotels" element={
+              <PageTransition key="hotels">
+                <HotelsPage 
+                  hotels={hotels}
+                  currentUserRole={currentUserRole} 
+                  setCurrentUserRole={setCurrentUserRole} 
+                  addInquiry={addInquiry} 
+                  triggerWhatsAppMessage={triggerWhatsAppMessage}
+                />
+              </PageTransition>
+            } />
+            <Route path="hotels" element={
+              <PageTransition key="hotels">
+                <HotelsPage 
+                  hotels={hotels}
+                  currentUserRole={currentUserRole} 
+                  setCurrentUserRole={setCurrentUserRole} 
+                  addInquiry={addInquiry} 
+                  triggerWhatsAppMessage={triggerWhatsAppMessage}
+                />
+              </PageTransition>
+            } />
+
+            <Route path="insider-vault" element={
+              <PageTransition key="insider-vault">
+                <InsiderPage 
+                  currentUserRole={currentUserRole} 
+                  setCurrentUserRole={setCurrentUserRole} 
+                  addInquiry={addInquiry} 
+                />
+              </PageTransition>
+            } />
+
+            <Route path="explore/planner" element={
+              <PageTransition key="plan">
+                <PlanPage 
+                  destinations={destinations}
+                  hotels={hotels}
+                  foodSpots={foodSpots}
+                  shoppingGuides={shoppingGuides}
+                  tours={tours}
+                  events={events}
+                  addInquiry={addInquiry}
+                  currentUserRole={currentUserRole}
+                  setCurrentUserRole={setCurrentUserRole}
+                />
+              </PageTransition>
+            } />
+            <Route path="plan" element={
+              <PageTransition key="plan">
+                <PlanPage 
+                  destinations={destinations}
+                  hotels={hotels}
+                  foodSpots={foodSpots}
+                  shoppingGuides={shoppingGuides}
+                  tours={tours}
+                  events={events}
+                  addInquiry={addInquiry}
+                  currentUserRole={currentUserRole}
+                  setCurrentUserRole={setCurrentUserRole}
+                />
+              </PageTransition>
+            } />
+
+            <Route path="work-with-us" element={
+              <PageTransition key="work-with-us">
+                <WorkWithUsPage 
+                  currentUserRole={currentUserRole}
+                  setCurrentUserRole={setCurrentUserRole}
+                  setPartnerRequests={setPartnerRequests}
+                  addAuditLog={addAuditLog}
+                />
+              </PageTransition>
+            } />
+
+            <Route path="discover" element={
+              <PageTransition key="discover">
+                <DiscoveryPage />
+              </PageTransition>
+            } />
+
+            <Route path="experience/:id" element={
+              <PageTransition key="experience-detail">
+                <ExperienceDetailPage
+                  destinations={destinations}
+                  shoppingGuides={shoppingGuides}
+                  hotels={hotels}
+                  tours={tours}
+                  foodSpots={foodSpots}
+                  events={events}
+                  blogs={blogs}
+                  addInquiry={addInquiry}
+                  triggerWhatsAppMessage={triggerWhatsAppMessage}
+                />
+              </PageTransition>
+            } />
+            <Route path="food/:id" element={
+              <PageTransition key="experience-detail">
+                <ExperienceDetailPage
+                  destinations={destinations}
+                  shoppingGuides={shoppingGuides}
+                  hotels={hotels}
+                  tours={tours}
+                  foodSpots={foodSpots}
+                  events={events}
+                  blogs={blogs}
+                  addInquiry={addInquiry}
+                  triggerWhatsAppMessage={triggerWhatsAppMessage}
+                />
+              </PageTransition>
+            } />
+            <Route path="hotel/:id" element={
+              <PageTransition key="experience-detail">
+                <ExperienceDetailPage
+                  destinations={destinations}
+                  shoppingGuides={shoppingGuides}
+                  hotels={hotels}
+                  tours={tours}
+                  foodSpots={foodSpots}
+                  events={events}
+                  blogs={blogs}
+                  addInquiry={addInquiry}
+                  triggerWhatsAppMessage={triggerWhatsAppMessage}
+                />
+              </PageTransition>
+            } />
+            <Route path="event/:id" element={
+              <PageTransition key="experience-detail">
+                <ExperienceDetailPage
+                  destinations={destinations}
+                  shoppingGuides={shoppingGuides}
+                  hotels={hotels}
+                  tours={tours}
+                  foodSpots={foodSpots}
+                  events={events}
+                  blogs={blogs}
+                  addInquiry={addInquiry}
+                  triggerWhatsAppMessage={triggerWhatsAppMessage}
+                />
+              </PageTransition>
+            } />
+          </Route>
+        </Routes>
+      </AnimatePresence>
+    </WebsiteImagesProvider>
   );
 }

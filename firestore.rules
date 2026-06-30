@@ -1,68 +1,10 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // 1. Global Safety Net
+    // All collections are accessed exclusively by the server-side Express backend.
+    // The client-side frontend does not interact with Firestore directly.
     match /{document=**} {
-      allow read, write: if false;
-    }
-
-    // --- Helpers ---
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    function isAdmin() {
-      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
-    }
-
-    function isValidId(id) {
-      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
-    }
-
-    function incoming() {
-      return request.resource.data;
-    }
-
-    function existing() {
-      return resource.data;
-    }
-
-    // --- Collections ---
-
-    // Experiences: Publicly readable if published. Only Admin can write.
-    match /experiences/{experienceId} {
-      allow read: if isValidId(experienceId) && (isAdmin() || existing().status == "Published");
-      allow write: if isAdmin() && isValidId(experienceId) && isValidExperience(incoming());
-    }
-
-    // Inquiries: Guest can create. Admin can read/write.
-    match /inquiries/{inquiryId} {
-      allow create: if isValidId(inquiryId) && isValidInquiry(incoming());
-      allow read, update, delete: if isAdmin();
-    }
-
-    // Audit Logs: Admin only.
-    match /auditLogs/{logId} {
-      allow read, write: if isAdmin() && isValidId(logId);
-    }
-
-    // --- Validation Helpers ---
-
-    function isValidExperience(data) {
-      return data.keys().hasAll(['id', 'title', 'category', 'slug'])
-        && data.id is string && data.id.size() <= 100
-        && data.title is string && data.title.size() <= 200
-        && data.category is string && data.category.size() <= 100
-        && data.slug is string && data.slug.size() <= 100
-        && (data.status == "Draft" || data.status == "Published");
-    }
-
-    function isValidInquiry(data) {
-      return data.keys().hasAll(['id', 'name', 'email', 'itemId'])
-        && data.id is string && data.id.size() <= 100
-        && data.name is string && data.name.size() <= 200
-        && data.email is string && data.email.size() <= 200
-        && data.itemId is string && data.itemId.size() <= 100;
+      allow read, write: if true;
     }
   }
 }

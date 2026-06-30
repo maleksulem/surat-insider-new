@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ShoppingGuide, Inquiry, CuratedExperience } from "../types";
 import { Sparkles, MapPin, Check, Info, ShieldCheck, Phone, Mail, ShoppingBag, ArrowUpRight } from "lucide-react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { ExperienceDetailModal } from "./ExperienceDetailModal";
 import { useImageModal } from "../context/ImageModalContext";
 
 interface ShoppingSectionProps {
@@ -18,7 +18,7 @@ export function ShoppingSection({
   triggerWhatsAppMessage,
   searchQuery,
 }: ShoppingSectionProps) {
-  const [selectedGuide, setSelectedGuide] = useState<CuratedExperience | null>(null);
+  const navigate = useNavigate();
   const [inquirySent, setInquirySent] = useState<string | null>(null);
   const { openImage } = useImageModal();
   const [formData, setFormData] = useState({
@@ -102,7 +102,7 @@ export function ShoppingSection({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ delay: idx * 0.15, type: "spring", stiffness: 50, damping: 15 }}
-              onClick={() => setSelectedGuide(guide)}
+              onClick={() => navigate(`/experience/${guide.id}`)}
               className="group cursor-pointer space-y-8"
             >
               <div className="aspect-[4/5] md:aspect-[16/10] overflow-hidden rounded-2xl shadow-sm group-hover:shadow-2xl transition-all duration-700 relative bg-brand-sand-100">
@@ -111,10 +111,6 @@ export function ShoppingSection({
                   alt={guide.title} 
                   style={{ y: idx % 2 === 0 ? y1 : y2 }}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 cursor-pointer" 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedGuide(guide);
-                  }}
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/60 transition-colors duration-700" />
                 <div className="absolute top-6 right-6">
@@ -166,16 +162,6 @@ export function ShoppingSection({
           Request Sourcing Specialist
         </button>
       </motion.section>
-
-      {/* Modals */}
-      {selectedGuide && (
-        <ExperienceDetailModal
-          item={selectedGuide}
-          onClose={() => setSelectedGuide(null)}
-          addInquiry={addInquiry}
-          triggerWhatsAppMessage={triggerWhatsAppMessage}
-        />
-      )}
     </div>
   );
 }

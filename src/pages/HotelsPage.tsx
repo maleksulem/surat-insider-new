@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "motion/react";
-import { Link } from "react-router-dom";
-import { Navbar } from "../components/Navbar";
+import { Link, useNavigate } from "react-router-dom";
 import { FluidLandingCursor } from "../components/FluidLandingCursor";
+import { SafeImage } from "../components/SafeImage";
 import { 
   Hotel, 
   ArrowLeft, 
@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import { Role, Inquiry, Hotel as HotelType } from "../types";
 import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
-import { ExperienceDetailModal } from "../components/ExperienceDetailModal";
 
 interface HotelsPageProps {
   hotels: HotelType[];
@@ -33,7 +32,7 @@ export function HotelsPage({
   addInquiry,
   triggerWhatsAppMessage
 }: HotelsPageProps) {
-  const [selectedHotel, setSelectedHotel] = useState<HotelType | null>(null);
+  const navigate = useNavigate();
 
   useDocumentMetadata({
     title: "Luxury Hotels & Boutique Stays in Surat • Best Places to Stay",
@@ -42,15 +41,8 @@ export function HotelsPage({
   });
 
   return (
-    <div className="relative min-h-screen bg-[#FFFDF5] text-[#1A1614] flex flex-col font-sans selection:bg-[#B8860B]/20 overflow-x-hidden">
+    <div className="relative min-h-screen bg-[#FFFDF5] text-[#1A1614] flex flex-col font-sans selection:bg-[#B8860B]/20 overflow-x-hidden pb-16">
       <FluidLandingCursor theme="hotels" />
-
-      <Navbar
-        currentTab="hotels"
-        setCurrentTab={() => {}}
-        currentUserRole={currentUserRole}
-        setCurrentUserRole={setCurrentUserRole}
-      />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <Link 
@@ -79,11 +71,11 @@ export function HotelsPage({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              onClick={() => setSelectedHotel(hotel)}
+              onClick={() => navigate(`/hotel/${hotel.id}`)}
               className="group cursor-pointer space-y-6"
             >
               <div className="aspect-[16/10] overflow-hidden rounded-[2rem] shadow-xl relative">
-                <img src={hotel.image} alt={hotel.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                <SafeImage src={hotel.image} alt={hotel.title} fallbackType="hotel" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                   <div className="flex gap-1">
@@ -118,19 +110,6 @@ export function HotelsPage({
           ))}
         </div>
       </main>
-
-      <footer className="bg-[#1A1614] text-brand-sand-50/20 py-12 text-center text-[10px] font-mono uppercase tracking-[0.5em] mt-auto">
-        Surat Insider • The Hospitality Collection
-      </footer>
-
-      {selectedHotel && (
-        <ExperienceDetailModal
-          item={selectedHotel}
-          onClose={() => setSelectedHotel(null)}
-          addInquiry={addInquiry}
-          triggerWhatsAppMessage={triggerWhatsAppMessage}
-        />
-      )}
     </div>
   );
 }

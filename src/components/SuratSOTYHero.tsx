@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useAnimation, useMotionValue, useSpring, useTransform, useAnimationFrame, animate, useVelocity } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { Gem, Clock, Scissors, Utensils, Compass } from "lucide-react";
+import { useWebsiteImages } from "./SafeImage";
 
 export interface SuratSOTYHeroProps {
   homepageConfig?: any;
@@ -38,7 +39,7 @@ const panels = [
   { id: 2, rank: "P 02", rankColor: "#1E90FF", question: "THE 48-HOUR\nPASSPORT", route: "/weekend", bgImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=1200&q=80", icon: Clock, description: "A precise timeline for the\ndiscerning traveler." },
   { id: 3, rank: "P 03", rankColor: "#B6A6D3", question: "THE SILK\nROUTE", route: "/textile", bgImage: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80", icon: Scissors, description: "Direct access to the heritage\nlooms of South Gujarat." },
   { id: 4, rank: "P 04", rankColor: "#FFD700", question: "THE TASTING\nTABLE", route: "/food", bgImage: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=1200&q=80", icon: Utensils, description: "From legendary street stalls to\nelite dining residences." },
-  { id: 5, rank: "P 05", rankColor: "#00FA9A", question: "THE INSIDER\nVAULT", route: "/insider", bgImage: "https://images.unsplash.com/photo-1585642398506-6c8f615e4a06?auto=format&fit=crop&w=1200&q=80", icon: Compass, description: "Bespoke encounters beyond the reach\nof standard itineraries." },
+  { id: 5, rank: "P 05", rankColor: "#00FA9A", question: "THE INSIDER\nVAULT", route: "/insider-vault", bgImage: "https://images.unsplash.com/photo-1585642398506-6c8f615e4a06?auto=format&fit=crop&w=1200&q=80", icon: Compass, description: "Bespoke encounters beyond the reach\nof standard itineraries." },
 ];
 
 export function SuratSOTYHero({ homepageConfig }: SuratSOTYHeroProps) {
@@ -880,6 +881,10 @@ function GoldDust({ isActive }: { isActive: boolean }) {
 }
 
 const BackgroundPanel = React.memo(({ panel, idx, jewelX, jewelY, containerRect, isMobile, portalRefs }: any) => {
+  const { imageMap, defaultMap } = useWebsiteImages();
+  const imageId = `portal_${panel.id}_bg`;
+  const resolvedBg = imageMap[imageId] || defaultMap[imageId] || panel.bgImage;
+
   const dist = useTransform([jewelX, jewelY], ([x, y]) => {
      if (!containerRect) return 1000;
      const p = getPortalCoords(idx, containerRect, isMobile, portalRefs);
@@ -900,7 +905,7 @@ const BackgroundPanel = React.memo(({ panel, idx, jewelX, jewelY, containerRect,
       style={{ 
         opacity, 
         scale, 
-        backgroundImage: `url(${panel.bgImage})`, 
+        backgroundImage: `url(${resolvedBg})`, 
         zIndex: useTransform(opacity, (v: number) => Math.round(v * 10)),
         filter: useTransform([blurValue, brightnessValue], ([b, br]) => `blur(${b}px) brightness(${br})`),
         willChange: "transform, opacity",

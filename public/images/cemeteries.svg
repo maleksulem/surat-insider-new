@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E1916" />
+      <stop offset="100%" stop-color="#0E0C0B" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C5A059" />
+      <stop offset="50%" stop-color="#E5C384" />
+      <stop offset="100%" stop-color="#A37F3C" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)" />
+  <rect x="20" y="20" width="760" height="460" fill="none" stroke="url(#goldGrad)" stroke-width="1" opacity="0.2" />
+  
+  <g transform="translate(400, 210)" stroke="url(#goldGrad)" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Dome mausoleum outline -->
+    <path d="M -80 100 L -80 40 L -60 40 L -60 -20 C -60 -70, 60 -70, 60 -20 L 60 40 L 80 40 L 80 100 Z" opacity="0.8" />
+    <!-- Pillars and columns -->
+    <line x1="-40" y1="40" x2="-40" y2="100" stroke-width="2" />
+    <line x1="40" y1="40" x2="40" y2="100" stroke-width="2" />
+    <line x1="0" y1="40" x2="0" y2="100" stroke-width="1.5" opacity="0.5" />
+    <!-- Arch detail -->
+    <path d="M -30 100 L -30 70 C -30 55, 30 55, 30 70 L 30 100" stroke-width="2" />
+    <!-- Top Spire -->
+    <line x1="0" y1="-65" x2="0" y2="-90" stroke-width="3" />
+    <circle cx="0" cy="-93" r="5" fill="url(#goldGrad)" stroke="none" />
+    <!-- Garden leaves below -->
+    <path d="M -150 100 C -120 70, -90 90, -70 100" stroke-width="1.5" opacity="0.5" />
+    <path d="M 150 100 C 120 70, 90 90, 70 100" stroke-width="1.5" opacity="0.5" />
+  </g>
+
+  <text x="400" y="395" fill="#E5C384" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" letter-spacing="6" text-anchor="middle" opacity="0.6">THE CHRONICLES</text>
+  <text x="400" y="430" fill="#F5EFE6" font-family="'Playfair Display', 'Georgia', serif" font-size="28" font-weight="bold" text-anchor="middle" letter-spacing="1">DUTCH &amp; ARMENIAN CEMETERIES</text>
+</svg>

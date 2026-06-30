@@ -355,7 +355,7 @@ export function CustomCursor({ theme = "default" }: { theme?: string }) {
       } else if (type === "ghari") {
         imageUrl = "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=800&auto=format&fit=crop";
       } else if (type === "locho") {
-        imageUrl = "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop";
+        imageUrl = "https://images.unsplash.com/photo-1606491956689-2ea866880c84?q=80&w=800&auto=format&fit=crop";
       } else if (type === "sev_khamani") {
         imageUrl = "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?q=80&w=800&auto=format&fit=crop";
       }

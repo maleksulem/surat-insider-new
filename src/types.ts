@@ -156,3 +156,37 @@ export interface ChatMessage {
   text: string;
   timestamp: string;
 }
+
+export interface MediaAsset {
+  id: string;
+  url: string;
+  filename: string;
+  storedFilename?: string;
+  title?: string;
+  altText: string;
+  caption: string;
+  category: string;
+  folder?: string;
+  description?: string;
+  width?: number;
+  height?: number;
+  size: string;
+  dateUploaded?: string;
+  lastModified?: string;
+  status?: "Active" | "Unused";
+  usedIn?: string[];
+  thumbnail?: string;
+  localFilePath?: string;
+  type?: "system" | "uploaded";
+}
+
+export interface WebsiteImageConfig {
+  id: string;
+  title: string;
+  section: "home" | "explore" | "food" | "hotels" | "shopping" | "events" | "vault" | "branding" | "system";
+  url: string;
+  defaultUrl: string;
+  description: string;
+  usedIn: string;
+}
+

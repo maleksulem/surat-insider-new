@@ -1,0 +1,1479 @@
+{
+  "destinations": [
+    {
+      "id": "item-1782809611274",
+      "title": "padam dungri eco tourism ",
+      "description": "Padamdungari Eco Tourism Center is a popular forest campsite nestled in the foothills of the Sahyadri mountain range. Situated right on the scenic banks of the Ambika River in the Unai Range of the Vyara Forest Division, it serves as an immersive nature getaway perfect for day picnics and weekend camping.",
+      "image": "/media/1782809550714-padam-dungri-eco-tourism-surat-0h4wrnue8q.avif",
+      "images": [
+        "/media/1782809550714-padam-dungri-eco-tourism-surat-0h4wrnue8q.avif"
+      ],
+      "category": "Heritage",
+      "location": "Surat, Gujarat",
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "padam-dungri-eco-tourism-",
+      "story": "Riverbank & Water Sports: The site sits adjacent to the rocky Ambika River. Depending on seasonal water levels, activities like boating, tubing, and river rafting can be planned.Adventure & Trails: The center features winding trekking pathways, hilly nature trails, observation towers (machaans) for wildlife viewing, and family activities like archery.Walk-In Insectarium & Orchid House: It is home to unique educational attractions, including an indoor insectarium, a reptile and amphibian watching station, and an orchid conservation house.Local Tribal Food: An on-site kitchen serves traditional, home-cooked tribal meals alongside standard Gujarati cuisine.",
+      "visitingHours": " 8:00 AM – 5:30 PM daily for day visitors.",
+      "bestTimeToVisit": "june to august",
+      "nearbyAttractions": [
+        "Surat Castle"
+      ],
+      "suggestedItinerary": "Riverbank & Water Sports: The site sits adjacent to the rocky Ambika River. Depending on seasonal water levels, activities like boating, tubing, and river rafting can be planned.Adventure & Trails: The center features winding trekking pathways, hilly nature trails, observation towers (machaans) for wildlife viewing, and family activities like archery.Walk-In Insectarium & Orchid House: It is home to unique educational attractions, including an indoor insectarium, a reptile and amphibian watching station, and an orchid conservation house.Local Tribal Food: An on-site kitchen serves traditional, home-cooked tribal meals alongside standard Gujarati cuisine.",
+      "inquiryType": "Destination",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1782812834,
+        "nanoseconds": 452000000
+      }
+    },
+    {
+      "id": "item-1782809323704",
+      "title": "amba pani ecotourism ",
+      "description": "Ambapani Eco Tourism Site (recently renamed Amaniya Eco Tourism) is a serene, forest-wrapped nature retreat located in Amonia village near Vyara in the Tapi district. Positioned along the banks of the picturesque Purna River and bordered by the lush Sahyadri mountain ranges, it serves as a popular weekend getaway from Surat.",
+      "image": "/media/1782809242270-ambapani_ecotourism.jpg",
+      "images": [
+        "/media/1782809242270-ambapani_ecotourism.jpg"
+      ],
+      "category": "Heritage",
+      "location": " Approximately 92 kilometers (about a 2-hour drive via Vyara)",
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "amba-pani-ecotourism-",
+      "story": "Managed under the Gujarat Forest Department ecotourism initiatives, the campsite offers budget-friendly overnight stays. Note: Rooms are usually booked on-site or via the forest department, as seamless online booking can be limited.AC Treehouses / Cottages: Around ₹2,000 per night.Non-AC Huts / Tents: Around ₹1,000 – ₹1,500 per night.Camping Amenities: Night stays feature access to public restrooms, basic electricity, running water, and evening campfires.",
+      "visitingHours": ": 10:00 AM – 6:00 PM daily for day visitors.",
+      "bestTimeToVisit": ": The monsoon and winter seasons. ",
+      "nearbyAttractions": [
+        "Surat Castle"
+      ],
+      "suggestedItinerary": "Managed under the Gujarat Forest Department ecotourism initiatives, the campsite offers budget-friendly overnight stays. Note: Rooms are usually booked on-site or via the forest department, as seamless online booking can be limited.AC Treehouses / Cottages: Around ₹2,000 per night.Non-AC Huts / Tents: Around ₹1,000 – ₹1,500 per night.Camping Amenities: Night stays feature access to public restrooms, basic electricity, running water, and evening campfires.",
+      "inquiryType": "Destination",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1782812834,
+        "nanoseconds": 452000000
+      }
+    },
+    {
+      "id": "item-1782809150771",
+      "title": "saputara hill station",
+      "description": "Saputara is the only official hill station in Gujarat, perched at an altitude of roughly 1,000 metres atop a plateau in the Sahyadri (Western Ghats) mountain range. Located in the Dang district, it is a highly popular year-round retreat known for its cool climate, misty green valleys, waterfalls, and tribal heritage",
+      "image": "/media/1782808953334-saputara_hill_station.jpg",
+      "images": [
+        "/media/1782808953334-saputara_hill_station.jpg"
+      ],
+      "category": "Heritage",
+      "location": "Surat, Gujarat",
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "saputara-hill-station",
+      "story": "Saputara Lake: A serene body of water located in the center of the hill station, offering rowboat and paddleboat rentals amid scenic hill views.Sunset Point & Ropeway: Accessible via a thrilling cable car ride (Pushpak Ropeway), this vantage point offers panoramic views of the surrounding Dang forest valleys during sunset.Gira Waterfalls: Located roughly 50 kilometers before reaching Saputara, this seasonal waterfall drops into the Ambika River and is a must-visit pitstop during the monsoons.Artist Village: A cultural cooperative colony where you can buy authentic tribal artifacts, view traditional Warli paintings, and participate in pottery workshops.Step Garden & Rose Garden: Beautifully landscaped, terraced garden setups featuring a wide variety of multi-hued roses, cacti, and structural step-pathways.",
+      "visitingHours": "all",
+      "bestTimeToVisit": "june to august ",
+      "nearbyAttractions": [
+        "Surat Castle"
+      ],
+      "suggestedItinerary": "Saputara Lake: A serene body of water located in the center of the hill station, offering rowboat and paddleboat rentals amid scenic hill views.Sunset Point & Ropeway: Accessible via a thrilling cable car ride (Pushpak Ropeway), this vantage point offers panoramic views of the surrounding Dang forest valleys during sunset.Gira Waterfalls: Located roughly 50 kilometers before reaching Saputara, this seasonal waterfall drops into the Ambika River and is a must-visit pitstop during the monsoons.Artist Village: A cultural cooperative colony where you can buy authentic tribal artifacts, view traditional Warli paintings, and participate in pottery workshops.Step Garden & Rose Garden: Beautifully landscaped, terraced garden setups featuring a wide variety of multi-hued roses, cacti, and structural step-pathways.",
+      "inquiryType": "Destination",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1782812834,
+        "nanoseconds": 452000000
+      }
+    },
+    {
+      "id": "item-1782805950845",
+      "title": "science centre",
+      "description": "The Science Centre Surat is a premier multi-facility hub designed to blend education with entertainment. Built by the Surat Municipal Corporation, it stands as a major landmark in Western India for students, space enthusiasts, and families.",
+      "image": "/media/1782805872956-Science_Centre_Surat.jpg",
+      "images": [
+        "/media/1782805872956-Science_Centre_Surat.jpg"
+      ],
+      "category": "Heritage",
+      "location": ": City Light Road, Maheshwari Cir, beside Shree Maheshwari Bhawan, Surat, Gujarat 395007.",
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "science-centre",
+      "story": "Science Gallery: An interactive floor packed with hands-on experiments, fun physics demonstrations, and mechanics puzzles designed to teach fundamental science concepts to kids.Planetarium: A high-tech digital dome theater hosting regular educational shows about astronomy, stars, planets, and dark matter mysteries.Surat Sardar Vabhbhai Patel Museum: A beautifully curated heritage wing displaying ancient wood carvings, terracotta art, textiles, old coins, and royal artifacts tracing Surat's historical lineage.Diamond Gallery: A dedicated regional exhibition space detailing Surat’s world-famous history as a global diamond cutting and polishing hub.3D Amphitheatre: Shows exciting, short educational and adventure films with immersive stereoscopic glasses.",
+      "visitingHours": "9:30 AM – 4:30 PM from Tuesday to Sunday (Closed every Monday).",
+      "bestTimeToVisit": "October to March",
+      "nearbyAttractions": [
+        "Surat Castle"
+      ],
+      "suggestedItinerary": "Science Gallery: An interactive floor packed with hands-on experiments, fun physics demonstrations, and mechanics puzzles designed to teach fundamental science concepts to kids.Planetarium: A high-tech digital dome theater hosting regular educational shows about astronomy, stars, planets, and dark matter mysteries.Surat Sardar Vabhbhai Patel Museum: A beautifully curated heritage wing displaying ancient wood carvings, terracotta art, textiles, old coins, and royal artifacts tracing Surat's historical lineage.Diamond Gallery: A dedicated regional exhibition space detailing Surat’s world-famous history as a global diamond cutting and polishing hub.3D Amphitheatre: Shows exciting, short educational and adventure films with immersive stereoscopic glasses.",
+      "inquiryType": "Destination",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1782812834,
+        "nanoseconds": 452000000
+      }
+    },
+    {
+      "id": "item-1782805812019",
+      "title": "botanical garden",
+      "description": "The Sneh Rashmi Botanical Garden is the primary botanical garden in Surat, located along the Bhesan Road in the Jahangirabad area. Spanning a massive green expanse, it is a highly popular destination for families and nature lovers, featuring over 1,000 exotic plant species, a scenic pond, and various recreational rides",
+      "image": "/media/1782805759125-Sneh-Rashmi-Botanical-Garden-in-surat.jpeg",
+      "images": [
+        "/media/1782805759125-Sneh-Rashmi-Botanical-Garden-in-surat.jpeg"
+      ],
+      "category": "Colonial",
+      "location": "Ugat, Bhesan Rd, Jahangirabad, Surat, Gujarat 395005.",
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "botanical-garden",
+      "story": "Exotic Flora Collection: The garden is home to hundreds of rare plant varieties, distinct cactus collections, therapeutic medicinal herbs, and meticulously curated greenhouse spaces.Family Rides: Visitors can enjoy an internal toy train ride, a small amusement park zone, and a children's playground.Scenic Lake: A peaceful pond sits inside the garden, providing a beautiful backdrop for walks, photography, and picnics.Walking Tracks: Paved pathways wind throughout the greenery, making it an excellent spot for long walks amidst nature.",
+      "visitingHours": " 1:45 PM – 9:00 PM from Tuesday to Sunday (Closed on Mondays).",
+      "bestTimeToVisit": "October to March",
+      "nearbyAttractions": [
+        "Surat Castle"
+      ],
+      "suggestedItinerary": "Exotic Flora Collection: The garden is home to hundreds of rare plant varieties, distinct cactus collections, therapeutic medicinal herbs, and meticulously curated greenhouse spaces.Family Rides: Visitors can enjoy an internal toy train ride, a small amusement park zone, and a children's playground.Scenic Lake: A peaceful pond sits inside the garden, providing a beautiful backdrop for walks, photography, and picnics.Walking Tracks: Paved pathways wind throughout the greenery, making it an excellent spot for long walks amidst nature.",
+      "inquiryType": "Destination",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1782812834,
+        "nanoseconds": 452000000
+      }
+    },
+    {
+      "id": "item-1782805727621",
+      "title": "Sarthana Nature Park",
+      "description": "Sarthana Nature Park (officially known as the Sarthana Nature Park and Zoo) is the only zoological park in Surat, spanning a massive 81 acres along the left bank of the Tapi River. It is a premier wildlife conservation and breeding center, particularly renowned for its successful breeding programs for Asiatic lions and Bengal tigers",
+      "image": "/media/1782805653907-sarthana-national-park.jpg",
+      "images": [
+        "/media/1782805653907-sarthana-national-park.jpg"
+      ],
+      "category": "Colonial",
+      "location": " Kamrej Rd, near Sarthana Jakatnaka, Sarthana Jakatnaka, Nana Varachha, Surat, Gujarat 395006.",
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "sarthana-nature-park",
+      "story": "Big Cat Enclosures: The park houses majestic Asiatic lions, white Bengal tigers, royal Bengal tigers, and leopards roaming in spacious, naturalistic enclosures.Avian & Reptile Zones: Features a diverse aviary with exotic migratory and local birds, alongside a dedicated reptile house containing various snake and turtle species.Rich Biodiversity: The zoo grounds are densely covered with native trees, including Casuarina and Eucalyptus, creating a refreshing forest-like microclimate within the city.",
+      "visitingHours": " 10:00 AM – 5:00 PM from Tuesday to Sunday (Closed every Monday).",
+      "bestTimeToVisit": "October to March",
+      "nearbyAttractions": [
+        "Surat Castle"
+      ],
+      "suggestedItinerary": "Big Cat Enclosures: The park houses majestic Asiatic lions, white Bengal tigers, royal Bengal tigers, and leopards roaming in spacious, naturalistic enclosures.Avian & Reptile Zones: Features a diverse aviary with exotic migratory and local birds, alongside a dedicated reptile house containing various snake and turtle species.Rich Biodiversity: The zoo grounds are densely covered with native trees, including Casuarina and Eucalyptus, creating a refreshing forest-like microclimate within the city.",
+      "inquiryType": "Destination",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1782812834,
+        "nanoseconds": 452000000
+      }
+    },
+    {
+      "id": "item-1782805557966",
+      "title": "venenzino mall(venice mall)",
+      "description": "Central Bazaar Veneziano Mall is Gujarat's first Venice-themed shopping and entertainment destination. Located in the upscale Vesu neighborhood of Surat, the entire property is uniquely built to replicate the classical European architecture, streets, and scenic waterways of Venice, Italy.",
+      "image": "/media/1782805491750-vanenziani_o_mall.jpg",
+      "images": [
+        "/media/1782805491750-vanenziani_o_mall.jpg"
+      ],
+      "category": "Textile",
+      "location": " Central Bazaar Veneziano Mall, Behind Kessel Bräu, Udhana - Magdalla Rd, Vesu, Surat, Gujarat 395007.",
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "venenzino-mall-venice-mall-",
+      "story": "Indoor Water Canals & Gondolas: The most popular feature is the central indoor water channel where you can take real gondola boat rides, passing under arched bridges just like in Italy.Venetian Architecture: The interiors are filled with elegant marble flooring, European-style classical sculptures, artistic paintings, and decorative arches designed as aesthetic backdrops for photography.Retail & Lifestyle Stores: It hosts a diverse combination of high-end international clothing brands, local fashion boutiques, custom tailors, perfume houses, and premium wellness spas.Dining & Entertainment: The mall features cafes (like Teabucks), multiple multi-cuisine restaurants, a family-friendly play zone, a cinema, and rooftop dining areas.On-Site Lodging: For travelers or staycations, the mall includes a unique concept hotel inside, Hotel VD Rooms, letting guests stay directly inside the theme complex.",
+      "visitingHours": " 11:00 AM – 10:00 PM daily.",
+      "bestTimeToVisit": "October to March",
+      "nearbyAttractions": [
+        "Surat Castle"
+      ],
+      "suggestedItinerary": "Indoor Water Canals & Gondolas: The most popular feature is the central indoor water channel where you can take real gondola boat rides, passing under arched bridges just like in Italy.Venetian Architecture: The interiors are filled with elegant marble flooring, European-style classical sculptures, artistic paintings, and decorative arches designed as aesthetic backdrops for photography.Retail & Lifestyle Stores: It hosts a diverse combination of high-end international clothing brands, local fashion boutiques, custom tailors, perfume houses, and premium wellness spas.Dining & Entertainment: The mall features cafes (like Teabucks), multiple multi-cuisine restaurants, a family-friendly play zone, a cinema, and rooftop dining areas.On-Site Lodging: For travelers or staycations, the mall includes a unique concept hotel inside, Hotel VD Rooms, letting guests stay directly inside the theme complex.",
+      "inquiryType": "Destination",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1782812834,
+        "nanoseconds": 452000000
+      }
+    },
+    {
+      "id": "dest-1",
+      "title": "Surat Castle / Old Fort",
+      "description": "An authentic 16th-century fortification constructed by Safi Agha against Portuguese incursions, offering dramatic views of the Tapi River and historical exhibits.",
+      "image": "/media/1782808006036-surat_fort3.jpg",
+      "gallery": [
+        "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "surat-castle",
+      "category": "Heritage",
+      "story": "Constructed in 1540 by Khudawand Khan, Surat Castle stands as a testament to Surat's status as India's premier medieval trading harbor. The castle underwent painstaking preservation and now offers curated galleries depicting ancient maritime routes and centuries of colonial struggles.",
+      "visitingHours": "10:00 AM - 06:00 PM (Closed on Mondays)",
+      "bestTimeToVisit": "October to March",
+      "nearbyAttractions": [
+        "Dutch Garden",
+        "Chauta Bazar",
+        "Tapi River Front"
+      ],
+      "suggestedItinerary": "Dedicate 2 hours in the late afternoon. Begin with the defense bastion, explore the coin galleries, and finish on the terrace deck just as the golden hour hits the Tapi River.",
+      "location": "Near Hope Bridge, Chowk Bazar, Surat",
+      "inquiryType": "Destination",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1782812834,
+        "nanoseconds": 452000000
+      },
+      "images": [
+        "/media/1782808006036-surat_fort3.jpg",
+        "/media/1782808007001-surat_fort2.jpg"
+      ]
+    },
+    {
+      "id": "dest-3",
+      "title": "Dumas Beach",
+      "description": "Famous for its dark, atmospheric sands, serene wind-carved pine forests, and delicious local tomato locho and sweet kulfi stalls.",
+      "image": "/media/1782808067110-dumas_sea_face.jpg",
+      "gallery": [
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "rating": 4.5,
+      "status": "Published",
+      "slug": "dumas-beach",
+      "category": "Nature",
+      "story": "Located 18 km outline of Surat along the Arabian Sea, Dumas Beach features iconic black sands rich with history and supernatural local folklore. Today it serves as the ultimate leisure destination for Surati families looking to escape to coastal breezes.",
+      "visitingHours": "06:00 AM - 08:00 PM",
+      "bestTimeToVisit": "Monsoon and Winter evenings",
+      "nearbyAttractions": [
+        "Sardar Patel Museum",
+        "Dumas Eco-Resort"
+      ],
+      "suggestedItinerary": "Drive down around 04:30 PM. Walk along the sand, try the hot locho and bhajiyas, and watch the tide cover the shoreline.",
+      "location": "Dumas, Surat District",
+      "inquiryType": "Destination",
+      "images": [
+        "/media/1782808067110-dumas_sea_face.jpg"
+      ],
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1782812834,
+        "nanoseconds": 452000000
+      }
+    },
+    {
+      "id": "dest-4",
+      "title": "Gopi Talav & Urban Lake Park",
+      "description": "A premium urban park built around a historic 15th-century octagonal lake, featuring musical fountains, boating, and food pavilions.",
+      "image": "/media/1782808151342-gopi-talav-surat-tourism-header.jpg",
+      "gallery": [
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "rating": 4.7,
+      "status": "Published",
+      "slug": "gopi-talav",
+      "category": "Family Activities",
+      "story": "Gopi Talav was constructed in 1510 AD by Malik Gopi, an influential merchant governor of Surat. After extensive civic restoration in recent years, it has been transformed into a gorgeous green space with spectacular light and water shows at dusk.",
+      "visitingHours": "12:00 PM - 09:00 PM",
+      "bestTimeToVisit": "November to March (Evening slots)",
+      "nearbyAttractions": [
+        "Chauta Bazar",
+        "Dutch Cemetery"
+      ],
+      "suggestedItinerary": "Perfect for family leisure. Book a paddle boat, enjoy the musical water fountain at 07:15 PM, and enjoy local street food.",
+      "location": "Rustampura, Surat",
+      "inquiryType": "Destination",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1782812834,
+        "nanoseconds": 452000000
+      },
+      "images": [
+        "/media/1782808151342-gopi-talav-surat-tourism-header.jpg"
+      ]
+    },
+    {
+      "image": "/media/1782805433486-suvali-beach-surat-india-tourism-photo-gallery.jpg",
+      "rating": 4.8,
+      "images": [
+        "/media/1782805433486-suvali-beach-surat-india-tourism-photo-gallery.jpg"
+      ],
+      "id": "item-1782755571661",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1782812834,
+        "nanoseconds": 452000000
+      },
+      "story": "suvali beach",
+      "title": "suvali beach",
+      "nearbyAttractions": [],
+      "suggestedItinerary": "suvali beach",
+      "visitingHours": "09:00 AM - 06:00 PM",
+      "description": "You said: dutch garden suratThe Dutch Garden (also known locally as Dayalji Garden) is a historic, European-style riverside park located along the banks of the Tapi River in Nanpura, Surat. Dating back to the 17th century, it serves as a quiet green getaway heavily intertwined with Surat's history as a prominent colonial trading hub.Key Visitor InformationAddress: Dutch Garden Road, Nanpura, Surat, Gujarat 395001.Timings: 6:00 AM – 12:00 PM and 3:00 PM – 10:00 PM daily.Entry Fee: Free admission.Best Time to Visit: Early mornings for crisp, cool air or late evenings to catch stunning sunset views over the Tapi River.Major Highlights & HistoryColonial Cemetery: The site serves as the final resting place for English and Dutch traders who settled in Surat. It contains grand, ornate mausoleums built in a unique blend of European and local architectural styles.Baron Adrian Van Reed Tomb: The most striking monument in the garden belongs to Baron Adrian Van Reed, a prominent Dutch official who passed away in 1691.Riverside Pathways: Geometric walking tracks line the perimeter, offering a refreshing river breeze that makes it a popular spot for local joggers and morning walkers.Family Amenities: The space features a small playground area for children and basic open-gym setups. Outside the main gate, vendors often offer horse and chariot rides for kids.Things to Keep in MindReviewers note that while the park is rich in heritage and offers a peaceful escape, certain sections have faced maintenance and cleanliness issues over time. Parking space directly at the entrance is also limited.Map data ©2026 Terms200 m Are you planning a visit to the garden, or are you looking for more historical facts about Surat's colonial era? I can also suggest other nearby attractions like the Surat Castle if you want to map out a day trip!AI can make mistakes, so double-check responses 12 sitesDutch Garden Surat, GujaratDutch Garden is located in Nanpura and is one of the most popular tourist sites in Surat. Besides beauty, the garden has got a lot...Tour My IndiaDutch Garden, Surat: How To Reach, Best Time & Tips - ThrillophiliaAbout Dutch Garden One of the most popular tourist places in Surat, the Dutch Garden is a captivating beauty of the city. Besides ...ThrillophiliaDutch Garden Surat – Visitor Guide & Travel Info - Chal Banjare23 Jun 2026 — Dutch Garden, Surat, Gujarat, India. ... Visitors come to explore the well-maintained gardens, view the historic tombs of Dutch an...Chal BanjareShow allYou said: botanical gardenThe Sneh Rashmi Botanical Garden is the primary botanical garden in Surat, located along the Bhesan Road in the Jahangirabad area. Spanning a massive green expanse, it is a highly popular destination for families and nature lovers, featuring over 1,000 exotic plant species, a scenic pond, and various recreational rides.Key Visitor InformationAddress: Ugat, Bhesan Rd, Jahangirabad, Surat, Gujarat 395005.Timings: 1:45 PM – 9:00 PM from Tuesday to Sunday (Closed on Mondays).Entry Fee: A nominal fee of ₹10 for adults and ₹5 for children (additional charges apply for rides).Best Time to Visit: Late afternoon to early evening to enjoy the sunset by the lake and comfortably experience the outdoor activities.Major Highlights & AttractionsExotic Flora Collection: The garden is home to hundreds of rare plant varieties, distinct cactus collections, therapeutic medicinal herbs, and meticulously curated greenhouse spaces.Family Rides: Visitors can enjoy an internal toy train ride, a small amusement park zone, and a children's playground.Scenic Lake: A peaceful pond sits inside the garden, providing a beautiful backdrop for walks, photography, and picnics.Walking Tracks: Paved pathways wind throughout the greenery, making it an excellent spot for long walks amidst nature.Tips for VisitorsIt can get incredibly crowded on Sunday evenings, so choosing a weekday visit is ideal if you prefer quiet surroundings. While there is a food court on-site, outside food and plastics are restricted at the gate to maintain the garden's cleanliness.Map data ©2026 Terms200 m Are you looking for driving directions to the botanical garden, or would you like to know about other nature parks and lakes to visit nearby?9 sitesSneh Rashmi Botanical Garden Surat: Entry, Timings & GuideSneh Rashmi Botanical Garden is located in the Jahangirabad district on Ugat-Bhesan Road, making it easily accessible from various...kupi.comBotanical Garden Surat - History, Time, Entry Fee, Photography13 Dec 2019 — Surat Botanical Garden History: Surat Botanical Garden is the great place to hang out with friends and families. The Surat Municip...TripnetraSneh Rashmi Botanical GardenWhat can visitors expect to see at the Sneh Rashmi Botanical Garden? Visitors can explore meticulously landscaped gardens, well-ma...AvathiShow allYou said: suvali beachSuvali Beach (also known as Suvali Black Sand Beach) is a peaceful, secluded beach located in Hazira on the outskirts of Surat [1]. Unlike crowded city parks, it is known for its distinct black sand, quiet atmosphere, and scenic sunset views away from the main urban hustle",
+      "location": "Surat, Gujarat",
+      "category": "Heritage",
+      "bestTimeToVisit": "October to March",
+      "slug": "suvali-beach",
+      "status": "Published",
+      "inquiryType": "Destination"
+    }
+  ],
+  "shoppingGuides": [
+    {
+      "id": "shop-1",
+      "title": "The Ultimate Saree & Bridal Trousseau Quest",
+      "description": "Expert guide to navigating Surat's world-famous textile hubs for premium bridal sarees, embroidered lehengas, and designer fabrics.",
+      "image": "https://images.unsplash.com/photo-1610030469668-93535c17b6b3?q=80&w=1200&auto=format&fit=crop",
+      "gallery": [
+        "https://images.unsplash.com/photo-1610030469668-93535c17b6b3?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "rating": 4.9,
+      "status": "Published",
+      "slug": "bridal-saree-guide",
+      "category": "Bridal Shopping",
+      "priceRange": "₹₹₹",
+      "whatToBuy": "Tanchoi Silk, Georgette Lehengas with Zardozi Work, Banarasi brocades, and Gaji Silk sarees.",
+      "insiderTips": "Wholesale textile markets usually open around 10:30 AM and get very crowded by 2 PM. Avoid middlemen who promise massive discounts as they collect high commission fees from stores.",
+      "stores": [
+        "Seematti Sarees & Bridal Emporium (Athwalines)",
+        "Sabyasachi Partner Outlets (VIP Road)",
+        "Anupam Creation (Ring Road)",
+        "Shree Balaji Silk Mill Retail Outlet (Kinnary Cinema Road)"
+      ],
+      "location": "Ring Road Textile District & Athwalines Retail Hub"
+    },
+    {
+      "id": "shop-2",
+      "title": "Surat Textile Market (STM)",
+      "description": "The gigantic beating heart of India's wholesale fashion and textile trade, spanning thousands of stores across multi-story complexes.",
+      "image": "https://images.unsplash.com/photo-1560243563-062bfc001d68?q=80&w=1200&auto=format&fit=crop",
+      "gallery": [
+        "https://images.unsplash.com/photo-1560243563-062bfc001d68?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "surat-textile-market",
+      "category": "Textiles",
+      "priceRange": "₹",
+      "whatToBuy": "Bulk fabrics, synthetic silk sarees, salwar suit dress materials, laces, borders, and running dress fabric.",
+      "insiderTips": "Wear comfortable walking shoes. Bring cash as wholesale merchants prefer it. If buying in bulk, locate transporters directly behind the market buildings to ship directly to your home town.",
+      "stores": [
+        "Radha Raman Textile Market Complex",
+        "Millennium Market (Ring Road)",
+        "Bombai House Wholesale Outlets",
+        "World Trade Centre fabric floors"
+      ],
+      "location": "Ring Road, Surat"
+    },
+    {
+      "id": "shop-3",
+      "title": "Katargam & Ghod Dod Diamond Boutiques",
+      "description": "Curated guide to exquisite handcheck solitaire diamonds and certified gold wedding jewelry in the Diamond Capital of the world.",
+      "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1200&auto=format&fit=crop",
+      "gallery": [
+        "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "rating": 4.9,
+      "status": "Published",
+      "slug": "diamond-jewellery-guide",
+      "category": "Jewellery",
+      "priceRange": "₹₹₹",
+      "whatToBuy": "VVS-VS Certification grade Diamond Solitaire Necklaces, Custom Bridal Jadau Sets, Modern Diamond Band rings.",
+      "insiderTips": "Ask for IGI or GIA ratings certificates on every diamond purchased. Surat diamond crafters process 90% of the world's diamonds, ensuring you get the absolute best crafting rates.",
+      "stores": [
+        "Kalamandir Jewellers (Ghod Dod Road)",
+        "Charu Jewels (VIP Avenue)",
+        "D. Khushalbhai Jewellers",
+        "K.P. Sanghvi Retail Showroom"
+      ],
+      "location": "Ghod Dod Road & Katargam Industrial Ring"
+    }
+  ],
+  "hotels": [
+    {
+      "id": "hotel-1",
+      "title": "Courtyard by Marriott Surat",
+      "description": "Luxurious oasis located on Surat's upscale Hazira Road, featuring stylish modern suites, a glorious infinity swimming pool, and pristine fine dining.",
+      "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop",
+      "gallery": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "rating": 4.9,
+      "status": "Published",
+      "slug": "courtyard-marriott-surat",
+      "category": "Luxury",
+      "pricePerNight": 8500,
+      "amenities": [
+        "Infinity Pool",
+        "High-speed WiFi",
+        "Mouth-watering Cafe",
+        "24/7 Room Service",
+        "Premium Spa & Gym",
+        "SITEX Airport Shuttle"
+      ],
+      "nearbyAttractions": [
+        "Dumas Beach",
+        "VR Surat Mall",
+        "Tapi River Boardwalk"
+      ],
+      "contactInfo": "+91 261 414 5555 | reservations@marriottsurat.com",
+      "location": "Hazira Road, opposite Gavier Lake, Surat"
+    },
+    {
+      "id": "hotel-2",
+      "title": "The Gateway Hotel Athwalines",
+      "description": "Elegantly designed hotel overlooking the picturesque active waters of the Tapi River, perfect for luxury-conscious business or wedding travelers.",
+      "image": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200&auto=format&fit=crop",
+      "gallery": [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "gateway-hotel-athwalines",
+      "category": "Luxury",
+      "pricePerNight": 7200,
+      "amenities": [
+        "Tapi View Balconies",
+        "Outdoor Pool",
+        "Traditional Gujarati Thali Restaurant",
+        "Business Lounge"
+      ],
+      "nearbyAttractions": [
+        "Dutch Cemeteries",
+        "Science Centre Surat",
+        "Surat Fort"
+      ],
+      "contactInfo": "+91 261 669 7000 | gateway.surat@tajhotels.com",
+      "location": "Ambika Niketan Temple Road, Athwalines, Surat"
+    },
+    {
+      "id": "hotel-3",
+      "title": "Lords Plaza Surat",
+      "description": "Highly rated, central hotel offering exceptionally clean accommodation and prompt hospitality right next to the Surat Railway Station.",
+      "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=1200&auto=format&fit=crop",
+      "gallery": [
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "rating": 4.2,
+      "status": "Published",
+      "slug": "lords-plaza-surat",
+      "category": "Mid-range",
+      "pricePerNight": 3500,
+      "amenities": [
+        "Free Airport Shuttle",
+        "In-house Multi-cuisine Restaurant",
+        "Speedy WiFi",
+        "Mini-bar"
+      ],
+      "nearbyAttractions": [
+        "Surat Castle",
+        "Chauta Bazar",
+        "STM Textile Market Grid"
+      ],
+      "contactInfo": "+91 261 241 8300 | info@lordsplazasurat.com",
+      "location": "Delhi Gate, Ring Road, Surat"
+    }
+  ],
+  "tours": [
+    {
+      "id": "tour-1",
+      "title": "Official Surat Heritage & History Walk",
+      "description": "Explore five centuries of global merchant history on foot, visiting Surat Fort, European tombs, and bustling heritage bazaar alleys.",
+      "image": "https://images.unsplash.com/photo-1605649487212-47bdab064df7?q=80&w=1200&auto=format&fit=crop",
+      "gallery": [
+        "https://images.unsplash.com/photo-1605649487212-47bdab064df7?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "rating": 4.9,
+      "status": "Published",
+      "slug": "surat-heritage-walk",
+      "pricing": 1500,
+      "duration": "4 Hours (Morning)",
+      "itinerary": [
+        "07:30 AM - Meet-up and traditional tea briefing at Chowk Bazar.",
+        "08:00 AM - Complete guided explorer walk inside Surat Castle.",
+        "09:15 AM - Walk through narrow historical lanes of Chauta Bazar and ancient temple complex relics.",
+        "10:30 AM - Explore majestic Dutch & Armenian mausoleums and tombs.",
+        "11:30 AM - Wrap up with refreshing sweet cold Ghari and savory Locho tastings."
+      ]
+    },
+    {
+      "id": "tour-2",
+      "title": "Curated Silk & Textile Industrial Tour",
+      "description": "A private behind-the-scenes journey into Surat's massive spinning mills, digital embroidery units, and historic handloom clusters.",
+      "image": "https://images.unsplash.com/photo-1524295981977-62f3a4794939?q=80&w=1200&auto=format&fit=crop",
+      "gallery": [
+        "https://images.unsplash.com/photo-1524295981977-62f3a4794939?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "textile-industrial-tour",
+      "pricing": 3000,
+      "duration": "6 Hours",
+      "itinerary": [
+        "09:30 AM - Hotel pickup and introductory briefing about Surat fabric history.",
+        "10:15 AM - Guided factory-floor visit inside an active power-loom and silk spinning mill.",
+        "11:45 AM - Learn the ancient art of hand dyeing, tie-and-dye patterns, and modern digital block printing.",
+        "01:15 PM - Traditional designer lunch with industry guides.",
+        "02:30 PM - VIP direct-access entry to wholesale textile market showrooms with customized shopping help."
+      ]
+    },
+    {
+      "id": "tour-3",
+      "title": "The Ultimate Surat Insider Day Tour Package",
+      "description": "Our signature gold-standard package. We guide you from high-end heritage silk mills, direct to cheap bridal wholesale loom stalls, relax at Dumas black beach, and finish with legendary local food spots.",
+      "image": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop",
+      "gallery": [
+        "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "rating": 5,
+      "status": "Published",
+      "slug": "ultimate-surat-insider-tour",
+      "pricing": 4500,
+      "duration": "Full Day Experience",
+      "itinerary": [
+        "09:00 AM - Premium SOTY Silk weaving mill direct walkthrough session - see 24K gold thread embroidery up close.",
+        "11:30 AM - Custom guided pricing & shopping assistance at Ring Road wholesale traditional textile lanes.",
+        "01:30 PM - Authentic, unlimited royal Gujarati Thali lunch with famous butter Ghari at Kansar restaurant.",
+        "04:00 PM - Chilled mocktails, ocean breezes, and dark sand walk at the beautiful atmospheric Dumas Beach.",
+        "06:30 PM - Gastronomy trail sampling Jani's iconic hot cheese locho with fresh mint chutney.",
+        "08:00 PM - Wrap up with musical laser & dancing waters fountain show spectacular at the historic Gopi Talav park."
+      ]
+    }
+  ],
+  "foodSpots": [
+    {
+      "id": "food-1",
+      "title": "Jani Locho Center",
+      "description": "The absolute gold standard for Surati Locho - a melt-in-mouth savory steamed chickpea snack garnished with butter, sev, and special spice blends.",
+      "image": "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?q=80&w=1200&auto=format&fit=crop",
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "jani-locho-center",
+      "category": "Street Food",
+      "mustTry": "Butter Locho, Schezwan Locho, and Garlic Locho with sweet mint chutney.",
+      "priceLevel": "₹",
+      "location": "Chowk Bazar & VIP Road Outlets",
+      "timings": "07:00 AM - 01:30 PM, 04:30 PM - 09:30 PM"
+    },
+    {
+      "id": "food-2",
+      "title": "Kansar Gujarati Thali",
+      "description": "An authentic, bottomless royal Gujarati Thali dining experience with deep ghee-drenched rotis, diverse curries, and rich traditional sweets.",
+      "image": "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?q=80&w=1200&auto=format&fit=crop",
+      "rating": 4.7,
+      "status": "Published",
+      "slug": "kansar-gujarati-thali",
+      "category": "Fine Dining",
+      "mustTry": "Surati Undhiyu, Dhokli, Shrikhand, and Jalebi with pure ghee.",
+      "priceLevel": "₹₹",
+      "location": "Ring Road, opposite Reshamwala Market, Surat",
+      "timings": "11:30 AM - 03:30 PM, 07:00 PM - 11:00 PM"
+    },
+    {
+      "id": "food-3",
+      "title": "Jamnadas Ghari Wala",
+      "description": "Pioneers of Ghari, a legendary traditional Surati dessert made with fresh cardamo-flavored mawa, heavy dry fruit, wrapped in pure ghee.",
+      "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=1200&auto=format&fit=crop",
+      "rating": 4.9,
+      "status": "Published",
+      "slug": "jamnadas-ghari-wala",
+      "category": "Local Favorites",
+      "mustTry": "Kesar Pistachio Ghari and sugar-free almond ghari.",
+      "priceLevel": "₹₹",
+      "location": "Chauta Bazar, Surat",
+      "timings": "09:00 AM - 10:00 PM"
+    }
+  ],
+  "events": [
+    {
+      "id": "event-1",
+      "title": "SITEX: Surat International Textile Expo",
+      "description": "The global commercial showcase of cutting-edge machineries, luxury bridal loom concepts, silk advances, and embroidery craft trends.",
+      "image": "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=1200&auto=format&fit=crop",
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "sitex-textile-expo",
+      "category": "Exhibitions",
+      "date": "January 14 - 17, 2027",
+      "venue": "SIECC, Sarsana, Surat"
+    },
+    {
+      "id": "event-2",
+      "title": "Royal Navratri Garba Utsav",
+      "description": "Experience 9 nights of synchronized multi-ring garba folk dances with thousands of dancers adorned in sparkling traditional mirror-work clothing.",
+      "image": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop",
+      "rating": 4.9,
+      "status": "Published",
+      "slug": "royal-navratri-garba",
+      "category": "Festivals",
+      "date": "October 10 - 18, 2026",
+      "venue": "Indoor Stadium Athwalines & Sarsana Dome Grounds, Surat"
+    }
+  ],
+  "blogs": [
+    {
+      "id": "blog-1",
+      "title": "The Insider Guide to Buying Wedding Sarees in Surat's Wholesale Markets",
+      "description": "A comprehensive local expert walk-through explaining saree fabrics, merchant navigation, price bars, and preventing common tourist shopping mistakes.",
+      "image": "https://images.unsplash.com/photo-1610030469668-93535c17b6b3?q=80&w=1200&auto=format&fit=crop",
+      "rating": 4.8,
+      "status": "Published",
+      "slug": "wedding-saree-market-guide",
+      "category": "Shopping Guides",
+      "content": "Surat satisfies nearly 40% of India's wholesale fashion textile needs, making it a dream wedding destination. But walking in without a direct strategy is highly chaotic. First, understand the central textile hotspots. Ring road holds the primary wholesale malls containing upwards of 20,000 offices. If you want bridal couture lehengas or curated designer silk, prioritize Athwalines or VIP Road. Do not hire auto drivers who claim to know secret mill outlets; they operate heavily on retail commission premiums. Focus on registered landmark stores like Anupam or Kalamandir. Make physical swatches checks and always ask for material purity certification.",
+      "author": "Radhika Parekh (Fashion Director)",
+      "publishedAt": "2026-05-15"
+    },
+    {
+      "id": "blog-2",
+      "title": "Surati Street Food Chronicles: Beyond the Standard Locho",
+      "description": "Explore the deep culinary history of Surat's distinct snacks, from sizzling spicy Katargam Locho to refreshing coco drinks.",
+      "image": "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?q=80&w=1200&auto=format&fit=crop",
+      "rating": 4.7,
+      "status": "Published",
+      "slug": "surati-street-food-bible",
+      "category": "Food Trails",
+      "content": "Suratis are legendary food lovers, leading to the famous Gujarati proverb 'Kashi nu maran ane Surat nu jaman' (To die in Kashi, to feast in Surat). Locho remains the supreme morning breakfast, steamed chickpea mixture crafted from custom spices. But don't sleep on Ghari, or traditional Undhiyu - an exceptionally tasty complex winter vegetable stew of sweet potatoes, tiny green beans, and spiced fenugreek dumplings that takes days of local family prep work.",
+      "author": "Karan Desai (Culinary Historian)",
+      "publishedAt": "2026-06-12"
+    }
+  ],
+  "monetization": {
+    "featuredListingFee": 2500,
+    "sponsoredAdCost": 150,
+    "premiumGuideAccessFee": 799,
+    "isFeaturedEnabled": true,
+    "isSponsoredEnabled": true,
+    "isPremiumEnabled": false
+  },
+  "inquiries": [
+    {
+      "id": "inq-1",
+      "itemId": "tour-1",
+      "itemTitle": "Official Surat Heritage & History Walk",
+      "itemType": "tour",
+      "name": "Aarav Sharma",
+      "email": "aarav@gmail.com",
+      "phone": "+91 98765 43210",
+      "message": "Interested in booking a heritage walk for 4 family members visiting during SITEX next week. Do you have specialized English guides?",
+      "date": "2026-06-15",
+      "status": "New"
+    },
+    {
+      "id": "inq-2",
+      "itemId": "hotel-1",
+      "itemTitle": "Courtyard by Marriott Surat",
+      "itemType": "hotel",
+      "name": "Meera Patel",
+      "email": "meera.patel@yahoo.com",
+      "phone": "+91 81234 56789",
+      "message": "Seeking group booking rates for 15 rooms during my daughter's wedding trousseau shopping trip in mid-October.",
+      "date": "2026-06-14",
+      "status": "Contacted"
+    }
+  ],
+  "partners": [
+    {
+      "id": "part-1",
+      "businessName": "Radhe Shyam Traditional Sarees",
+      "businessType": "shop",
+      "contactEmail": "contact@radheshyamsilk.com",
+      "requestedUpdate": "Add our wholesale unit under STM category. We carry authentic Tanchoi and Patola fabrics starting ₹3000 onwards.",
+      "status": "Pending Approval",
+      "date": "2026-06-15"
+    },
+    {
+      "id": "part-2",
+      "businessName": "Laxmi Sweets & Ghari Boutique",
+      "businessType": "restaurant",
+      "contactEmail": "laxmisweets@surat.in",
+      "requestedUpdate": "Update shop address to: Laxmi Tower, Bhagal Chowk, Surat. Add sweet sugar-free variants in must-try section.",
+      "status": "Approved",
+      "date": "2026-06-13"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "log-1782745109305",
+      "user": "itxghost111@gmail.com",
+      "role": "Super Admin",
+      "action": "Edited Spot",
+      "targetType": "Destination",
+      "targetName": "Surat Castle / Old Fort",
+      "timestamp": "2026-06-29T14:58:29.305Z"
+    },
+    {
+      "id": "log-1782745077191",
+      "user": "itxghost111@gmail.com",
+      "role": "Super Admin",
+      "action": "Administrative Access Granted",
+      "targetType": "Auth",
+      "targetName": "itxghost111@gmail.com",
+      "timestamp": "2026-06-29T14:57:57.191Z"
+    },
+    {
+      "id": "log-1782744837623",
+      "user": "itxghost111@gmail.com",
+      "role": "Super Admin",
+      "action": "Edited Spot",
+      "targetType": "Destination",
+      "targetName": "The Dutch & Armenian Cemeteries",
+      "timestamp": "2026-06-29T14:53:57.623Z"
+    },
+    {
+      "id": "log-1782744811230",
+      "user": "itxghost111@gmail.com",
+      "role": "Super Admin",
+      "action": "Edited Spot",
+      "targetType": "Destination",
+      "targetName": "Surat Castle / Old Fort",
+      "timestamp": "2026-06-29T14:53:31.230Z"
+    },
+    {
+      "id": "log-1782744740725",
+      "user": "itxghost111@gmail.com",
+      "role": "Super Admin",
+      "action": "Administrative Access Granted",
+      "targetType": "Auth",
+      "targetName": "itxghost111@gmail.com",
+      "timestamp": "2026-06-29T14:52:20.725Z"
+    },
+    {
+      "id": "log-1782744265687",
+      "user": "itxghost111@gmail.com",
+      "role": "Super Admin",
+      "action": "Administrative Access Granted",
+      "targetType": "Auth",
+      "targetName": "itxghost111@gmail.com",
+      "timestamp": "2026-06-29T14:44:25.687Z"
+    },
+    {
+      "id": "log-1782739776605",
+      "user": "itxghost111@gmail.com",
+      "role": "Super Admin",
+      "action": "Edited Spot",
+      "targetType": "Destination",
+      "targetName": "Surat Castle / Old Fort",
+      "timestamp": "2026-06-29T13:29:36.605Z"
+    },
+    {
+      "id": "log-1782739737118",
+      "user": "itxghost111@gmail.com",
+      "role": "Super Admin",
+      "action": "Administrative Access Granted",
+      "targetType": "Auth",
+      "targetName": "itxghost111@gmail.com",
+      "timestamp": "2026-06-29T13:28:57.118Z"
+    },
+    {
+      "id": "log-1782739447480",
+      "user": "itxghost111@gmail.com",
+      "role": "Super Admin",
+      "action": "Edited Spot",
+      "targetType": "Destination",
+      "targetName": "Surat Castle / Old Fort",
+      "timestamp": "2026-06-29T13:24:07.480Z"
+    },
+    {
+      "id": "log-1782739286430",
+      "user": "itxghost111@gmail.com",
+      "role": "Super Admin",
+      "action": "Edited Spot",
+      "targetType": "Destination",
+      "targetName": "Surat Castle / Old Fort",
+      "timestamp": "2026-06-29T13:21:26.430Z"
+    },
+    {
+      "id": "log-1782739184413",
+      "user": "itxghost111@gmail.com",
+      "role": "Super Admin",
+      "action": "Administrative Access Granted",
+      "targetType": "Auth",
+      "targetName": "itxghost111@gmail.com",
+      "timestamp": "2026-06-29T13:19:44.413Z"
+    },
+    {
+      "id": "log-1",
+      "user": "admin@suratinsider.com",
+      "role": "Super Admin",
+      "action": "Platform Initialized",
+      "targetType": "System Setup",
+      "targetName": "Surat Insider V1 Engine",
+      "timestamp": "2026-06-16T11:00:00"
+    },
+    {
+      "id": "log-2",
+      "user": "admin@suratinsider.com",
+      "role": "Super Admin",
+      "action": "Approved Partner Listing",
+      "targetType": "Partner Request",
+      "targetName": "Laxmi Sweets & Ghari Boutique",
+      "timestamp": "2026-06-16T11:05:00"
+    }
+  ],
+  "homepage": {
+    "heroTitle": "SURAT INSIDER",
+    "heroSubtitle": "THE SOUL OF THE EMERALD CITY",
+    "heroDescription": "Step into South Gujarat's premier portal for luxury textile curation, heritage explorations, diamonds, and culinary marvels.",
+    "ctaText": "Explore the Guides",
+    "heroImage": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop",
+    "heroVideo": "",
+    "heroBadges": [
+      "100% Curated",
+      "Local Heritage",
+      "Diamond District Approved"
+    ]
+  },
+  "aiChatbot": {
+    "prompt": "You are Surat Insider AI, the ultimate luxury concierge for Surat.",
+    "personas": {
+      "shopping": "You are Radhika, Surat Insider's elite Wedding Shopping & Textile Market Expert. You have deep knowledge of Ring Road's wholesale hubs, STM, Ghod Dod Road's diamond jewelery boutiques, and where to secure authentic Tanchoi, Gaji Silk, and high-end embroidered work. Keep your tone extremely premium, insider-focused, elegant, and helpful. Guide users with budget wisdom, secret shopping hubs, and tips to avoid commission middlemen.",
+      "food": "You are Jignesh, Surat Insider's passionate Culinary Historian and Street Food Guide. Surat's food represents luxury through street feast. You know everything about Locho (butter, garlic, Schezwan), Khaman, Ghari, Undhiyu, and the local street-faring culture. Your tone is warm, enthusiastic, slightly mouth-watering, and full of pride for Surati food treasures.",
+      "heritage": "You are Jayesh, Surat Insider's Head of Cultural Heritage and Local Travel Guide. You represent the historical, architectural, and tourism heartbeat of Surat and South Gujarat (including Saputara and Statue of Unity). You explain Surat Castle's defense walls, Dutch/Armenian monuments, Tapi River mysteries, and general itinerary guides with historical flair. Keep your tone polished, scholarly yet accessible, and deeply welcoming."
+    },
+    "greeting": "Namaste! Welcome to Surat Insider's elite concierge. Select an expert persona below or ask me any question about our legendary silk, street food, or 16th-century bastions.",
+    "faq": [
+      {
+        "question": "Where is the best place to buy authentic sarees?",
+        "answer": "Ghod Dod Road and Ring Road wholesale markets are highly recommended."
+      },
+      {
+        "question": "What is Surat's most famous dish?",
+        "answer": "Surati Locho and Ghari are absolute must-tries!"
+      }
+    ],
+    "messageLimit": 5
+  },
+  "seo": {
+    "home": {
+      "pageTitle": "Surat Insider • Explore, Shop, Experience",
+      "metaDescription": "Step into South Gujarat's premier portal for luxury textile curation, heritage explorations, diamonds, and culinary marvels.",
+      "keywords": "surat, travel, gujarat, tourism, textile, diamonds, locho, history, silk, castle",
+      "canonicalUrl": "https://suratinsider.com",
+      "openGraphImage": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop",
+      "twitterCard": "summary_large_image",
+      "structuredSchema": "{}"
+    },
+    "wedding": {
+      "pageTitle": "Royal Wedding Sourcing & Saree Shopping Guide",
+      "metaDescription": "The ultimate curated roadmap to Surat's bridal wear, couture collections, legendary silk sarees, and high-end wedding jewelers.",
+      "keywords": "wedding shopping, sarees, silk, bridal wear, designer, couture",
+      "canonicalUrl": "https://suratinsider.com/wedding",
+      "openGraphImage": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1200&auto=format&fit=crop",
+      "twitterCard": "summary_large_image",
+      "structuredSchema": "{}"
+    }
+  },
+  "media": [
+    {
+      "id": "media-1782809550714",
+      "url": "/media/1782809550714-padam-dungri-eco-tourism-surat-0h4wrnue8q.avif",
+      "filename": "padam-dungri-eco-tourism-surat-0h4wrnue8q.avif",
+      "altText": "padam-dungri-eco-tourism-surat-0h4wrnue8q.avif",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "21.2 KB"
+    },
+    {
+      "id": "media-1782809242271",
+      "url": "/media/1782809242270-ambapani_ecotourism.jpg",
+      "filename": "ambapani ecotourism.jpg",
+      "altText": "ambapani ecotourism.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "80.1 KB"
+    },
+    {
+      "id": "media-1782808953334",
+      "url": "/media/1782808953334-saputara_hill_station.jpg",
+      "filename": "saputara hill station.jpg",
+      "altText": "saputara hill station.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "42.7 KB"
+    },
+    {
+      "id": "media-1782808168698",
+      "url": "/media/1782808168697-dutch-garden-surat-india-tourism-history.jpg",
+      "filename": "dutch-garden-surat-india-tourism-history.jpg",
+      "altText": "dutch-garden-surat-india-tourism-history.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "119.1 KB"
+    },
+    {
+      "id": "media-1782808151342",
+      "url": "/media/1782808151342-gopi-talav-surat-tourism-header.jpg",
+      "filename": "gopi-talav-surat-tourism-header.jpg",
+      "altText": "gopi-talav-surat-tourism-header.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "292.9 KB"
+    },
+    {
+      "id": "media-1782808133117",
+      "url": "/media/1782808133117-dutch-garden-surat-india-tourism-history.jpg",
+      "filename": "dutch-garden-surat-india-tourism-history.jpg",
+      "altText": "dutch-garden-surat-india-tourism-history.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "119.1 KB"
+    },
+    {
+      "id": "media-1782808109040",
+      "url": "/media/1782808109039-dutch_garden2.jpg",
+      "filename": "dutch garden2.jpg",
+      "altText": "dutch garden2.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "50.6 KB"
+    },
+    {
+      "id": "media-1782808084395",
+      "url": "/media/1782808084395-dutch_garden2.jpg",
+      "filename": "dutch garden2.jpg",
+      "altText": "dutch garden2.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "50.6 KB"
+    },
+    {
+      "id": "media-1782808067110",
+      "url": "/media/1782808067110-dumas_sea_face.jpg",
+      "filename": "dumas sea face.jpg",
+      "altText": "dumas sea face.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "195.0 KB"
+    },
+    {
+      "id": "media-1782808040522",
+      "url": "/media/1782808040522-dutch-garden-surat-india-tourism-history.jpg",
+      "filename": "dutch-garden-surat-india-tourism-history.jpg",
+      "altText": "dutch-garden-surat-india-tourism-history.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "119.1 KB"
+    },
+    {
+      "id": "media-1782808030477",
+      "url": "/media/1782808030477-dutch_garden2.jpg",
+      "filename": "dutch garden2.jpg",
+      "altText": "dutch garden2.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "50.6 KB"
+    },
+    {
+      "id": "media-1782808007001",
+      "url": "/media/1782808007001-surat_fort2.jpg",
+      "filename": "surat fort2.jpg",
+      "altText": "surat fort2.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "347.9 KB"
+    },
+    {
+      "id": "media-1782808006037",
+      "url": "/media/1782808006036-surat_fort3.jpg",
+      "filename": "surat fort3.jpg",
+      "altText": "surat fort3.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "34.8 KB"
+    },
+    {
+      "id": "media-1782805872957",
+      "url": "/media/1782805872956-Science_Centre_Surat.jpg",
+      "filename": "Science Centre Surat.jpg",
+      "altText": "Science Centre Surat.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "139.6 KB"
+    },
+    {
+      "id": "media-1782805759126",
+      "url": "/media/1782805759125-Sneh-Rashmi-Botanical-Garden-in-surat.jpeg",
+      "filename": "Sneh-Rashmi-Botanical-Garden-in-surat.jpeg",
+      "altText": "Sneh-Rashmi-Botanical-Garden-in-surat.jpeg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "428.4 KB"
+    },
+    {
+      "id": "media-1782805653908",
+      "url": "/media/1782805653907-sarthana-national-park.jpg",
+      "filename": "sarthana-national-park.jpg",
+      "altText": "sarthana-national-park.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "65.2 KB"
+    },
+    {
+      "id": "media-1782805491751",
+      "url": "/media/1782805491750-vanenziani_o_mall.jpg",
+      "filename": "vanenziani=o mall.jpg",
+      "altText": "vanenziani=o mall.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "65.2 KB"
+    },
+    {
+      "id": "media-1782805433486",
+      "url": "/media/1782805433486-suvali-beach-surat-india-tourism-photo-gallery.jpg",
+      "filename": "suvali-beach-surat-india-tourism-photo-gallery.jpg",
+      "altText": "suvali-beach-surat-india-tourism-photo-gallery.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "119.5 KB"
+    },
+    {
+      "id": "media-1782747678229",
+      "url": "/media/1782747678228-gopi-talav-surat-tourism-header.jpg",
+      "filename": "gopi-talav-surat-tourism-header.jpg",
+      "altText": "gopi-talav-surat-tourism-header.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "292.9 KB"
+    },
+    {
+      "id": "media-1782747023869",
+      "url": "/media/1782747023868-dumas_sea_face.jpg",
+      "filename": "dumas sea face.jpg",
+      "altText": "dumas sea face.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "195.0 KB"
+    },
+    {
+      "id": "media-1782746129813",
+      "url": "/media/1782746129812-dutch-garden-surat-india-tourism-history.jpg",
+      "filename": "dutch-garden-surat-india-tourism-history.jpg",
+      "altText": "dutch-garden-surat-india-tourism-history.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "119.1 KB"
+    },
+    {
+      "id": "media-1782746098334",
+      "url": "/media/1782746098333-surat_fort2.jpg",
+      "filename": "surat fort2.jpg",
+      "altText": "surat fort2.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "347.9 KB"
+    },
+    {
+      "id": "media-1782746071697",
+      "url": "/media/1782746071696-surat_fort2.jpg",
+      "filename": "surat fort2.jpg",
+      "altText": "surat fort2.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "347.9 KB"
+    },
+    {
+      "id": "media-1782746070997",
+      "url": "/media/1782746070996-surat_fort3.jpg",
+      "filename": "surat fort3.jpg",
+      "altText": "surat fort3.jpg",
+      "caption": "Uploaded via Experience form",
+      "category": "General",
+      "size": "34.8 KB"
+    }
+  ],
+  "websiteImages": [
+    {
+      "id": "home_hero_bg",
+      "title": "Home Hero Background",
+      "section": "home",
+      "url": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop",
+      "description": "Primary large background image on the main page landing hero section.",
+      "usedIn": "Home Page Hero"
+    },
+    {
+      "id": "home_hero_overlay",
+      "title": "Home Hero Overlay",
+      "section": "home",
+      "url": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop",
+      "description": "Secondary decorative lighting overlay banner on the Home Page.",
+      "usedIn": "Home Page Backdrop"
+    },
+    {
+      "id": "portal_1_bg",
+      "title": "Portal 1 (The Wedding Edit)",
+      "section": "home",
+      "url": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80",
+      "defaultUrl": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80",
+      "description": "Elegant background image for the luxury wedding and bridal wear portal link.",
+      "usedIn": "Home Page Portals & Zari Cards"
+    },
+    {
+      "id": "portal_2_bg",
+      "title": "Portal 2 (The 48-Hour Passport)",
+      "section": "home",
+      "url": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=1200&q=80",
+      "defaultUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=1200&q=80",
+      "description": "Background image for the high-end travel passport and fast tour portal link.",
+      "usedIn": "Home Page Portals & Zari Cards"
+    },
+    {
+      "id": "portal_3_bg",
+      "title": "Portal 3 (The Silk Route)",
+      "section": "home",
+      "url": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80",
+      "defaultUrl": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80",
+      "description": "Background image for heritage looms, wholesale silk, and textile guides portal link.",
+      "usedIn": "Home Page Portals & Zari Cards"
+    },
+    {
+      "id": "portal_4_bg",
+      "title": "Portal 4 (The Tasting Table)",
+      "section": "home",
+      "url": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=1200&q=80",
+      "defaultUrl": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=1200&q=80",
+      "description": "Background image for Surat's premier local foods and street food feast portal link.",
+      "usedIn": "Home Page Portals & Zari Cards"
+    },
+    {
+      "id": "portal_5_bg",
+      "title": "Portal 5 (The Insider Vault)",
+      "section": "home",
+      "url": "https://images.unsplash.com/photo-1585642398506-6c8f615e4a06?auto=format&fit=crop&w=1200&q=80",
+      "defaultUrl": "https://images.unsplash.com/photo-1585642398506-6c8f615e4a06?auto=format&fit=crop&w=1200&q=80",
+      "description": "Background image for the private/exclusive bespoke membership portal link.",
+      "usedIn": "Home Page Portals & Zari Cards"
+    },
+    {
+      "id": "explore_hero_bg",
+      "title": "Explore Hero Background",
+      "section": "explore",
+      "url": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=2000&q=80",
+      "defaultUrl": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=2000&q=80",
+      "description": "Background banner on the Explore Section of South Gujarat and local attractions.",
+      "usedIn": "Explore Page Hero / Top Banner"
+    },
+    {
+      "id": "explore_card_1",
+      "title": "Explore Card 1 (Heritage)",
+      "section": "explore",
+      "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop",
+      "description": "Scenic preview image for heritage monument tours.",
+      "usedIn": "Explore Page Heritage Showcase"
+    },
+    {
+      "id": "explore_card_2",
+      "title": "Explore Card 2 (Textile)",
+      "section": "explore",
+      "url": "https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=1200&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=1200&auto=format&fit=crop",
+      "description": "Handloom weaving craft and master looms preview image.",
+      "usedIn": "Explore Page Craft Showcase"
+    },
+    {
+      "id": "explore_card_3",
+      "title": "Explore Card 3 (Scenic)",
+      "section": "explore",
+      "url": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop",
+      "description": "Waterfront and scenic attraction preview image.",
+      "usedIn": "Explore Page Scenic Showcase"
+    },
+    {
+      "id": "explore_banner_cta",
+      "title": "Explore CTA Banner",
+      "section": "explore",
+      "url": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=2000&q=80",
+      "defaultUrl": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=2000&q=80",
+      "description": "Stately banner behind the newsletter or travel query form in Explore.",
+      "usedIn": "Explore Guide CTA Banner"
+    },
+    {
+      "id": "food_hero_bg",
+      "title": "Food Route Hero",
+      "section": "food",
+      "url": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=2000&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=2000&auto=format&fit=crop",
+      "description": "Steaming hot local Locho and local delicacies background banner.",
+      "usedIn": "Tasting Table Guide Page Hero"
+    },
+    {
+      "id": "food_card_1",
+      "title": "Food Card 1 (Sweets & Ghari)",
+      "section": "food",
+      "url": "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?q=80&w=800&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?q=80&w=800&auto=format&fit=crop",
+      "description": "Delicious sweet Surti Ghari presentation closeup card background.",
+      "usedIn": "Tasting Table Selection 1"
+    },
+    {
+      "id": "food_card_2",
+      "title": "Food Card 2 (Locho & Snacks)",
+      "section": "food",
+      "url": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=800&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=800&auto=format&fit=crop",
+      "description": "Steaming hot savory locho snack closeup card background.",
+      "usedIn": "Tasting Table Selection 2"
+    },
+    {
+      "id": "hotel_hero_bg",
+      "title": "Hotel Hero Background",
+      "section": "hotels",
+      "url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop",
+      "description": "Luxury hotel facade or premier grand lobby entrance backdrop.",
+      "usedIn": "Hotels Page Hero Banner"
+    },
+    {
+      "id": "hotel_card_1",
+      "title": "Hotel Card 1 (Luxury Bed)",
+      "section": "hotels",
+      "url": "https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1200&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1200&auto=format&fit=crop",
+      "description": "Polished image of premium hotel suites and standard room layouts.",
+      "usedIn": "Hotels Page Selection 1"
+    },
+    {
+      "id": "hotel_card_2",
+      "title": "Hotel Card 2 (Lounge)",
+      "section": "hotels",
+      "url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200&auto=format&fit=crop",
+      "description": "Elegant restaurant lounge or swimming pool setting.",
+      "usedIn": "Hotels Page Selection 2"
+    },
+    {
+      "id": "shopping_hero_bg",
+      "title": "Shopping Hero Background",
+      "section": "shopping",
+      "url": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1200&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1200&auto=format&fit=crop",
+      "description": "Close-up of golden silk saree stitches and embroidery work.",
+      "usedIn": "Shopping Page Hero Banner"
+    },
+    {
+      "id": "shopping_zari_banner",
+      "title": "Zari Work Banner",
+      "section": "shopping",
+      "url": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop",
+      "description": "Rich threads, looms, and wholesale hand-craft highlight banner.",
+      "usedIn": "Zari Heritage Highlights"
+    },
+    {
+      "id": "shopping_jewellery_banner",
+      "title": "Jewellery Sourcing Banner",
+      "section": "shopping",
+      "url": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80",
+      "defaultUrl": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80",
+      "description": "Exquisite gold jewelry sets and diamond solitaire stones showcase banner.",
+      "usedIn": "Diamond & Jewelry Highlights"
+    },
+    {
+      "id": "bridal_mile_1",
+      "title": "Bridal Mile 1 (Heritage Weaves)",
+      "section": "shopping",
+      "url": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80",
+      "defaultUrl": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80",
+      "description": "High-contrast silk saree closeup showcasing gold threads and zari detailing.",
+      "usedIn": "Wedding - Bridal Saree Section"
+    },
+    {
+      "id": "bridal_mile_2",
+      "title": "Bridal Mile 2 (Royal Couture)",
+      "section": "shopping",
+      "url": "https://images.unsplash.com/photo-1590073844006-33379778ae09?auto=format&fit=crop&w=800&q=80",
+      "defaultUrl": "https://images.unsplash.com/photo-1590073844006-33379778ae09?auto=format&fit=crop&w=800&q=80",
+      "description": "Designer bridal dress atelier showing custom embroideries and royal fabrics.",
+      "usedIn": "Wedding - Royal Couture Section"
+    },
+    {
+      "id": "bridal_mile_3",
+      "title": "Bridal Mile 3 (Diamond Sourcing)",
+      "section": "shopping",
+      "url": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80",
+      "defaultUrl": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80",
+      "description": "Luxury diamonds close-up showcasing elite solitaire work and gold jewelry.",
+      "usedIn": "Wedding - Jewelry Sourcing Section"
+    },
+    {
+      "id": "textile_hero_bg",
+      "title": "Silk Route Hero",
+      "section": "shopping",
+      "url": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop",
+      "description": "Rich backdrop of silk reels and fine fabrics inside the Silk Route guides page.",
+      "usedIn": "Silk Route Guide Page Hero"
+    },
+    {
+      "id": "wedding_hero_bg",
+      "title": "Wedding Hero",
+      "section": "shopping",
+      "url": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=2000&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=2000&auto=format&fit=crop",
+      "description": "Main background image in the luxury Wedding Shopping guide page.",
+      "usedIn": "Wedding Sourcing Guide Page Hero"
+    },
+    {
+      "id": "vault_card_1",
+      "title": "Vault: Diamond Sourcing",
+      "section": "vault",
+      "url": "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?q=80&w=800&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?q=80&w=800&auto=format&fit=crop",
+      "description": "Background card inside the private membership vault for diamonds.",
+      "usedIn": "Insider Vault Card List"
+    },
+    {
+      "id": "vault_card_2",
+      "title": "Vault: Gaji Silk Weaving",
+      "section": "vault",
+      "url": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=800&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=800&auto=format&fit=crop",
+      "description": "Background card inside the private membership vault for exclusive looms.",
+      "usedIn": "Insider Vault Card List"
+    },
+    {
+      "id": "vault_card_3",
+      "title": "Vault: Ghari Tasting Session",
+      "section": "vault",
+      "url": "https://images.unsplash.com/photo-1606491956689-2ea866880c84?q=80&w=800&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1606491956689-2ea866880c84?q=80&w=800&auto=format&fit=crop",
+      "description": "Background card inside the private membership vault for master tastings.",
+      "usedIn": "Insider Vault Card List"
+    },
+    {
+      "id": "vault_card_4",
+      "title": "Vault: Dutch Secret Heritage",
+      "section": "vault",
+      "url": "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?q=80&w=800&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?q=80&w=800&auto=format&fit=crop",
+      "description": "Background card inside the private membership vault for historical tours.",
+      "usedIn": "Insider Vault Card List"
+    },
+    {
+      "id": "branding_logo",
+      "title": "Main Website Logo",
+      "section": "branding",
+      "url": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=100&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=100&auto=format&fit=crop",
+      "description": "Primary website logo shown in the navigation bar.",
+      "usedIn": "Navigation Navbar (Left)"
+    },
+    {
+      "id": "branding_footer_logo",
+      "title": "Footer Logo",
+      "section": "branding",
+      "url": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=100&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=100&auto=format&fit=crop",
+      "description": "Branding logo used in the bottom footer block.",
+      "usedIn": "Page Footer Layout"
+    },
+    {
+      "id": "branding_favicon",
+      "title": "Favicon Logo Icon",
+      "section": "branding",
+      "url": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=50&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=50&auto=format&fit=crop",
+      "description": "Website short favicon logo icon in the browser tab.",
+      "usedIn": "Browser Tab Favicon"
+    },
+    {
+      "id": "footer_banner",
+      "title": "Footer Banner background",
+      "section": "branding",
+      "url": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop",
+      "defaultUrl": "https://images.unsplash.com/photo-1596422846543-75c6fc18a523?q=80&w=1200&auto=format&fit=crop",
+      "description": "Decorative bottom backdrop behind footer links.",
+      "usedIn": "Page Footer Background Overlay"
+    },
+    {
+      "id": "placeholder_generic",
+      "title": "Placeholder: Generic",
+      "section": "system",
+      "url": "/images/generic.svg",
+      "defaultUrl": "/images/generic.svg",
+      "description": "Generic system fallback image asset.",
+      "usedIn": "SafeImage System Core Fallbacks"
+    },
+    {
+      "id": "placeholder_castle",
+      "title": "Placeholder: Surat Castle",
+      "section": "system",
+      "url": "/images/surat_castle.svg",
+      "defaultUrl": "/images/surat_castle.svg",
+      "description": "Castle and historical forts system fallback image asset.",
+      "usedIn": "SafeImage System Core Fallbacks"
+    },
+    {
+      "id": "placeholder_cemetery",
+      "title": "Placeholder: Cemeteries",
+      "section": "system",
+      "url": "/images/cemeteries.svg",
+      "defaultUrl": "/images/cemeteries.svg",
+      "description": "Dutch & Armenian historical cemetery monuments fallback image asset.",
+      "usedIn": "SafeImage System Core Fallbacks"
+    },
+    {
+      "id": "placeholder_beach",
+      "title": "Placeholder: Dumas Beach",
+      "section": "system",
+      "url": "/images/dumas_beach.svg",
+      "defaultUrl": "/images/dumas_beach.svg",
+      "description": "Dumas & Suvali beach scenic coastlines fallback image asset.",
+      "usedIn": "SafeImage System Core Fallbacks"
+    },
+    {
+      "id": "placeholder_lake",
+      "title": "Placeholder: Gopi Talav Lake",
+      "section": "system",
+      "url": "/images/gopi_talav.svg",
+      "defaultUrl": "/images/gopi_talav.svg",
+      "description": "Symmetrical historic Gopi Talav lakes and waterfronts fallback image asset.",
+      "usedIn": "SafeImage System Core Fallbacks"
+    },
+    {
+      "id": "placeholder_textile",
+      "title": "Placeholder: Textile Loom",
+      "section": "system",
+      "url": "/images/textile_guide.svg",
+      "defaultUrl": "/images/textile_guide.svg",
+      "description": "Bridal sarees, heritage looms and wholesale silk guide fallback image asset.",
+      "usedIn": "SafeImage System Core Fallbacks"
+    },
+    {
+      "id": "placeholder_hotel",
+      "title": "Placeholder: Elite Stays",
+      "section": "system",
+      "url": "/images/hotel.svg",
+      "defaultUrl": "/images/hotel.svg",
+      "description": "Lobbies, boutique hotels and grand residency fallback image asset.",
+      "usedIn": "SafeImage System Core Fallbacks"
+    },
+    {
+      "id": "placeholder_food",
+      "title": "Placeholder: Gastronomy",
+      "section": "system",
+      "url": "/images/food.svg",
+      "defaultUrl": "/images/food.svg",
+      "description": "Delicious street locho, sweet ghari and thali feasts fallback image asset.",
+      "usedIn": "SafeImage System Core Fallbacks"
+    },
+    {
+      "id": "placeholder_event",
+      "title": "Placeholder: Events & Festivals",
+      "section": "system",
+      "url": "/images/event.svg",
+      "defaultUrl": "/images/event.svg",
+      "description": "Garba expos, modern textiles and local festivals fallback image asset.",
+      "usedIn": "SafeImage System Core Fallbacks"
+    },
+    {
+      "id": "placeholder_diamond",
+      "title": "Placeholder: Diamonds & Jewels",
+      "section": "system",
+      "url": "/images/diamonds.svg",
+      "defaultUrl": "/images/diamonds.svg",
+      "description": "Precious diamonds, gold jewelry and elite merchants fallback image asset.",
+      "usedIn": "SafeImage System Core Fallbacks"
+    }
+  ]
+}

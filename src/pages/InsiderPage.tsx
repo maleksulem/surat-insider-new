@@ -116,14 +116,6 @@ export function InsiderPage({
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#B8860B]/5 blur-[100px] rounded-full" />
       </div>
 
-      {/* Global Navbar */}
-      <Navbar
-        currentTab=""
-        setCurrentTab={() => {}}
-        currentUserRole={currentUserRole}
-        setCurrentUserRole={setCurrentUserRole}
-      />
-
       {/* Back CTA */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 text-left">
         <Link 

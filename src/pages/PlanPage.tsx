@@ -35,13 +35,6 @@ export function PlanPage({
 
   return (
     <div className="min-h-screen bg-brand-sand-50 flex flex-col font-sans">
-      <Navbar
-        currentTab="planner"
-        setCurrentTab={() => {}}
-        currentUserRole={currentUserRole}
-        setCurrentUserRole={setCurrentUserRole}
-      />
-
       <main className="flex-1 pt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <motion.div

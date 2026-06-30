@@ -17,6 +17,7 @@ import {
   Share2
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { SafeImage } from "./SafeImage";
 
 interface ExperienceDetailModalProps {
   item: CuratedExperience & { images?: string[] };
@@ -134,13 +135,13 @@ export function ExperienceDetailModal({
   };
 
   return (
-    <div id={`detail-modal-${item.id}`} className="fixed inset-0 z-[1000] h-[100dvh] w-full bg-[#FFFDF5] flex flex-col">
+    <div id={`detail-page-${item.id}`} className="relative w-full bg-[#FFFDF5] flex flex-col min-h-screen">
       <motion.div 
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-        className="bg-[#FFFDF5] w-full h-full flex flex-col"
+        className="bg-[#FFFDF5] w-full flex flex-col"
       >
         {/* Sticky Header Actions */}
         <div className="sticky top-0 z-[60] w-full flex justify-end gap-2.5 p-4 pointer-events-none">
@@ -168,7 +169,7 @@ export function ExperienceDetailModal({
         </div>
 
         {/* Content Body */}
-        <div className="flex-1 pb-10 overflow-y-auto hide-scrollbar">
+        <div className="w-full pb-10">
           
           {/* Swipeable Image Gallery with Framer Motion Drag Gestures */}
           <div className="relative w-full overflow-hidden">
@@ -191,9 +192,20 @@ export function ExperienceDetailModal({
             >
               {images.map((img, idx) => (
                 <div key={idx} className="w-full shrink-0 relative h-72 md:h-[400px] select-none">
-                  <img
+                  <SafeImage
                     src={img}
                     alt={`${item.title} ${idx + 1}`}
+                    fallbackType={
+                      item.category?.toLowerCase().includes("hotel") || item.category?.toLowerCase().includes("luxury")
+                        ? "hotel"
+                        : item.category?.toLowerCase().includes("market") || item.category?.toLowerCase().includes("shop") || item.category?.toLowerCase().includes("textile") || item.category?.toLowerCase().includes("jewellery")
+                          ? "shopping"
+                          : item.category?.toLowerCase().includes("tour") || item.category?.toLowerCase().includes("walk")
+                            ? "tour"
+                            : item.category?.toLowerCase().includes("street") || item.category?.toLowerCase().includes("local") || item.category?.toLowerCase().includes("favorite")
+                              ? "food"
+                              : "destination"
+                    }
                     className="w-full h-full object-cover pointer-events-none"
                   />
                   {/* Floating Category Tag (Only on first image) */}

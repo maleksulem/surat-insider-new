@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E1916" />
+      <stop offset="100%" stop-color="#0E0C0B" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C5A059" />
+      <stop offset="50%" stop-color="#E5C384" />
+      <stop offset="100%" stop-color="#A37F3C" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)" />
+  <rect x="20" y="20" width="760" height="460" fill="none" stroke="url(#goldGrad)" stroke-width="1" opacity="0.2" />
+  
+  <g transform="translate(400, 210)" stroke="url(#goldGrad)" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Minimalist plate, cloche or spoon-fork outline -->
+    <circle cx="0" cy="10" r="70" stroke-width="3" opacity="0.8" />
+    <path d="M -30 10 C -15 25, 15 25, 30 10" stroke-width="2" opacity="0.6" />
+    <!-- Fork outline -->
+    <path d="M -110 -30 L -110 30 M -120 -30 L -120 10 M -100 -30 L -100 10 M -110 30 L -110 70" stroke-width="2" opacity="0.7" />
+    <!-- Knife outline -->
+    <path d="M 110 -30 L 110 70 M 110 -30 C 120 -30, 120 20, 110 20" stroke-width="2" opacity="0.7" />
+    <!-- Hot steam loops -->
+    <path d="M -20 -80 Q -10 -95, -20 -110" stroke-width="1.5" opacity="0.5" />
+    <path d="M 0 -80 Q 10 -95, 0 -110" stroke-width="1.5" opacity="0.5" />
+    <path d="M 20 -80 Q 30 -95, 20 -110" stroke-width="1.5" opacity="0.5" />
+  </g>
+
+  <text x="400" y="395" fill="#E5C384" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" letter-spacing="6" text-anchor="middle" opacity="0.6">THE CHRONICLES</text>
+  <text x="400" y="430" fill="#F5EFE6" font-family="'Playfair Display', 'Georgia', serif" font-size="28" font-weight="bold" text-anchor="middle" letter-spacing="1">SURATI FEASTS &amp; FLAVORS</text>
+</svg>

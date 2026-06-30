@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { FluidLandingCursor } from '../components/FluidLandingCursor';
+import { SafeImage } from '../components/SafeImage';
 import { 
   UNIFIED_DISCOVERY_DATA, 
   DISCOVERY_COLLECTIONS, 
@@ -77,8 +78,6 @@ export function DiscoveryPage() {
         <div className="absolute inset-0 bg-[radial-gradient(#1A1614_1px,transparent_1px)] bg-[size:60px_60px] opacity-[0.02]" />
         <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-[#B8860B]/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/4" />
       </div>
-
-      <Navbar currentTab="" setCurrentTab={() => {}} currentUserRole="Guest" setCurrentUserRole={() => {}} />
 
       <main className="relative z-10 flex-1 flex flex-col max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         
@@ -189,9 +188,10 @@ export function DiscoveryPage() {
                         onClick={() => setSearchQuery(s.query)}
                         className="group relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl"
                       >
-                        <img 
+                        <SafeImage 
                           src={s.image} 
                           alt={s.title} 
+                          fallbackType="generic"
                           className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#1A1614] via-[#1A1614]/20 to-transparent" />
@@ -221,7 +221,7 @@ export function DiscoveryPage() {
                         to={`/${(item.type || "").toLowerCase() === 'place' ? 'attractions' : (item.type || "").toLowerCase()}/${item.slug || ""}`}
                         className="group relative h-64 rounded-[3rem] overflow-hidden shadow-xl"
                       >
-                        <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
+                        <SafeImage src={item.image} alt={item.title} fallbackType="generic" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
                         <div className="absolute inset-0 bg-[#1A1614]/40 group-hover:bg-[#1A1614]/20 transition-colors" />
                         <div className="absolute inset-0 p-10 flex flex-col justify-between items-start">
                           <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[8px] font-mono font-black uppercase tracking-widest text-white">
@@ -251,7 +251,7 @@ export function DiscoveryPage() {
                         className="group bg-white rounded-[3.5rem] p-10 border border-[#1A1614]/5 shadow-xl hover:shadow-2xl transition-all duration-700 flex flex-col space-y-6"
                       >
                         <div className="aspect-[2/1] rounded-[2.5rem] overflow-hidden">
-                          <img src={c.image} alt={c.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                          <SafeImage src={c.image} alt={c.title} fallbackType="generic" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                         </div>
                         <div className="space-y-3">
                           <h3 className="font-serif text-3xl font-bold text-[#1A1614]">{c.title}</h3>
@@ -290,7 +290,7 @@ export function DiscoveryPage() {
                         }`}
                       >
                         <div className="w-32 h-32 rounded-2xl overflow-hidden shrink-0">
-                          <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                          <SafeImage src={item.image} alt={item.title} fallbackType="generic" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         </div>
                         <div className="flex-1 space-y-2 py-1">
                           <div className="flex items-start justify-between">

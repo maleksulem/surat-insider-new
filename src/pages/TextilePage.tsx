@@ -114,14 +114,6 @@ export function TextilePage({
       <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%231A1614' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")` }} />
 
-      {/* Global Navbar */}
-      <Navbar
-        currentTab=""
-        setCurrentTab={() => {}}
-        currentUserRole={currentUserRole}
-        setCurrentUserRole={setCurrentUserRole}
-      />
-
       {/* Back CTA */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <Link 

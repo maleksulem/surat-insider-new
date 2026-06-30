@@ -1,11 +1,12 @@
 import React, { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
+import { SafeImage } from "./SafeImage";
 import { 
   Calendar, Check, Plus, Trash2, Send, Phone, Clock, ArrowRight, 
   MapPin, Sparkles, Smile, MessageSquare, ChevronRight, Share2, ChevronDown 
 } from "lucide-react";
 import { Destination, Hotel, FoodSpot, ShoppingGuide, LocalEvent, Tour, Inquiry, CuratedExperience } from "../types";
-import { ExperienceDetailModal } from "./ExperienceDetailModal";
 
 interface PlannerItem {
   id: string;
@@ -41,7 +42,7 @@ export function PlannerSection({
   addInquiry,
   }: PlannerSectionProps) {
   const theme: any = "normal";
-  const [selectedExperience, setSelectedExperience] = useState<CuratedExperience | null>(null);
+  const navigate = useNavigate();
 
   const mapTourToCuratedExperience = (tour: Tour): CuratedExperience => {
     return {
@@ -483,14 +484,14 @@ export function PlannerSection({
               <div>
                 {/* Header Cover Image */}
                 <div 
-                  onClick={() => setSelectedExperience(mapTourToCuratedExperience(tour))}
+                  onClick={() => navigate(`/experience/${tour.id}`)}
                   className="relative h-44 w-full overflow-hidden cursor-pointer hover:opacity-95 transition-opacity"
                 >
-                  <img
+                  <SafeImage
                     src={tour.image}
                     alt={tour.title}
+                    fallbackType="tour"
                     className="w-full h-full object-cover select-none transition-transform duration-500 hover:scale-105"
-                    referrerPolicy="no-referrer"
                   />
                   <div className="absolute top-3 left-3 bg-[#B8860B]/95 text-brand-sand-50 text-[9px] font-mono font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-[#B8860B]/35 shadow-md">
                     ⏱️ {tour.duration}
@@ -518,7 +519,7 @@ export function PlannerSection({
                   </p>
 
                   {/* Step by Step Timeline sequence tree road map */}
-                  <div className={`p-4 rounded-2xl border space-y-2.5 select-none ${style.panelBg ? style.panelBg : 'bg-[#FFFDF5]0/50'}`}>
+                  <div className={`p-4 rounded-2xl border space-y-2.5 select-none ${style.panelBg ? style.panelBg : 'bg-[#FFFDF5]/50'}`}>
                     <div className="flex items-center justify-between border-b pb-1.5 mb-1" style={{ borderColor: style.divider }}>
                       <span className={`text-[9px] uppercase tracking-widest font-mono font-black flex items-center gap-1 ${style.accentText}`}>
                         📍 Route Roadmap Stops
@@ -1204,17 +1205,6 @@ export function PlannerSection({
           </form>
         </div>
       </div>
-      
-      {selectedExperience && (
-        <ExperienceDetailModal
-          item={selectedExperience}
-          onClose={() => setSelectedExperience(null)}
-          addInquiry={addInquiry}
-          triggerWhatsAppMessage={(text) => {
-            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, "_blank");
-          }}
-        />
-      )}
     </div>
   );
 }

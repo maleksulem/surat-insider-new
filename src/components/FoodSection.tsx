@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FoodSpot, Inquiry, CuratedExperience } from "../types";
 import { Utensils, MapPin, Clock, Search, Star, Heart, Flame, ShieldCheck, Check } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { ExperienceDetailModal } from "./ExperienceDetailModal";
 import { useImageModal } from "../context/ImageModalContext";
+import { SafeImage } from "./SafeImage";
 
 interface FoodSectionProps {
   foodSpots: FoodSpot[];
@@ -13,11 +14,11 @@ interface FoodSectionProps {
 }
 
 export function FoodSection({ foodSpots, addInquiry, triggerWhatsAppMessage, searchQuery }: FoodSectionProps) {
+  const navigate = useNavigate();
   const [activeFoodCategory, setActiveFoodCategory] = useState<string>("All");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [selectedPlatter, setSelectedPlatter] = useState<{ id: string; name: string; price: number }[]>([]);
   const [showOrderSent, setShowOrderSent] = useState(false);
-  const [selectedSpot, setSelectedSpot] = useState<CuratedExperience | null>(null);
   const { openImage } = useImageModal();
 
   // Filter spots
@@ -86,15 +87,15 @@ export function FoodSection({ foodSpots, addInquiry, triggerWhatsAppMessage, sea
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              onClick={() => setSelectedSpot(spot as any)}
+              onClick={() => navigate(`/experience/${spot.id}`)}
               className="group cursor-pointer"
             >
               <div className="aspect-[3/4] overflow-hidden rounded-2xl mb-6 shadow-sm group-hover:shadow-xl transition-shadow duration-500 relative bg-brand-sand-100">
-                <img 
+                <SafeImage 
                   src={spot.image} 
                   alt={spot.title} 
+                  fallbackType="food"
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 cursor-pointer" 
-                  onClick={() => setSelectedSpot(spot as any)}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
                 <div className="absolute bottom-6 left-6 right-6 transform group-hover:-translate-y-2 transition-transform duration-500">
@@ -232,16 +233,6 @@ export function FoodSection({ foodSpots, addInquiry, triggerWhatsAppMessage, sea
           ))}
         </div>
       </section>
-
-      {/* Spot Detail Modal */}
-      {selectedSpot && (
-        <ExperienceDetailModal
-          item={selectedSpot}
-          onClose={() => setSelectedSpot(null)}
-          addInquiry={addInquiry}
-          triggerWhatsAppMessage={triggerWhatsAppMessage}
-        />
-      )}
     </div>
   );
 }
